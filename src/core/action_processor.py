@@ -7,11 +7,10 @@ import json
 from typing import Dict, Any, Optional
 import pandas as pd
 
-from mhtml_processor import MHTMLProcessor
+from .mhtml_processor import MHTMLProcessor
 from exceptions import ElementLocatorError
-from data_loaders import load_dom_content_json, load_action_list_from_mhtml, load_current_page_urls
-from file_utils import setup_result_dirs
-from instruction_generator import parse_target_action_reprs, generate_step_instruction
+from utils.data_loaders import load_dom_content_json, load_action_list_from_mhtml, load_current_page_urls
+from utils.helpers import setup_result_dirs, parse_target_action_reprs, generate_step_instruction
 
 
 def _extract_parquet_data(parquet_row: pd.DataFrame) -> Dict[str, Any]:

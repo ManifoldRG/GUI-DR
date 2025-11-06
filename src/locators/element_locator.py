@@ -7,7 +7,7 @@ import json
 from typing import Dict, Optional, List
 
 from exceptions import ElementLocatorError, ElementNotFoundError, AmbiguousMatchError
-from locator_strategies import (
+from .strategies import (
     IdStrategy, DataTestIdStrategy, RoleAndTextStrategy, TextStrategy,
     FingerprintStrategy, TagAndClassStrategy, BroadSearchStrategy
 )

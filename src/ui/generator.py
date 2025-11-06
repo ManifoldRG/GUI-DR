@@ -4,7 +4,7 @@ Extracted from ui_injection.py for better modularity.
 """
 
 import re
-from js_templates import STYLE_CSS_MAP
+from .templates import STYLE_CSS_MAP
 
 # Common CSS base that prevents text overflow and ensures visibility
 COMMON_BASE_CSS = """

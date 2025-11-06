@@ -6,10 +6,8 @@ import asyncio
 import argparse
 from datetime import datetime
 
-from data_loaders import load_parquet_files_by_split
-from task_discovery import find_tasks_from_parquet
-from action_processor import process_mhtml_actions
-from summary import print_trajectory_summary
+from utils import load_parquet_files_by_split, find_tasks_from_parquet, print_trajectory_summary
+from core import process_mhtml_actions
 
 
 async def main(split: str = 'train'):

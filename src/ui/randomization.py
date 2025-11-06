@@ -1,6 +1,6 @@
 import random
 import re
-from ui_styles_data import COLOR_PALETTES, FONT_COMBINATIONS
+from .styles_data import COLOR_PALETTES, FONT_COMBINATIONS
 
 
 def hex_to_rgb(hex_color):

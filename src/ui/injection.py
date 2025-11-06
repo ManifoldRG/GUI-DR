@@ -2,8 +2,8 @@
 UI Injection Module - Generates JavaScript code for injecting UI modifications.
 Simplified to use extracted templates and generators.
 """
-from js_templates import STYLE_CSS_MAP
-from js_generator import generate_style_js, COMMON_BASE_CSS
+from .templates import STYLE_CSS_MAP
+from .generator import generate_style_js, COMMON_BASE_CSS
 
 
 def generate_injection_js(params: dict) -> str:

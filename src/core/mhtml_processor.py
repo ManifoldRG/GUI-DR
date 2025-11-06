@@ -9,11 +9,11 @@ import os
 import traceback
 from typing import List, Dict, Any, Optional, Tuple, Union
 from PIL import Image
-from randomization import generate_diverse_ui_params
-from ui_injection import generate_injection_js
+from ui.randomization import generate_diverse_ui_params
+from ui.injection import generate_injection_js
 from exceptions import ElementLocatorError, ElementNotFoundError, AmbiguousMatchError
-from element_locator import ElementLocator
-from action_replay import ActionReplayer
+from locators.element_locator import ElementLocator
+from core.action_replay import ActionReplayer
 
 DEBUG = True   
 
