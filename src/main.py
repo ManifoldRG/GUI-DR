@@ -3,15 +3,21 @@ Main Script - Orchestrates MHTML processing pipeline
 """
 
 import asyncio
+import argparse
 import json
 import re
 import os
 from datetime import datetime
 from playwright.async_api import async_playwright
 from mhtml_processor import MHTMLProcessor
+from exceptions import ElementLocatorError
 import pandas as pd
 import ast
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Tuple
+
+# Regex pattern for parsing target_action_reprs: [element_type] element_text -> ACTION_TYPE(: action_value)?
+TARGET_ACTION_REPRS_PATTERN = r"\[(.*?)\]\s(.*?)\s->\s(CLICK|SELECT|TYPE)(?:\s*:\s*(.*))?"
+TARGET_ACTION_REPRS_PATTERN_SIMPLE = r"\[(.*?)\]\s(.*?)\s->.*"
 
 
 def load_dom_content_json(dom_content_json_path: str) -> List[str]:
@@ -21,16 +27,55 @@ def load_dom_content_json(dom_content_json_path: str) -> List[str]:
 
     return dom_content_json
 
-def load_action_list(dom_content_json: List) -> List[str]:
-    """Load action list from dom content"""
-    action_uids = [item['action_uid'] for item in dom_content_json]
-
+def load_action_list_from_mhtml(mhtml_files_dir: str) -> List[str]:
+    """Load action UIDs from MHTML file names (ground truth).
+    
+    MHTML files are named: {action_uid}_before.mhtml
+    Returns sorted list of action_uids found in the snapshots directory.
+    """
+    if not os.path.exists(mhtml_files_dir):
+        raise ValueError(f"MHTML files directory not found: {mhtml_files_dir}")
+    
+    action_uids = []
+    for filename in os.listdir(mhtml_files_dir):
+        if filename.endswith('_before.mhtml'):
+            # Extract action_uid from filename: {action_uid}_before.mhtml
+            action_uid = filename.replace('_before.mhtml', '')
+            action_uids.append(action_uid)
+    
+    # Sort to ensure consistent ordering
+    action_uids.sort()
     return action_uids
 
-def load_current_page_urls(dom_content_json: List) -> List[str]:
-    """Load current page urls from dom content"""
-    current_page_urls = [item['before']['dom']['strings'][1] for item in dom_content_json]
+def load_action_list(dom_content_json: List) -> List[str]:
+    """Load action list from dom content (legacy - kept for fallback)"""
+    action_uids = [item['action_uid'] for item in dom_content_json]
+    return action_uids
 
+def load_current_page_urls(dom_content_json: List, action_uids: List[str]) -> List[str]:
+    """Load current page urls from dom content, matching action_uids order.
+    
+    Args:
+        dom_content_json: The dom content JSON list
+        action_uids: List of action_uids to match (from MHTML files)
+    
+    Returns:
+        List of page URLs in the same order as action_uids
+    """
+    # Create a mapping from action_uid to page URL
+    uid_to_url = {}
+    for item in dom_content_json:
+        uid = item.get('action_uid')
+        if uid and 'before' in item and 'dom' in item['before'] and 'strings' in item['before']['dom']:
+            if len(item['before']['dom']['strings']) > 1:
+                uid_to_url[uid] = item['before']['dom']['strings'][1]
+    
+    # Return URLs in the order of action_uids
+    current_page_urls = []
+    for uid in action_uids:
+        url = uid_to_url.get(uid, '')
+        current_page_urls.append(url)
+    
     return current_page_urls
 
 def setup_result_dirs(run_dir: str, task_uid: str):
@@ -58,8 +103,7 @@ def setup_result_dirs(run_dir: str, task_uid: str):
 
 def generate_step_instruction(target_action_reprs: str) -> str:
     """Convert target_action_reprs to natural language step instruction"""
-    pattern = r"\[(.*?)\]\s(.*?)\s->\s(CLICK|SELECT|TYPE)(?:\s*:\s*(.*))?"
-    match = re.match(pattern, target_action_reprs)
+    match = re.match(TARGET_ACTION_REPRS_PATTERN, target_action_reprs)
     if not match:
         raise ValueError(f"Invalid target action reprs: {target_action_reprs}")
     
@@ -92,18 +136,41 @@ async def process_mhtml_actions(dom_content_json_path: str, hf_parquet_df: pd.Da
     Returns:
         dict with keys: 'steps_total', 'steps_succeeded', 'steps_saved', 'task_uid'
     """
-    dom_content_json = load_dom_content_json(dom_content_json_path)
-    action_uids = load_action_list(dom_content_json)
-    current_page_urls = load_current_page_urls(dom_content_json)
+    # Use MHTML file names as ground truth for action_uids
+    action_uids = load_action_list_from_mhtml(mhtml_files_dir)
+    
+    if not action_uids:
+        raise ValueError(f"No MHTML files found in {mhtml_files_dir}")
+    
+    print(f"📋 Found {len(action_uids)} MHTML files (action_uids) in snapshots directory")
+    
+    # Load dom_content.json for page URLs (optional - only if available)
+    try:
+        dom_content_json = load_dom_content_json(dom_content_json_path)
+        current_page_urls = load_current_page_urls(dom_content_json, action_uids)
+    except Exception as e:
+        print(f"⚠️  Warning: Could not load page URLs from dom_content.json: {e}")
+        print(f"   Continuing without page URL tracking...")
+        current_page_urls = [''] * len(action_uids)
     
     # Filter parquet dataframe by annotation_id (task_uid)
     hf_parquet_file = hf_parquet_df[hf_parquet_df['annotation_id'] == task_uid].copy()
     
     if hf_parquet_file.empty:
-        raise ValueError(f"No data found in parquet files for task_uid: {task_uid}")
-
-    if not action_uids:
-        raise ValueError("No actions to process")
+        print(f"⚠️  Warning: No data found in parquet files for task_uid: {task_uid}")
+        print(f"   Will process MHTML files but skip steps without parquet data")
+    else:
+        # Check how many action_uids have parquet data
+        parquet_action_uids = set(hf_parquet_file['action_uid'].unique())
+        mhtml_action_uids = set(action_uids)
+        missing_in_parquet = mhtml_action_uids - parquet_action_uids
+        if missing_in_parquet:
+            print(f"⚠️  Warning: {len(missing_in_parquet)} action_uids from MHTML files not found in parquet:")
+            for uid in sorted(missing_in_parquet)[:5]:  # Show first 5
+                print(f"      - {uid}")
+            if len(missing_in_parquet) > 5:
+                print(f"      ... and {len(missing_in_parquet) - 5} more")
+        print(f"✅ Found parquet data for {len(parquet_action_uids & mhtml_action_uids)}/{len(action_uids)} action_uids")
 
     task_screenshots_dir, trajectory_file = setup_result_dirs(run_dir, task_uid)
 
@@ -131,15 +198,35 @@ async def process_mhtml_actions(dom_content_json_path: str, hf_parquet_df: pd.Da
                 print(f"Action UID: {action_uid}")
                 
                 mhtml_path = os.path.join(mhtml_files_dir, f"{action_uid}_before.mhtml")
-                pos_candidate = hf_parquet_file[hf_parquet_file['action_uid'] == action_uid]['pos_candidates'].iloc[0][0]
-                confirmed_task = hf_parquet_file[hf_parquet_file['action_uid'] == action_uid]['confirmed_task'].iloc[0]
-                action_op = hf_parquet_file[hf_parquet_file['action_uid'] == action_uid]['operation'].iloc[0]['op']
-                target_action_reprs = hf_parquet_file[hf_parquet_file['action_uid'] == action_uid]['target_action_reprs'].iloc[0]
-                type_action_value = hf_parquet_file[hf_parquet_file['action_uid'] == action_uid]['operation'].iloc[0]['value']
+                
+                # Check if MHTML file exists (should always exist since we loaded from file names)
+                if not os.path.exists(mhtml_path):
+                    print(f"⏭️  Skipping step {i+1}: MHTML file not found: {mhtml_path}")
+                    print(f"{'='*60}")
+                    continue
+                
+                # Try to get data from parquet (may not exist for all action_uids)
+                parquet_row = hf_parquet_file[hf_parquet_file['action_uid'] == action_uid]
+                
+                if parquet_row.empty:
+                    print(f"⏭️  Skipping step {i+1}: No parquet data found for action UID {action_uid}")
+                    print(f"   MHTML file exists but no metadata in parquet files")
+                    print(f"{'='*60}")
+                    continue
+                
+                pos_candidate = parquet_row['pos_candidates'].iloc[0]
+                if not pos_candidate or len(pos_candidate) == 0:
+                    print(f"⏭️  Skipping step {i+1}: No pos_candidates found for action UID {action_uid}")
+                    print(f"{'='*60}")
+                    continue
+                
+                pos_candidate = pos_candidate[0]
+                confirmed_task = parquet_row['confirmed_task'].iloc[0]
+                action_op = parquet_row['operation'].iloc[0]['op']
+                target_action_reprs = parquet_row['target_action_reprs'].iloc[0]
+                type_action_value = parquet_row['operation'].iloc[0]['value']
 
-                pattern = r"\[(.*?)\]\s(.*?)\s->.*"
-
-                match = re.match(pattern, target_action_reprs)
+                match = re.match(TARGET_ACTION_REPRS_PATTERN_SIMPLE, target_action_reprs)
                 if match:
                     target_element_type = match.group(1).strip()
                     target_element_text = match.group(2).strip()
@@ -175,7 +262,8 @@ async def process_mhtml_actions(dom_content_json_path: str, hf_parquet_df: pd.Da
                     target_element_type,
                     target_element_text,
                     step_index=i,
-                    should_reset_page_pre_actions=should_reset_page_pre_actions
+                    should_reset_page_pre_actions=should_reset_page_pre_actions,
+                    should_randomize=True
                 )
                 should_reset_page_pre_actions = False
 
@@ -215,11 +303,15 @@ async def process_mhtml_actions(dom_content_json_path: str, hf_parquet_df: pd.Da
                     json.dump(trajectory, f, indent=2)
                 steps_saved = len(trajectory)
                 print(f"💾 Trajectory saved: {trajectory_file} (step {i+1}/{len(action_uids)})")
-            except Exception as e:
-                # Skip step if element finding fails (ElementNotFoundError, AmbiguousMatchError, etc.)
+            except (ElementLocatorError, IndexError, ValueError, KeyError) as e:
+                # Skip step if element finding fails or data is missing/invalid
+                # ElementLocatorError: element not found or ambiguous
+                # IndexError: pandas data missing (action_uid not in parquet)
+                # ValueError: invalid data format (e.g., invalid target_action_reprs)
+                # KeyError: missing dictionary keys in data
                 error_type = type(e).__name__
                 print(f"⏭️  Skipping step {i+1}: {error_type} - {str(e)}")
-                print(f"   Element cannot be found with 100% confidence, skipping to next step")
+                print(f"   Step cannot be processed, skipping to next step")
                 print(f"{'='*60}")
                 should_reset_page_pre_actions = False
                 continue
@@ -260,57 +352,48 @@ def discover_task_folders(mm_mind2web_base: str) -> List[tuple]:
         raise ValueError(f"Task directory not found: {task_dir}")
     
     for item in os.listdir(task_dir):
-        try:
-            item_path = os.path.join(task_dir, item)
-            
-            # Check if it's a directory
-            if not os.path.isdir(item_path):
-                continue
-            
-            # Check if it has processed/dom_content.json
-            dom_content_path = os.path.join(item_path, "processed", "dom_content.json")
-            snapshots_dir = os.path.join(item_path, "processed", "snapshots")
-            
-            if os.path.exists(dom_content_path) and os.path.exists(snapshots_dir):
-                task_folders.append((item, dom_content_path, snapshots_dir))
-                print(f"✅ Found task folder: {item}")
-        except Exception as e:
-            print(f"⚠️  Warning: Failed to process task folder {item}: {e}")
+        item_path = os.path.join(task_dir, item)
+        
+        # Check if it's a directory
+        if not os.path.isdir(item_path):
             continue
+        
+        # Check if it has processed/dom_content.json
+        dom_content_path = os.path.join(item_path, "processed", "dom_content.json")
+        snapshots_dir = os.path.join(item_path, "processed", "snapshots")
+        
+        if os.path.exists(dom_content_path) and os.path.exists(snapshots_dir):
+            task_folders.append((item, dom_content_path, snapshots_dir))
+            print(f"✅ Found task folder: {item}")
         
     return task_folders
 
 
-def load_parquet_files(mm_mind2web_base: str, task_uids: List[str]) -> pd.DataFrame:
-    """Load all parquet files from mm_mind2web_base/data/, keeping only needed columns
+def load_parquet_files_by_split(mm_mind2web_base: str, split: str) -> Tuple[pd.DataFrame, List[str]]:
+    """Load parquet files for a specific split (train, test_domain, test_task, test_website).
     
-    Columns needed:
-    - action_uid
-    - pos_candidates
-    - confirmed_task
-    - operation
-    - target_action_reprs
-    - annotation_id
+    Args:
+        mm_mind2web_base: Base directory for data
+        split: One of 'train', 'test_domain', 'test_task', 'test_website'
     
     Returns:
-        Combined and sorted dataframe
+        Tuple of (combined dataframe, list of unique task_uids from parquet)
     """
-    parquet_files = []
-    
     data_dir = os.path.join(mm_mind2web_base, "data")
     
     if not os.path.exists(data_dir):
         raise ValueError(f"Data directory not found: {data_dir}")
     
-    # Find all parquet files
+    # Find parquet files for the specified split
+    parquet_files = []
     for item in os.listdir(data_dir):
-        if item.endswith('.parquet'):
+        if item.endswith('.parquet') and item.startswith(split):
             parquet_path = os.path.join(data_dir, item)
             parquet_files.append(parquet_path)
-            print(f"✅ Found parquet file: {item}")
+            print(f"✅ Found {split} parquet file: {item}")
     
     if not parquet_files:
-        raise ValueError(f"No parquet files found in {data_dir}")
+        raise ValueError(f"No {split} parquet files found in {data_dir}")
     
     # Columns to load (only what we need)
     columns_to_load = ['action_uid', 'pos_candidates', 'confirmed_task', 'operation', 
@@ -320,87 +403,144 @@ def load_parquet_files(mm_mind2web_base: str, task_uids: List[str]) -> pd.DataFr
     dataframes = []
     for parquet_path in parquet_files:
         print(f"📂 Loading columns from {os.path.basename(parquet_path)}...")
-        try:
-            df = pd.read_parquet(parquet_path, columns=columns_to_load)
-            # Parse operation column if it's a string representation of a dict/list
-            if 'operation' in df.columns:
-                def parse_operation(x):
-                    if isinstance(x, str):
-                        try:
-                            return ast.literal_eval(x)
-                        except (ValueError, SyntaxError):
-                            return x
-                    return x
-                df['operation'] = df['operation'].apply(parse_operation)
-            dataframes.append(df)
-        except Exception as e:
-            print(f"⚠️  Warning: Failed to load {parquet_path}: {e}")
-            continue
+        df = pd.read_parquet(parquet_path, columns=columns_to_load)
+        
+        # Parse operation column if it's a string representation of a dict/list
+        if 'operation' in df.columns:
+            def parse_operation(x):
+                if isinstance(x, str):
+                    try:
+                        return ast.literal_eval(x)
+                    except (ValueError, SyntaxError):
+                        return x
+                return x
+            df['operation'] = df['operation'].apply(parse_operation)
+        
+        dataframes.append(df)
     
     if not dataframes:
-        raise ValueError("No parquet files could be loaded")
+        raise ValueError(f"No {split} parquet files could be loaded")
     
     # Concatenate all dataframes
-    print(f"📊 Concatenating {len(dataframes)} parquet files...")
+    print(f"📊 Concatenating {len(dataframes)} {split} parquet files...")
     combined_df = pd.concat(dataframes, ignore_index=True)
     
     # Sort by annotation_id
     print(f"🔢 Sorting by annotation_id...")
     combined_df = combined_df.sort_values('annotation_id').reset_index(drop=True)
-    combined_df = combined_df[combined_df['annotation_id'].isin(task_uids)]
-
-    print(f"✅ Loaded {len(combined_df)} rows from {len(dataframes)} parquet file(s) for {len(task_uids)} task(s)")
     
-    return combined_df
+    # Get unique task_uids from the parquet data
+    task_uids = combined_df['annotation_id'].unique().tolist()
+    print(f"✅ Loaded {len(combined_df)} rows from {len(dataframes)} {split} parquet file(s)")
+    print(f"📋 Found {len(task_uids)} unique tasks (annotation_ids) in {split} split")
+    
+    return combined_df, task_uids
 
 
-async def main():
-    """Entry point - automatically discovers task folders and parquet files
+def find_tasks_from_parquet(mm_mind2web_base: str, task_uids: List[str]) -> List[tuple]:
+    """Find task folders that match the task_uids from parquet data.
+    
+    Args:
+        mm_mind2web_base: Base directory for task folders
+        task_uids: List of task UIDs (annotation_ids) from parquet
+    
+    Returns:
+        List of tuples: (task_uid, dom_content_json_path, mhtml_files_dir)
+    """
+    task_folders = []
+    task_dir = os.path.join(mm_mind2web_base, "task")
+    
+    if not os.path.exists(task_dir):
+        raise ValueError(f"Task directory not found: {task_dir}")
+    
+    # Create a set for faster lookup
+    task_uids_set = set(task_uids)
+    
+    # Check each task folder
+    for task_uid in task_uids_set:
+        item_path = os.path.join(task_dir, task_uid)
+        
+        # Check if it's a directory
+        if not os.path.isdir(item_path):
+            continue
+        
+        # Check if it has processed/dom_content.json and snapshots
+        dom_content_path = os.path.join(item_path, "processed", "dom_content.json")
+        snapshots_dir = os.path.join(item_path, "processed", "snapshots")
+        
+        if os.path.exists(dom_content_path) and os.path.exists(snapshots_dir):
+            task_folders.append((task_uid, dom_content_path, snapshots_dir))
+            print(f"✅ Found task folder: {task_uid}")
+    
+    missing_tasks = task_uids_set - {t[0] for t in task_folders}
+    if missing_tasks:
+        print(f"⚠️  Warning: {len(missing_tasks)} tasks from parquet have no corresponding task folders:")
+        for task_uid in sorted(missing_tasks)[:5]:
+            print(f"      - {task_uid}")
+        if len(missing_tasks) > 5:
+            print(f"      ... and {len(missing_tasks) - 5} more")
+    
+    return task_folders
+
+
+async def main(split: str = 'train'):
+    """Entry point - loads parquet files for specified split and processes corresponding tasks.
+    
+    Args:
+        split: One of 'train', 'test_domain', 'test_task', 'test_website'
     
     Data structure:
     - mm_mind2web/task/<task_uid>/processed/dom_content.json
     - mm_mind2web/task/<task_uid>/processed/snapshots/ (MHTML files)
-    - mm_mind2web/data/<parquet_file>.parquet
+    - mm_mind2web/data/<split>-*.parquet
     """
     # Base directory for all source data
     mm_mind2web_base = "mm_mind2web"
     
+    # Validate split
+    valid_splits = ['train', 'test_domain', 'test_task', 'test_website']
+    if split not in valid_splits:
+        raise ValueError(f"Invalid split: {split}. Must be one of {valid_splits}")
+    
     refresh_ui_params_per_step = True
     
-    # Discover task folders
+    # Load parquet files for the specified split
     print(f"\n{'='*80}")
-    print(f"🔍 Discovering task folders in {mm_mind2web_base}/task/...")
+    print(f"📦 Loading {split} parquet files from {mm_mind2web_base}/data/...")
     print(f"{'='*80}\n")
     
-    task_folders = discover_task_folders(mm_mind2web_base)
+    hf_parquet_df, parquet_task_uids = load_parquet_files_by_split(mm_mind2web_base, split)
+    
+    if len(parquet_task_uids) == 0:
+        raise ValueError(f"No tasks found in {split} parquet files")
+    
+    # Find corresponding task folders
+    print(f"\n{'='*80}")
+    print(f"🔍 Finding task folders for {len(parquet_task_uids)} tasks from {split} split...")
+    print(f"{'='*80}\n")
+    
+    task_folders = find_tasks_from_parquet(mm_mind2web_base, parquet_task_uids)
     
     if not task_folders:
-        raise ValueError(f"No task folders found in {mm_mind2web_base}/task")
+        raise ValueError(f"No task folders found for tasks in {split} split")
     
-    print(f"\n✅ Found {len(task_folders)} task folder(s)\n")
+    print(f"\n✅ Found {len(task_folders)} task folder(s) with MHTML files\n")
     
-    # Discover and load parquet files
-    print(f"{'='*80}")
-    print(f"📦 Loading parquet files from {mm_mind2web_base}/data/...")
-    print(f"{'='*80}\n")
-    
-    # Build lists from discovered folders
+    # Build lists from found folders
     task_uids = [task_uid for task_uid, _, _ in task_folders]
-    task_uids = ['277e3468-f8cb-45c6-9e4b-0328066c42d3'] # '000ada18-5007-4fd4-8a12-8987ba543d31' not in parquet files somehow?
-    dom_content_json_paths = [dom_path for item, dom_path, _ in task_folders if item in task_uids]
-    mhtml_files_dirs = [snapshots_dir for item, _, snapshots_dir in task_folders if item in task_uids]
-    hf_parquet_df = load_parquet_files(mm_mind2web_base, task_uids)
+    dom_content_json_paths = [dom_path for _, dom_path, _ in task_folders]
+    mhtml_files_dirs = [snapshots_dir for _, _, snapshots_dir in task_folders]
     
-    # Generate a single run timestamp for this batch
+    # Generate a single run timestamp for this batch (include split in directory name)
     run_timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    run_dir = f"outputs/run_{run_timestamp}"
+    run_dir = f"outputs/run_{run_timestamp}_{split}"
     
     # Process each trajectory
     trajectory_stats = []
     total_trajectories = len(task_uids)
     
     print(f"\n{'#'*80}")
-    print(f"🚀 Starting batch processing of {total_trajectories} trajectory/trajectories")
+    print(f"🚀 Starting batch processing of {total_trajectories} trajectory/trajectories from {split} split")
     print(f"📁 All outputs will be saved in: {run_dir}/")
     print(f"{'#'*80}\n")
     
@@ -433,9 +573,10 @@ async def main():
     
     # Print overall summary
     print(f"\n{'#'*80}")
-    print(f"📊 OVERALL SUMMARY")
+    print(f"📊 OVERALL SUMMARY - {split.upper()} SPLIT")
     print(f"{'#'*80}\n")
     
+    print(f"Split: {split}")
     print(f"Total trajectories processed: {len(trajectory_stats)}")
     print(f"\nPer-trajectory statistics:")
     print(f"{'='*80}")
@@ -477,4 +618,27 @@ async def main():
     print(f"{'#'*80}\n")
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    parser = argparse.ArgumentParser(
+        description='Process MHTML files with UI randomization based on parquet data splits',
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  python src/main.py                    # Process train split (default)
+  python src/main.py --split test_domain
+  python src/main.py -s test_task
+  python src/main.py --split test_website
+        """
+    )
+    
+    parser.add_argument(
+        '--split', '-s',
+        type=str,
+        default='train',
+        choices=['train', 'test_domain', 'test_task', 'test_website'],
+        help='Data split to process (default: train)'
+    )
+    
+    args = parser.parse_args()
+    
+    print(f"🚀 Processing {args.split} split")
+    asyncio.run(main(split=args.split))
