@@ -17,3 +17,8 @@ class AmbiguousMatchError(ElementLocatorError):
     """Multiple elements found, cannot disambiguate"""
     pass
 
+
+class ElementValidationError(ElementLocatorError):
+    """Element found but failed validation checks (wrong element, not visible, viewport issues, etc.)"""
+    pass
+

@@ -9,7 +9,8 @@ from typing import Dict, Optional, List
 from exceptions import ElementLocatorError, ElementNotFoundError, AmbiguousMatchError
 from .strategies import (
     IdStrategy, DataTestIdStrategy, RoleAndTextStrategy, TextStrategy,
-    FingerprintStrategy, TagAndClassStrategy, BroadSearchStrategy
+    FingerprintStrategy, TagAndClassStrategy, BroadSearchStrategy,
+    ContextualContainerStrategy
 )
 
 
@@ -19,7 +20,6 @@ class ElementLocator:
     Tries each locator method in order, stops at first success.
     """
     
-    IOU_THRESHOLD = 0.5  # Minimum IoU for spatial disambiguation
 
     def __init__(self, pos_candidate_json: str, target_element_type: str, target_element_text: str):
         """Parses the input JSON and extracts fingerprint + bounding box."""
@@ -95,11 +95,13 @@ class ElementLocator:
     
     async def find_element(self, page):
         """Find element using text, type, and fingerprint in priority order.
-        Assumes target_element_text and target_element_type are always available."""
-        if not self.target_element_text or not self.target_element_type:
-            raise ElementNotFoundError("target_element_text and target_element_type must be provided")
+        target_element_text can be empty, but target_element_type is required."""
+        if not self.target_element_type:
+            raise ElementNotFoundError("target_element_type must be provided")
         
-        print(f"🔍 Searching for element: type='{self.target_element_type}', text='{self.target_element_text}'")
+        has_text = self.target_element_text and self.target_element_text.strip()
+        text_display = self.target_element_text if has_text else "(empty)"
+        print(f"🔍 Searching for element: type='{self.target_element_type}', text='{text_display}'")
         print(f"   Fingerprint: {self.fingerprint}")
         
         type_lower = self.target_element_type.lower()
@@ -114,20 +116,35 @@ class ElementLocator:
         
         # Create strategy instances
         strategies = [
-            IdStrategy(self.fingerprint, self.target_element_type, self.target_element_text, self.original_box),
-            DataTestIdStrategy(self.fingerprint, self.target_element_type, self.target_element_text, self.original_box),
-            RoleAndTextStrategy(self.fingerprint, self.target_element_type, self.target_element_text, self.original_box),
-            TextStrategy(self.fingerprint, self.target_element_type, self.target_element_text, self.original_box),
-            FingerprintStrategy(self.fingerprint, self.target_element_type, self.target_element_text, self.original_box),
-            TagAndClassStrategy(self.fingerprint, self.target_element_type, self.target_element_text, self.original_box),
-            BroadSearchStrategy(self.fingerprint, self.target_element_type, self.target_element_text, self.original_box),
+            IdStrategy(self.fingerprint, self.target_element_type, self.target_element_text or '', self.original_box),
+            DataTestIdStrategy(self.fingerprint, self.target_element_type, self.target_element_text or '', self.original_box),
         ]
+        
+        # Add text-based strategies only if we have meaningful text
+        if has_text:
+            strategies.extend([
+                ContextualContainerStrategy(self.fingerprint, self.target_element_type, self.target_element_text, self.original_box),
+                RoleAndTextStrategy(self.fingerprint, self.target_element_type, self.target_element_text, self.original_box),
+                TextStrategy(self.fingerprint, self.target_element_type, self.target_element_text, self.original_box),
+            ])
+        
+        # Add fingerprint-based strategies (work with or without text)
+        strategies.extend([
+            FingerprintStrategy(self.fingerprint, self.target_element_type, self.target_element_text or '', self.original_box),
+            TagAndClassStrategy(self.fingerprint, self.target_element_type, self.target_element_text or '', self.original_box),
+        ])
+        
+        # Add broad search only if we have text
+        if has_text:
+            strategies.append(
+                BroadSearchStrategy(self.fingerprint, self.target_element_type, self.target_element_text, self.original_box)
+            )
         
         # Try strategies in priority order
         for strategy in strategies:
             if isinstance(strategy, RoleAndTextStrategy):
                 result = await strategy.execute(page, role)
-            elif isinstance(strategy, (FingerprintStrategy, TagAndClassStrategy)):
+            elif isinstance(strategy, (FingerprintStrategy, TagAndClassStrategy, ContextualContainerStrategy)):
                 result = await strategy.execute(page, type_lower)
             else:
                 result = await strategy.execute(page)
@@ -136,104 +153,7 @@ class ElementLocator:
                 return result
         
         raise ElementNotFoundError(
-            f"No element found: type='{self.target_element_type}', text='{self.target_element_text}', "
+            f"No element found: type='{self.target_element_type}', text='{text_display}', "
             f"fingerprint={self.fingerprint}"
         )
-
-    async def _disambiguate_with_text_and_iou(self, candidates):
-        """Disambiguate candidates using text match first, then IoU."""
-        if not candidates:
-            raise AmbiguousMatchError("No candidates for disambiguation")
-        
-        # First, try to filter by text if available (most reliable)
-        if self.target_element_text:
-            text_matched = await self._filter_by_text(candidates, self.target_element_text)
-            if len(text_matched) == 1:
-                print(f"  ✅ Disambiguated by text match")
-                return text_matched[0]
-            elif len(text_matched) > 1:
-                # Use text-matched candidates for IoU disambiguation
-                candidates = text_matched
-                print(f"  📝 Filtered to {len(candidates)} text-matched candidates")
-        
-        # Filter by type if available
-        if self.target_element_type:
-            type_matched = await self._filter_by_type(candidates, self.target_element_type)
-            if len(type_matched) == 1:
-                print(f"  ✅ Disambiguated by type match")
-                return type_matched[0]
-            elif len(type_matched) > 1:
-                candidates = type_matched
-                print(f"  📝 Filtered to {len(candidates)} type-matched candidates")
-        
-        # Use IoU for spatial disambiguation if we have bounding box and multiple candidates
-        if self.original_box and len(candidates) > 1:
-            return await self._disambiguate_with_iou(candidates)
-        
-        # If no bounding box or only one candidate, return first candidate
-        if len(candidates) == 1:
-            return candidates[0]
-        
-        # Fallback: return first candidate (shouldn't happen often)
-        print(f"  ⚠️ No bounding box for IoU, returning first candidate")
-        return candidates[0]
-
-    async def _disambiguate_with_iou(self, candidates):
-        """Use IoU and area matching to pick the best candidate."""
-        if not candidates or not self.original_box:
-            raise AmbiguousMatchError("No candidates or bounding box for disambiguation")
-        
-        orig = self.original_box
-        orig_area = orig['width'] * orig['height']
-        orig_center = (orig['x'] + orig['width'] / 2, orig['y'] + orig['height'] / 2)
-        
-        candidate_data = []
-        for candidate in candidates:
-            if box := await candidate.bounding_box():
-                iou = self._calculate_iou(orig, box)
-                area_diff = abs(box.get('width', 0) * box.get('height', 0) - orig_area)
-                cx, cy = box.get('x', 0) + box.get('width', 0) / 2, box.get('y', 0) + box.get('height', 0) / 2
-                center_dist = ((cx - orig_center[0]) ** 2 + (cy - orig_center[1]) ** 2) ** 0.5
-                
-                candidate_data.append({
-                    'element': candidate, 'iou': iou, 'area_diff': area_diff, 'center_distance': center_dist
-                })
-        
-        if not candidate_data:
-            raise AmbiguousMatchError(f"Found {len(candidates)} candidates but none had valid bounding boxes")
-        
-        candidate_data.sort(key=lambda x: (-x['iou'], x['area_diff']))
-        best = candidate_data[0]
-        
-        if best['iou'] < 0.1:
-            print(f"  ⚠️ Low IoU ({best['iou']:.2f}), falling back to center distance matching")
-            candidate_data.sort(key=lambda x: (x['center_distance'], x['area_diff']))
-            best = candidate_data[0]
-        
-        if best['iou'] < self.IOU_THRESHOLD and best['center_distance'] > 100:
-            raise AmbiguousMatchError(
-                f"Found {len(candidates)} candidates but best match has IoU {best['iou']:.2f} "
-                f"and center distance {best['center_distance']:.1f}px"
-            )
-        
-        print(f"  ✅ Selected: IoU={best['iou']:.2f}, center_dist={best['center_distance']:.1f}px")
-        return best['element']
-
-    def _calculate_iou(self, box1: Dict, box2: Dict) -> float:
-        """Calculate Intersection over Union between two bounding boxes."""
-        try:
-            x1, y1, w1, h1 = box1.get('x', 0), box1.get('y', 0), box1.get('width', 0), box1.get('height', 0)
-            x2, y2, w2, h2 = box2.get('x', 0), box2.get('y', 0), box2.get('width', 0), box2.get('height', 0)
-            
-            x_left, y_top = max(x1, x2), max(y1, y2)
-            x_right, y_bottom = min(x1 + w1, x2 + w2), min(y1 + h1, y2 + h2)
-            
-            if x_right <= x_left or y_bottom <= y_top:
-                return 0.0
-            
-            intersection = (x_right - x_left) * (y_bottom - y_top)
-            union = w1 * h1 + w2 * h2 - intersection
-            return intersection / union if union > 0 else 0.0
-        except Exception:
-            return 0.0
 

@@ -8,7 +8,7 @@ from typing import Dict, Any, Optional
 import pandas as pd
 
 from .mhtml_processor import MHTMLProcessor
-from exceptions import ElementLocatorError
+from exceptions import ElementLocatorError, ElementValidationError
 from utils.data_loaders import load_dom_content_json, load_action_list_from_mhtml, load_current_page_urls
 from utils.helpers import setup_result_dirs, parse_target_action_reprs, generate_step_instruction
 
@@ -188,6 +188,7 @@ async def process_mhtml_actions(
                 
                 # Add action data to trajectory list
                 action_data = {
+                    'task_uid': task_uid,
                     'confirmed_task': parquet_data['confirmed_task'],
                     'action_uid': result['action_uid'],
                     'op': result['op'],
@@ -211,10 +212,10 @@ async def process_mhtml_actions(
                 steps_saved = len(trajectory)
                 print(f"💾 Trajectory saved: {trajectory_file} (step {i+1}/{len(action_uids)})")
                 
-            except (ElementLocatorError, IndexError, ValueError, KeyError) as e:
+            except (ElementLocatorError, ElementValidationError, IndexError, ValueError, KeyError) as e:
                 error_type = type(e).__name__
                 print(f"⏭️  Skipping step {i+1}: {error_type} - {str(e)}")
-                print(f"   Step cannot be processed, skipping to next step")
+                print(f"   Step cannot be processed with 100% confidence, skipping to next step")
                 print(f"{'='*60}")
                 should_reset_page_pre_actions = False
                 continue

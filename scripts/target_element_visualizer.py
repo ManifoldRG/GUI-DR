@@ -1,8 +1,10 @@
 import json
+import os
 from pathlib import Path
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import PIL.Image
+
 
 ##### VISUALIZE BOUNDING BOXES #####
 # Visualize bounding boxes for all images in a trajectory
@@ -10,11 +12,8 @@ import PIL.Image
 script_dir = Path(__file__).parent
 project_root = script_dir.parent
 
-
 # Configuration: specify the run folder and JSON filename
-import os
-
-run_folder = "run_20251104_233524"
+run_folder = "run_20251106_223652_train"
 task_folders = [f for f in os.listdir(project_root / "outputs" / run_folder)]
 
 for task_folder in task_folders:

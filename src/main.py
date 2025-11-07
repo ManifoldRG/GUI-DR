@@ -4,10 +4,14 @@ Main Script - Orchestrates MHTML processing pipeline
 
 import asyncio
 import argparse
+import os
 from datetime import datetime
 
 from utils import load_parquet_files_by_split, find_tasks_from_parquet, print_trajectory_summary
 from core import process_mhtml_actions
+
+DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
+DEBUG_TASK_UIDS = ['767faaa6-220e-4e6c-ac1d-39b1501c69cf']
 
 
 async def main(split: str = 'train'):
@@ -35,6 +39,10 @@ async def main(split: str = 'train'):
     print(f"{'='*80}\n")
     
     hf_parquet_df, parquet_task_uids = load_parquet_files_by_split(mm_mind2web_base, split)
+
+    if DEBUG:
+        parquet_task_uids = DEBUG_TASK_UIDS
+        hf_parquet_df = hf_parquet_df[hf_parquet_df['annotation_id'].isin(parquet_task_uids)]
     
     if len(parquet_task_uids) == 0:
         raise ValueError(f"No tasks found in {split} parquet files")
