@@ -91,7 +91,8 @@ async def main(split: str = 'train'):
                 mhtml_files_dir,
                 task_uid,
                 refresh_ui_params_per_step,
-                run_dir
+                run_dir,
+                headless=True
             )
             trajectory_stats.append(stats)
         except Exception as e:

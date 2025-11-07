@@ -41,7 +41,8 @@ async def process_mhtml_actions(
     mhtml_files_dir: str,
     task_uid: str,
     refresh_ui_params_per_step: bool,
-    run_dir: str
+    run_dir: str,
+    headless: bool = False
 ) -> Dict[str, Any]:
     """Main processing function for a single trajectory.
     
@@ -99,7 +100,7 @@ async def process_mhtml_actions(
         logger.info(f"✅ Found parquet data for {len(parquet_action_uids & mhtml_action_uids)}/{len(action_uids)} action_uids")
 
     async with async_playwright() as p:
-        browser = await p.chromium.launch(headless=False)
+        browser = await p.chromium.launch(headless=headless)
         context = await browser.new_context(
             java_script_enabled=True,
             viewport={"width": 1920, "height": 1080}
