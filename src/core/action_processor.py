@@ -6,11 +6,13 @@ import os
 import json
 from typing import Dict, Any, Optional
 import pandas as pd
+from loguru import logger
 
 from .mhtml_processor import MHTMLProcessor
 from exceptions import ElementLocatorError, ElementValidationError
 from utils.data_loaders import load_dom_content_json, load_action_list_from_mhtml, load_current_page_urls
 from utils.helpers import setup_result_dirs, parse_target_action_reprs, generate_step_instruction
+from utils.logging_setup import setup_task_logging
 
 
 def _extract_parquet_data(parquet_row: pd.DataFrame) -> Dict[str, Any]:
@@ -62,37 +64,39 @@ async def process_mhtml_actions(
     if not action_uids:
         raise ValueError(f"No MHTML files found in {mhtml_files_dir}")
     
-    print(f"📋 Found {len(action_uids)} MHTML files (action_uids) in snapshots directory")
+    # Set up task-specific logging (writes to both console and task_dir/logs.txt)
+    task_dir, task_screenshots_dir, trajectory_file = setup_result_dirs(run_dir, task_uid)
+    setup_task_logging(task_dir, task_uid)
+    
+    logger.info(f"📋 Found {len(action_uids)} MHTML files (action_uids) in snapshots directory")
     
     # Load dom_content.json for page URLs (optional)
     try:
         dom_content_json = load_dom_content_json(dom_content_json_path)
         current_page_urls = load_current_page_urls(dom_content_json, action_uids)
     except Exception as e:
-        print(f"⚠️  Warning: Could not load page URLs from dom_content.json: {e}")
-        print(f"   Continuing without page URL tracking...")
+        logger.warning(f"Could not load page URLs from dom_content.json: {e}")
+        logger.warning("Continuing without page URL tracking...")
         current_page_urls = [''] * len(action_uids)
     
     # Filter parquet dataframe by annotation_id (task_uid)
     hf_parquet_file = hf_parquet_df[hf_parquet_df['annotation_id'] == task_uid].copy()
     
     if hf_parquet_file.empty:
-        print(f"⚠️  Warning: No data found in parquet files for task_uid: {task_uid}")
-        print(f"   Will process MHTML files but skip steps without parquet data")
+        logger.warning(f"No data found in parquet files for task_uid: {task_uid}")
+        logger.warning("Will process MHTML files but skip steps without parquet data")
     else:
         # Check how many action_uids have parquet data
         parquet_action_uids = set(hf_parquet_file['action_uid'].unique())
         mhtml_action_uids = set(action_uids)
         missing_in_parquet = mhtml_action_uids - parquet_action_uids
         if missing_in_parquet:
-            print(f"⚠️  Warning: {len(missing_in_parquet)} action_uids from MHTML files not found in parquet:")
+            logger.warning(f"{len(missing_in_parquet)} action_uids from MHTML files not found in parquet:")
             for uid in sorted(missing_in_parquet)[:5]:
-                print(f"      - {uid}")
+                logger.warning(f"      - {uid}")
             if len(missing_in_parquet) > 5:
-                print(f"      ... and {len(missing_in_parquet) - 5} more")
-        print(f"✅ Found parquet data for {len(parquet_action_uids & mhtml_action_uids)}/{len(action_uids)} action_uids")
-
-    task_screenshots_dir, trajectory_file = setup_result_dirs(run_dir, task_uid)
+                logger.warning(f"      ... and {len(missing_in_parquet) - 5} more")
+        logger.info(f"✅ Found parquet data for {len(parquet_action_uids & mhtml_action_uids)}/{len(action_uids)} action_uids")
 
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=False)
@@ -116,15 +120,15 @@ async def process_mhtml_actions(
         
         for i, action_uid in enumerate(action_uids):
             try:
-                print(f"\n{'='*60}")
-                print(f"Processing task {task_uid} - action {i+1}/{len(action_uids)}")
-                print(f"Action UID: {action_uid}")
+                logger.info(f"\n{'='*60}")
+                logger.info(f"Processing task {task_uid} - action {i+1}/{len(action_uids)}")
+                logger.info(f"Action UID: {action_uid}")
                 
                 mhtml_path = os.path.join(mhtml_files_dir, f"{action_uid}_before.mhtml")
                 
                 if not os.path.exists(mhtml_path):
-                    print(f"⏭️  Skipping step {i+1}: MHTML file not found: {mhtml_path}")
-                    print(f"{'='*60}")
+                    logger.warning(f"⏭️  Skipping step {i+1}: MHTML file not found: {mhtml_path}")
+                    logger.info(f"{'='*60}")
                     continue
                 
                 # Try to get data from parquet
@@ -132,9 +136,9 @@ async def process_mhtml_actions(
                 parquet_data = _extract_parquet_data(parquet_row)
                 
                 if parquet_data is None:
-                    print(f"⏭️  Skipping step {i+1}: No parquet data found for action UID {action_uid}")
-                    print(f"   MHTML file exists but no metadata in parquet files")
-                    print(f"{'='*60}")
+                    logger.warning(f"⏭️  Skipping step {i+1}: No parquet data found for action UID {action_uid}")
+                    logger.warning("   MHTML file exists but no metadata in parquet files")
+                    logger.info(f"{'='*60}")
                     continue
                 
                 target_element_type, target_element_text = parse_target_action_reprs(
@@ -142,15 +146,15 @@ async def process_mhtml_actions(
                 )
                 step_instruction = generate_step_instruction(parquet_data['target_action_reprs'])
 
-                print(f"Confirmed Task: {parquet_data['confirmed_task']}")
-                print(f"Action Op: {parquet_data['action_op']}")
-                print(f"Target Action Reprs: {parquet_data['target_action_reprs']}")
-                print(f"Target Element Type: {target_element_type}")
-                print(f"Target Element Text: {target_element_text}")
-                print(f"Step Instruction: {step_instruction}")
-                print(f"Pos Candidate: {parquet_data['pos_candidate']}")
-                print(f"Type Action Value: {parquet_data['type_action_value']}")
-                print(f"Current Page URL: {current_page_urls[i]}")
+                logger.info(f"Confirmed Task: {parquet_data['confirmed_task']}")
+                logger.info(f"Action Op: {parquet_data['action_op']}")
+                logger.info(f"Target Action Reprs: {parquet_data['target_action_reprs']}")
+                logger.info(f"Target Element Type: {target_element_type}")
+                logger.info(f"Target Element Text: {target_element_text}")
+                logger.info(f"Step Instruction: {step_instruction}")
+                logger.info(f"Pos Candidate: {parquet_data['pos_candidate']}")
+                logger.info(f"Type Action Value: {parquet_data['type_action_value']}")
+                logger.info(f"Current Page URL: {current_page_urls[i]}")
                 
                 # Load MHTML
                 await processor.load_mhtml(mhtml_path)
@@ -176,8 +180,8 @@ async def process_mhtml_actions(
 
                 # Only add to trajectory if element was found with 100% confidence
                 if not result['augmentation_success']:
-                    print(f"⏭️  Skipping step {i+1}: Element not found with 100% confidence")
-                    print(f"{'='*60}")
+                    logger.warning(f"⏭️  Skipping step {i+1}: Element not found with 100% confidence")
+                    logger.info(f"{'='*60}")
                     continue
 
                 steps_succeeded += 1
@@ -204,19 +208,19 @@ async def process_mhtml_actions(
                     'ui_params': result.get('ui_params')
                 }
                 trajectory.append(action_data)
-                print(f"{'='*60}")
+                logger.info(f"{'='*60}")
 
                 # Save trajectory after successful step
                 with open(trajectory_file, 'w') as f:
                     json.dump(trajectory, f, indent=2)
                 steps_saved = len(trajectory)
-                print(f"💾 Trajectory saved: {trajectory_file} (step {i+1}/{len(action_uids)})")
+                logger.info(f"💾 Trajectory saved: {trajectory_file} (step {i+1}/{len(action_uids)})")
                 
             except (ElementLocatorError, ElementValidationError, IndexError, ValueError, KeyError) as e:
                 error_type = type(e).__name__
-                print(f"⏭️  Skipping step {i+1}: {error_type} - {str(e)}")
-                print(f"   Step cannot be processed with 100% confidence, skipping to next step")
-                print(f"{'='*60}")
+                logger.warning(f"⏭️  Skipping step {i+1}: {error_type} - {str(e)}")
+                logger.warning("   Step cannot be processed with 100% confidence, skipping to next step")
+                logger.info(f"{'='*60}")
                 should_reset_page_pre_actions = False
                 continue
 
@@ -224,13 +228,17 @@ async def process_mhtml_actions(
         await browser.close()
 
     # Summary
-    print(f"\n{'='*60}")
-    print(f"✅ Processing complete for trajectory {task_uid}!")
-    print(f"📊 Total steps: {steps_total}")
-    print(f"✅ Steps succeeded: {steps_succeeded}")
-    print(f"💾 Steps saved: {steps_saved}")
-    print(f"❌ Steps failed/skipped: {steps_total - steps_succeeded}")
-    print(f"{'='*60}")
+    logger.info(f"\n{'='*60}")
+    logger.info(f"✅ Processing complete for trajectory {task_uid}!")
+    logger.info(f"📊 Total steps: {steps_total}")
+    logger.info(f"✅ Steps succeeded: {steps_succeeded}")
+    logger.info(f"💾 Steps saved: {steps_saved}")
+    logger.info(f"❌ Steps failed/skipped: {steps_total - steps_succeeded}")
+    logger.info(f"{'='*60}")
+    
+    # Reset logging for next task (close file handler)
+    from utils.logging_setup import reset_logging
+    reset_logging()
     
     return {
         'task_uid': task_uid,

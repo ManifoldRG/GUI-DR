@@ -9,6 +9,7 @@ import os
 import traceback
 from typing import List, Dict, Any, Optional, Tuple, Union
 from PIL import Image
+from loguru import logger
 from ui.randomization import generate_diverse_ui_params
 from ui.injection import generate_injection_js
 from exceptions import ElementLocatorError, ElementNotFoundError, AmbiguousMatchError, ElementValidationError
@@ -53,7 +54,7 @@ class MHTMLProcessor:
             True if loaded successfully, False otherwise.
         """
         if not os.path.exists(mhtml_path):
-            print(f"❌ MHTML file not found: {mhtml_path}")
+            logger.error(f"MHTML file not found: {mhtml_path}")
             return False
         
         try:
@@ -74,13 +75,13 @@ class MHTMLProcessor:
                     timeout=15.0
                 )
             except asyncio.TimeoutError:
-                print(f"⚠️  Network idle timeout, continuing anyway...")
+                logger.warning("Network idle timeout, continuing anyway...")
                 # Continue even if networkidle times out
             
-            print(f"✅ Loaded MHTML: {os.path.basename(mhtml_path)}")
+            logger.info(f"✅ Loaded MHTML: {os.path.basename(mhtml_path)}")
             return True
         except Exception as e:
-            print(f"❌ Error loading MHTML {mhtml_path}: {e}")
+            logger.error(f"Error loading MHTML {mhtml_path}: {e}")
             traceback.print_exc()
             return False
     
@@ -132,7 +133,7 @@ class MHTMLProcessor:
         
         # Execute the generated JavaScript
         await self.page.evaluate(injection_js, params_with_reorder)
-        print("✅ Random UI modifications injected")
+        logger.info("✅ Random UI modifications injected")
         return params_return
 
     async def find_element_by_pos_info(
@@ -183,7 +184,7 @@ class MHTMLProcessor:
         try:
             await self.action_replayer.replay_actions(self.page_pre_actions, type_action_value)
         except Exception as replay_error:
-            print(f"⚠️  Error during action replay: {replay_error}")
+            logger.warning(f"Error during action replay: {replay_error}")
             # Continue processing even if replay fails - the MHTML might already have the state we need
         
         if should_randomize:
@@ -195,7 +196,7 @@ class MHTMLProcessor:
         
         Also handles finding parent elements when child elements are found (e.g., span inside link).
         """
-        print(f"Finding element by pos_candidate: {pos_candidate}")
+        logger.info(f"Finding element by pos_candidate: {pos_candidate}")
         element_info = await self.find_element_by_pos_info(pos_candidate, target_element_type, target_element_text)
         
         element = element_info.get('locator')
@@ -221,7 +222,7 @@ class MHTMLProcessor:
                 
                 if input_element:
                     element = input_element
-                    print(f"  📌 Using input checkbox/radio instead of label")
+                    logger.info("  📌 Using input checkbox/radio instead of label")
         
         # STRICT VALIDATION: Verify element matches expected type and text after all adjustments
         await self.element_validator.validate_element(element, target_element_type, target_element_text)
@@ -278,7 +279,7 @@ class MHTMLProcessor:
         should_randomize: bool = True
     ) -> Dict[str, Any]:
         """Process a single action entry"""
-        print(f"\n🎬 Processing action: {action_uid} ({action_op})")
+        logger.info(f"\n🎬 Processing action: {action_uid} ({action_op})")
         
         try:
             # Prepare context: reset, replay, inject UI
@@ -289,7 +290,7 @@ class MHTMLProcessor:
             
             # Get coordinates
             coordinates, bounding_box = await self._get_element_coordinates(element, element_info)
-            print(f"Found element at coordinates: {coordinates} with bounding box: {bounding_box}")
+            logger.info(f"Found element at coordinates: {coordinates} with bounding box: {bounding_box}")
             
             # Get scroll position at the SAME time as bounding box to ensure consistency
             scroll_info_at_bbox = await self.page.evaluate("() => ({ scrollX: window.scrollX, scrollY: window.scrollY })")
@@ -332,6 +333,6 @@ class MHTMLProcessor:
                 'ui_params': ui_params
             }
         except Exception as e:
-            print(f"❌ Error in process_action: {e}")
+            logger.error(f"Error in process_action: {e}")
             traceback.print_exc()
             raise

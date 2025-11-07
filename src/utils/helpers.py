@@ -11,7 +11,7 @@ from typing import List, Tuple, Dict, Any
 # File Utilities
 # ============================================================================
 
-def setup_result_dirs(run_dir: str, task_uid: str) -> Tuple[str, str]:
+def setup_result_dirs(run_dir: str, task_uid: str) -> Tuple[str, str, str]:
     """Set up directory structure: run_<timestamp>/<task_id>/screenshots/ and trajectory.json
     
     Args:
@@ -19,7 +19,7 @@ def setup_result_dirs(run_dir: str, task_uid: str) -> Tuple[str, str]:
         task_uid: The task UID to use as the folder name
         
     Returns:
-        Tuple of (task_screenshots_dir, trajectory_file)
+        Tuple of (task_dir, task_screenshots_dir, trajectory_file)
     """
     # Create structure: run_<timestamp>/<task_id>/
     task_dir = os.path.join(run_dir, task_uid)
@@ -32,7 +32,7 @@ def setup_result_dirs(run_dir: str, task_uid: str) -> Tuple[str, str]:
     # Create trajectory file path: run_<timestamp>/<task_id>/trajectory.json
     trajectory_file = os.path.join(task_dir, "trajectory.json")
     
-    return task_screenshots_dir, trajectory_file
+    return task_dir, task_screenshots_dir, trajectory_file
 
 
 # ============================================================================
