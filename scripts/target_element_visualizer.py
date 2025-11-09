@@ -13,7 +13,7 @@ script_dir = Path(__file__).parent
 project_root = script_dir.parent
 
 # Configuration: specify the run folder and JSON filename
-run_folder = "run_20251106_223652_train"
+run_folder = "run_20251107_124217_train"
 task_folders = [f for f in os.listdir(project_root / "outputs" / run_folder)]
 
 for task_folder in task_folders:

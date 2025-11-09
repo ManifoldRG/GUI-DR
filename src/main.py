@@ -11,7 +11,15 @@ from utils import load_parquet_files_by_split, find_tasks_from_parquet, print_tr
 from core import process_mhtml_actions
 
 DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
-DEBUG_TASK_UIDS = ['767faaa6-220e-4e6c-ac1d-39b1501c69cf']
+# DEBUG_TASK_UIDS = ['0a2130e7-1108-4281-8772-25c8671fb88e']
+DEBUG_TASK_UIDS = ['f4c21e9f-fbd7-4c45-a282-de06ae3b73c5'] # many button
+# DEBUG_TASK_UIDS = ['ff173880-e7f5-4b4e-b941-79e9c3504add', # step 4 arrow and bbox are apart, INVESTIGATE coordinates update after scrolling and cropping
+#                     '38fe67f7-14af-4259-8309-aa350abdc395', # 3rd star symbol div
+#                     'e6643cfb-567e-4e11-8cab-f85483573539', # dense text interface
+#                     '0cb50efe-4568-4c8d-bf0e-ed106cf99d1d'] # tiny magnifying glass icon top right corner
+SHOULD_RANDOMIZE = True
+HEADLESS = True
+# DEBUG_TASK_UIDS = None
 
 
 async def main(split: str = 'train'):
@@ -40,8 +48,9 @@ async def main(split: str = 'train'):
     
     hf_parquet_df, parquet_task_uids = load_parquet_files_by_split(mm_mind2web_base, split)
 
-    if DEBUG:
+    if DEBUG_TASK_UIDS:
         parquet_task_uids = DEBUG_TASK_UIDS
+        # parquet_task_uids = parquet_task_uids[:2]
         hf_parquet_df = hf_parquet_df[hf_parquet_df['annotation_id'].isin(parquet_task_uids)]
     
     if len(parquet_task_uids) == 0:
@@ -92,7 +101,8 @@ async def main(split: str = 'train'):
                 task_uid,
                 refresh_ui_params_per_step,
                 run_dir,
-                headless=True
+                headless=HEADLESS,
+                should_randomize=SHOULD_RANDOMIZE
             )
             trajectory_stats.append(stats)
         except Exception as e:

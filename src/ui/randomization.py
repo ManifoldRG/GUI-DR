@@ -31,19 +31,92 @@ def get_contrast_ratio(color1, color2):
     return (lighter + 0.05) / (darker + 0.05)
 
 
+def generate_contrasting_color(bg_color, prefer_dark=True):
+    """Generate a contrasting color (black or white) that meets WCAG contrast requirements.
+    
+    Args:
+        bg_color: Background color (hex string or RGB tuple)
+        prefer_dark: If True, prefer dark text; if False, prefer light text
+    
+    Returns:
+        Hex color string that contrasts with bg_color (minimum 4.5:1 ratio)
+    """
+    bg_rgb = hex_to_rgb(bg_color) if isinstance(bg_color, str) else bg_color
+    bg_lum = get_luminance(bg_rgb)
+    
+    # Try black first if prefer_dark, then white
+    test_colors = ['#000000', '#FFFFFF'] if prefer_dark else ['#FFFFFF', '#000000']
+    
+    for test_color in test_colors:
+        if get_contrast_ratio(bg_rgb, test_color) >= 4.5:
+            return test_color
+    
+    # If neither pure black nor white works (very rare), use luminance-based choice
+    # This ensures at least some contrast
+    return '#000000' if bg_lum > 0.5 else '#FFFFFF'
+
+
 def find_accessible_text_color(bg_color, dark_options, light_options, min_ratio=4.5):
-    """Find an accessible text color for the given background"""
+    """Find an accessible text color for the given background.
+    
+    Always returns a color with at least min_ratio contrast (default 4.5:1 for WCAG AA).
+    If no palette color meets the requirement, generates a contrasting color.
+    """
+    # Handle gradient backgrounds by using a representative color
+    # For gradients, we'll use the first solid color or default to checking against white
+    if isinstance(bg_color, str) and 'gradient' in bg_color.lower():
+        # For gradients, check against a light background assumption
+        # The JavaScript will handle actual contrast per element
+        bg_color = '#FFFFFF'  # Default assumption for gradient backgrounds
+    
+    bg_rgb = hex_to_rgb(bg_color) if isinstance(bg_color, str) else bg_color
+    
+    # Try all options in order, preferring ones with higher contrast
+    best_color = None
+    best_ratio = 0
+    
     for text_color in dark_options + light_options:
-        if get_contrast_ratio(bg_color, text_color) >= min_ratio:
-            return text_color
-    bg_lum = get_luminance(hex_to_rgb(bg_color) if isinstance(bg_color, str) and '#' in bg_color else (240, 240, 240))
-    return light_options[0] if bg_lum < 0.5 else dark_options[0]
+        ratio = get_contrast_ratio(bg_rgb, text_color)
+        if ratio >= min_ratio:
+            # Prefer colors with higher contrast (up to a point, for readability)
+            if ratio > best_ratio:
+                best_color = text_color
+                best_ratio = ratio
+    
+    # If we found a good color, return it
+    if best_color:
+        return best_color
+    
+    # If no palette color works, generate a guaranteed contrasting color
+    bg_lum = get_luminance(bg_rgb)
+    prefer_dark = bg_lum > 0.5  # Prefer dark text on light backgrounds
+    return generate_contrasting_color(bg_rgb, prefer_dark=prefer_dark)
+
+
+def validate_color_contrast(text_color, bg_color, min_ratio=4.5, element_name="element"):
+    """Validate that text color has sufficient contrast with background.
+    
+    Returns True if contrast is sufficient, False otherwise.
+    Logs a warning if contrast is insufficient (shouldn't happen with improved find_accessible_text_color).
+    """
+    # Skip validation for gradient backgrounds (handled by JavaScript)
+    if isinstance(bg_color, str) and 'gradient' in bg_color.lower():
+        return True
+    
+    ratio = get_contrast_ratio(text_color, bg_color)
+    if ratio < min_ratio:
+        # This shouldn't happen with our improved find_accessible_text_color, but log if it does
+        from loguru import logger
+        logger.warning(f"⚠️  {element_name}: contrast ratio {ratio:.2f} < {min_ratio} for {text_color} on {bg_color}")
+        return False
+    return True
 
 
 def generate_diverse_ui_params():
     """
     Generate highly diverse UI parameters for maximum visual difference.
     Creates dramatic color, font, and style variations while maintaining text overflow prevention.
+    All color combinations are validated to meet WCAG contrast requirements (minimum 4.5:1).
     """
     style = random.choice(list(COLOR_PALETTES.keys()))
     colors = COLOR_PALETTES[style]
@@ -52,8 +125,26 @@ def generate_diverse_ui_params():
     body_text_color = find_accessible_text_color(bg_color, colors['dark_text'], colors['light_text'])
     btn_text_color = find_accessible_text_color(primary_color, colors['dark_text'], colors['light_text'])
     
+    # Validate initial color combinations
+    validate_color_contrast(body_text_color, bg_color, element_name="body text")
+    validate_color_contrast(btn_text_color, primary_color, element_name="button text")
+    
     # Get font combination for the selected style
     heading_font, body_font = random.choice(FONT_COMBINATIONS.get(style, FONT_COMBINATIONS['modern_minimal']))
+    
+    # Ensure linkColor has sufficient contrast with background
+    # Links should be visible, so we check contrast with bg_color
+    link_color = primary_color
+    if get_contrast_ratio(bg_color, primary_color) < 3.0:  # 3.0 is minimum for large text, but we want better
+        # If primary color doesn't contrast well, use a contrasting color
+        link_color = find_accessible_text_color(bg_color, colors['dark_text'], colors['light_text'], min_ratio=3.0)
+        # But make it distinct from body text - if it's the same, use primary with higher contrast
+        if link_color == body_text_color:
+            # Try to find a color that contrasts but is different
+            for candidate in colors['primaries']:
+                if get_contrast_ratio(bg_color, candidate) >= 3.0 and candidate != body_text_color:
+                    link_color = candidate
+                    break
     
     # Base parameters with more dramatic variations
     base_params = {
@@ -75,12 +166,14 @@ def generate_diverse_ui_params():
         'lineHeight': round(random.uniform(1.3, 1.7), 2),
         'btnBg': primary_color,
         'btnTextColor': btn_text_color,
-        'linkColor': primary_color,
+        'linkColor': link_color,
         'transitionSpeed': round(random.uniform(0.15, 0.4), 2),
     }
     
     # Style-specific parameters with more dramatic variations
     if style == 'neobrutalism':
+        input_bg = '#FFFFFF'
+        input_text_color = find_accessible_text_color(input_bg, colors['dark_text'], colors['light_text'])
         base_params.update({
             'btnBorderWidth': random.randint(4, 8),
             'btnBorderColor': random.choice(colors['borders']),
@@ -91,8 +184,8 @@ def generate_diverse_ui_params():
             'btnShadowY': random.randint(6, 12),
             'btnShadowBlur': 0,
             'btnShadowColor': '#000000',
-            'inputBg': '#FFFFFF',
-            'inputTextColor': '#000000',
+            'inputBg': input_bg,
+            'inputTextColor': input_text_color,
             'inputBorderWidth': random.randint(3, 6),
             'inputBorderColor': random.choice(colors['borders']),
             'inputBorderRadius': random.choice([0, 2, 4]),
@@ -145,6 +238,8 @@ def generate_diverse_ui_params():
             'inputShadowInset': f"inset {random.randint(3, 5)}px {random.randint(3, 5)}px {random.randint(8, 12)}px rgba(0, 0, 0, 0.15)",
         })
     elif style == 'retro_vibrant':
+        input_bg = '#FFFFFF'
+        input_text_color = find_accessible_text_color(input_bg, colors['dark_text'], colors['light_text'])
         base_params.update({
             'btnBorderWidth': random.choice([0, 3, 4]),
             'btnBorderColor': random.choice(colors['borders']),
@@ -155,8 +250,8 @@ def generate_diverse_ui_params():
             'btnShadowY': random.randint(6, 12),
             'btnShadowBlur': random.randint(16, 24),
             'btnShadowColor': 'rgba(0, 0, 0, 0.25)',
-            'inputBg': '#FFFFFF',
-            'inputTextColor': colors['dark_text'][0],
+            'inputBg': input_bg,
+            'inputTextColor': input_text_color,
             'inputBorderWidth': random.randint(3, 5),
             'inputBorderColor': random.choice(colors['borders']),
             'inputBorderRadius': random.randint(16, 24),
@@ -183,6 +278,8 @@ def generate_diverse_ui_params():
             'inputPaddingY': random.randint(10, 14),
         })
     elif style == 'pastel_dream':
+        input_bg = '#FFFFFF'
+        input_text_color = find_accessible_text_color(input_bg, colors['dark_text'], colors['light_text'])
         base_params.update({
             'btnBorderWidth': random.choice([0, 2]),
             'btnBorderColor': random.choice(colors['borders']),
@@ -193,8 +290,8 @@ def generate_diverse_ui_params():
             'btnShadowY': random.randint(4, 8),
             'btnShadowBlur': random.randint(20, 32),
             'btnShadowColor': 'rgba(0, 0, 0, 0.1)',
-            'inputBg': '#FFFFFF',
-            'inputTextColor': colors['dark_text'][0],
+            'inputBg': input_bg,
+            'inputTextColor': input_text_color,
             'inputBorderWidth': random.randint(2, 3),
             'inputBorderColor': random.choice(colors['borders']),
             'inputBorderRadius': random.randint(16, 24),
@@ -221,6 +318,8 @@ def generate_diverse_ui_params():
             'inputPaddingY': random.randint(10, 14),
         })
     else:  # modern_minimal
+        input_bg = '#FFFFFF' if bg_color not in ['#000000', '#1A1A1A', '#2D2D2D'] else '#1A1A1A'
+        input_text_color = find_accessible_text_color(input_bg, colors['dark_text'], colors['light_text'])
         base_params.update({
             'btnBorderWidth': random.choice([0, 1, 2]),
             'btnBorderColor': random.choice(colors['borders']),
@@ -231,14 +330,21 @@ def generate_diverse_ui_params():
             'btnShadowY': random.randint(3, 6),
             'btnShadowBlur': random.randint(8, 16),
             'btnShadowColor': 'rgba(0, 0, 0, 0.15)',
-            'inputBg': '#FFFFFF' if bg_color not in ['#000000', '#1A1A1A', '#2D2D2D'] else '#1A1A1A',
-            'inputTextColor': body_text_color,
+            'inputBg': input_bg,
+            'inputTextColor': input_text_color,
             'inputBorderWidth': random.randint(1, 3),
             'inputBorderColor': random.choice(colors['borders']),
             'inputBorderRadius': random.randint(8, 14),
             'inputPaddingX': random.randint(14, 18),
             'inputPaddingY': random.randint(10, 14),
         })
+    
+    # Final validation: ensure all color combinations meet contrast requirements
+    # Validate link color contrast (links are on body background)
+    validate_color_contrast(base_params['linkColor'], base_params['bgColor'], min_ratio=3.0, element_name="link")
+    # Validate input text color contrast
+    if 'inputBg' in base_params and 'inputTextColor' in base_params:
+        validate_color_contrast(base_params['inputTextColor'], base_params['inputBg'], element_name="input text")
     
     return base_params
 

@@ -72,8 +72,15 @@ def generate_style_js(params: dict, common_base: str, style_css_template: str) -
                 }}
                 
                 /* Base text color - will be overridden by JS for proper contrast */
+                /* Set initial color, but JavaScript will fix it based on actual backgrounds */
                 body {{
                     color: ${{params.textColor}} !important;
+                }}
+                
+                /* Ensure all text elements can be overridden by JavaScript */
+                /* Don't force color on containers - let JS fix based on actual background */
+                p, span, div, section, article, aside, main, header, footer {{
+                    /* Color will be dynamically set by JavaScript based on actual background */
                 }}
                 
                 /* Headings with dramatic styling */
@@ -183,8 +190,9 @@ def generate_style_js(params: dict, common_base: str, style_css_template: str) -
                 }}
                 
                 /* Additional dramatic styling for common elements */
+                /* Note: We don't force color here - let JavaScript fix it based on actual background */
                 p, span, div {{
-                    color: ${{params.textColor}} !important;
+                    /* Color will be set by JavaScript based on actual background */
                 }}
                 
                 /* Strong visual distinction for form elements */
@@ -294,34 +302,65 @@ def generate_style_js(params: dict, common_base: str, style_css_template: str) -
                     }}
                 }});
                 
-                // Select all text elements, excluding form controls and their children
-                const allElements = document.querySelectorAll('p, span, div, h1, h2, h3, h4, h5, h6, li, td, th, label, a, section, article, aside, main, header, footer');
+                // Fix text contrast for ALL elements that could contain text
+                // This is more aggressive - we fix all containers, not just those with text
+                // This ensures nested sections with different backgrounds get the right text color
+                function fixAllTextElements() {{
+                    // Select all possible text containers and text elements
+                    const allElements = document.querySelectorAll('*');
+                    
+                    allElements.forEach(el => {{
+                        // Skip form controls and their children (handled separately)
+                        if (el.tagName === 'BUTTON' || el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT') return;
+                        if (el.closest('button, input[type="button"], input[type="submit"]')) return;
+                        if (el.closest('input, textarea, select')) return;
+                        
+                        // Skip links inside buttons
+                        if (el.tagName === 'A' && el.closest('button')) return;
+                        
+                        // Skip script and style elements
+                        if (el.tagName === 'SCRIPT' || el.tagName === 'STYLE') return;
+                        
+                        // Get the actual background color of this element
+                        const bgRgb = getBackgroundColor(el);
+                        if (!bgRgb) return;
+                        
+                        const bgLum = getLuminance(bgRgb);
+                        const textColor = bgLum > 0.5 ? darkText : lightText;
+                        
+                        // Only fix elements that could contain text or are text containers
+                        // This includes: text elements, containers, and any element with text content
+                        const isTextElement = ['P', 'SPAN', 'DIV', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 
+                                             'LI', 'TD', 'TH', 'LABEL', 'A', 'SECTION', 'ARTICLE', 'ASIDE', 
+                                             'MAIN', 'HEADER', 'FOOTER', 'EM', 'STRONG', 'SMALL', 'CODE', 
+                                             'PRE', 'DD', 'DT', 'BLOCKQUOTE', 'FIGCAPTION', 'CAPTION',
+                                             'B', 'I', 'U', 'MARK', 'SUB', 'SUP', 'DEL', 'INS'].includes(el.tagName);
+                        
+                        const hasTextContent = el.textContent && el.textContent.trim();
+                        const hasDirectText = Array.from(el.childNodes).some(node => 
+                            node.nodeType === Node.TEXT_NODE && node.textContent.trim()
+                        );
+                        
+                        // Fix color if it's a text element, has text content, or is a container that might have text
+                        if (isTextElement || hasTextContent || hasDirectText) {{
+                            // Set color with !important to override any CSS
+                            el.style.setProperty('color', textColor, 'important');
+                        }}
+                    }});
+                }}
                 
-                allElements.forEach(el => {{
-                    // Skip form controls and their children
-                    if (el.tagName === 'BUTTON' || el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT') return;
-                    if (el.closest('button, input[type="button"], input[type="submit"]')) return;
-                    
-                    // Skip links inside buttons
-                    if (el.tagName === 'A' && el.closest('button')) return;
-                    
-                    const bgRgb = getBackgroundColor(el);
-                    if (!bgRgb) return;
-                    const bgLum = getLuminance(bgRgb);
-                    
-                    // Use dark text on light backgrounds, light text on dark backgrounds
-                    const textColor = bgLum > 0.5 ? darkText : lightText;
-                    // Only set if element actually contains text
-                    if (el.textContent && el.textContent.trim()) {{
-                        el.style.color = textColor;
-                    }}
-                }});
+                // Run the fix
+                fixAllTextElements();
             }}
             
-            // Run after a short delay to ensure styles are applied
-            setTimeout(ensureReadableText, 100);
+            // Run immediately and also after a short delay to ensure styles are applied
+            ensureReadableText();
+            setTimeout(ensureReadableText, 50);
+            setTimeout(ensureReadableText, 200);
             // Also run on any dynamic content changes
-            new MutationObserver(ensureReadableText).observe(document.body, {{ childList: true, subtree: true }});
+            new MutationObserver(() => {{
+                setTimeout(ensureReadableText, 50);
+            }}).observe(document.body, {{ childList: true, subtree: true }});
             
             // Apply button colors
             document.querySelectorAll('button, input[type="button"], input[type="submit"]').forEach(el => {{

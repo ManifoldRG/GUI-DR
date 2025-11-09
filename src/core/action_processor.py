@@ -4,6 +4,8 @@ Action processing logic for individual steps in a trajectory.
 
 import os
 import json
+from playwright.async_api import async_playwright
+import timeit
 from typing import Dict, Any, Optional
 import pandas as pd
 from loguru import logger
@@ -33,8 +35,6 @@ def _extract_parquet_data(parquet_row: pd.DataFrame) -> Dict[str, Any]:
     }
 
 
-
-
 async def process_mhtml_actions(
     dom_content_json_path: str,
     hf_parquet_df: pd.DataFrame,
@@ -42,7 +42,8 @@ async def process_mhtml_actions(
     task_uid: str,
     refresh_ui_params_per_step: bool,
     run_dir: str,
-    headless: bool = False
+    headless: bool = False,
+    should_randomize: bool = True
 ) -> Dict[str, Any]:
     """Main processing function for a single trajectory.
     
@@ -57,8 +58,7 @@ async def process_mhtml_actions(
     Returns:
         Dict with keys: 'steps_total', 'steps_succeeded', 'steps_saved', 'task_uid'
     """
-    from playwright.async_api import async_playwright
-    
+    start_time = timeit.default_timer()
     # Use MHTML file names as ground truth for action_uids
     action_uids = load_action_list_from_mhtml(mhtml_files_dir)
     
@@ -175,7 +175,7 @@ async def process_mhtml_actions(
                     target_element_text,
                     step_index=i,
                     should_reset_page_pre_actions=should_reset_page_pre_actions,
-                    should_randomize=True
+                    should_randomize=should_randomize
                 )
                 should_reset_page_pre_actions = False
 
@@ -229,6 +229,8 @@ async def process_mhtml_actions(
         await browser.close()
 
     # Summary
+    end_time = timeit.default_timer()
+    logger.info(f"🕒 Processing time: {end_time - start_time} seconds")
     logger.info(f"\n{'='*60}")
     logger.info(f"✅ Processing complete for trajectory {task_uid}!")
     logger.info(f"📊 Total steps: {steps_total}")
