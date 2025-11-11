@@ -199,12 +199,21 @@ async def process_mhtml_actions(
                 nearest_element_data = None
                 if nearest_element_info:
                     # Extract only the fields needed for trajectory.json
+                    bbox = nearest_element_info.get('bbox')
                     nearest_element_data = {
                         'text': nearest_element_info.get('text', ''),
                         'relative_position': nearest_element_info.get('relative_position', []),
                         'tag': nearest_element_info.get('tag', ''),
                         'distance': nearest_element_info.get('center_distance')
                     }
+                    # Include bounding box if available
+                    if bbox:
+                        nearest_element_data['bounding_box'] = [
+                            bbox.get('x', 0),
+                            bbox.get('y', 0),
+                            bbox.get('width', 0),
+                            bbox.get('height', 0)
+                        ]
                 
                 # Add action data to trajectory list
                 action_data = {
