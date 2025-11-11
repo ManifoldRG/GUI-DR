@@ -5,6 +5,7 @@ Extracted from ui_injection.py for better modularity.
 
 import re
 from .templates import STYLE_CSS_MAP
+from .cloning import generate_cloning_js
 
 # Common CSS base that prevents text overflow and ensures visibility
 COMMON_BASE_CSS = """
@@ -12,19 +13,53 @@ COMMON_BASE_CSS = """
         button, input[type="button"], input[type="submit"], .btn {
             box-sizing: border-box !important;
             white-space: nowrap !important;
-            overflow: visible !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
             width: auto !important;
-            min-width: fit-content !important;
+            min-width: 0 !important;
             max-width: 100% !important;
-            word-wrap: break-word !important;
-            overflow-wrap: break-word !important;
+            flex-shrink: 1 !important;
+            margin: 2px 4px !important;
         }
         
-        /* Ensure text doesn't overflow containers */
+        /* Prevent overlapping - ensure proper text wrapping and container expansion */
         * {
             box-sizing: border-box !important;
+        }
+        
+        /* Allow text to wrap naturally but prevent inappropriate breaking */
+        p, span, div, h1, h2, h3, h4, h5, h6, li, td, th, label {
             overflow-wrap: break-word !important;
-            word-break: break-word !important;
+            word-break: normal !important;
+            hyphens: auto !important;
+            white-space: normal !important;
+        }
+        
+        /* Prevent inline elements from breaking inappropriately */
+        a, span, em, strong, i, b, u, small {
+            white-space: normal !important;
+            word-break: normal !important;
+        }
+        
+        /* Ensure flex/grid containers can expand */
+        nav, header, section, article, aside, main, footer, ul, ol, div[class*="menu"], div[class*="nav"], div[class*="bar"] {
+            min-width: 0 !important;
+            overflow: visible !important;
+        }
+        
+        /* Prevent button containers from causing overlap - allow wrapping */
+        nav, header, [class*="menu"], [class*="nav"], [class*="bar"] {
+            flex-wrap: wrap !important;
+            gap: 4px 8px !important;
+        }
+        
+        nav button, nav a, header button, header a, [class*="menu"] button, [class*="menu"] a, [class*="nav"] button, [class*="nav"] a {
+            flex-shrink: 1 !important;
+            min-width: 0 !important;
+            max-width: calc(100% - 8px) !important;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
         }
         
         /* Force visibility for all text and icons - override inherited colors */
@@ -50,6 +85,9 @@ def generate_style_js(params: dict, common_base: str, style_css_template: str) -
     # Convert Python format placeholders to JavaScript template literals
     style_css = re.sub(r'\{(\w+)\}', r'${params.\1}', style_css_template)
     
+    # Get cloning JavaScript
+    cloning_js = generate_cloning_js()
+    
     return f"""
         (params) => {{
             const existing = document.getElementById('ui-modifications-style');
@@ -60,15 +98,12 @@ def generate_style_js(params: dict, common_base: str, style_css_template: str) -
             style.textContent = `
                 {common_base}
                 
-                /* Base body with dramatic styling - ensure all text inherits readable color */
+                /* Base body styling - preserve original typography, only change colors and font family */
                 body {{
                     background: ${{params.bgColor}} !important;
                     color: ${{params.textColor}} !important;
                     font-family: ${{params.bodyFont}} !important;
-                    font-size: ${{params.bodySize}}px !important;
-                    font-weight: ${{params.bodyWeight}} !important;
-                    line-height: ${{params.lineHeight}} !important;
-                    letter-spacing: ${{params.letterSpacing}}em !important;
+                    /* Preserve original font-size, font-weight, line-height, letter-spacing from MHTML */
                 }}
                 
                 /* Base text color - will be overridden by JS for proper contrast */
@@ -83,23 +118,20 @@ def generate_style_js(params: dict, common_base: str, style_css_template: str) -
                     /* Color will be dynamically set by JavaScript based on actual background */
                 }}
                 
-                /* Headings with dramatic styling */
+                /* Headings styling - preserve original typography, only change colors and font family */
                 h1, h2, h3, h4, h5, h6 {{
                     font-family: ${{params.headingFont}} !important;
-                    font-size: ${{params.headingSize}}px !important;
-                    font-weight: ${{params.headingWeight}} !important;
                     color: ${{params.headingColor}} !important;
-                    letter-spacing: ${{params.letterSpacing}}em !important;
+                    /* Preserve original font-size, font-weight, line-height, letter-spacing from MHTML */
                     margin: 0.5em 0 !important;
                 }}
                 
-                /* Buttons with dramatic styling - fix text alignment */
+                /* Buttons styling - preserve original typography, only change colors, font family, and layout */
                 button, input[type="button"], input[type="submit"], .btn {{
                     background: ${{params.btnBg}} !important;
                     color: ${{params.btnTextColor}} !important;
                     font-family: ${{params.bodyFont}} !important;
-                    font-size: ${{params.bodySize}}px !important;
-                    font-weight: ${{params.bodyWeight}} !important;
+                    /* Preserve original font-size, font-weight, line-height, letter-spacing from MHTML */
                     padding: ${{params.btnPaddingY}}px ${{params.btnPaddingX}}px !important;
                     transition: all ${{params.transitionSpeed}}s ease !important;
                     cursor: pointer !important;
@@ -109,7 +141,10 @@ def generate_style_js(params: dict, common_base: str, style_css_template: str) -
                     align-items: center !important;
                     justify-content: center !important;
                     vertical-align: middle !important;
-                    line-height: 1 !important;
+                    flex-shrink: 1 !important;
+                    min-width: 0 !important;
+                    max-width: 100% !important;
+                    margin: 2px 4px !important;
                     {style_css}
                 }}
                 /* Ensure button text stays inside */
@@ -123,10 +158,10 @@ def generate_style_js(params: dict, common_base: str, style_css_template: str) -
                     filter: brightness(1.1) !important;
                 }}
                 
-                /* Links with dramatic styling */
+                /* Links styling - preserve original typography, only change colors */
                 a {{
                     color: ${{params.linkColor}} !important;
-                    font-weight: ${{params.bodyWeight}} !important;
+                    /* Preserve original font-weight, font-size, line-height, letter-spacing from MHTML */
                     text-decoration: none !important;
                     transition: all ${{params.transitionSpeed}}s ease !important;
                     border-bottom: 2px solid transparent !important;
@@ -137,7 +172,7 @@ def generate_style_js(params: dict, common_base: str, style_css_template: str) -
                     filter: brightness(1.2) !important;
                 }}
                 
-                /* Input fields with dramatic styling */
+                /* Input fields styling - preserve original typography, only change colors, font family, and borders */
                 input, textarea, select {{
                     background: ${{params.inputBg}} !important;
                     color: ${{params.inputTextColor}} !important;
@@ -145,9 +180,7 @@ def generate_style_js(params: dict, common_base: str, style_css_template: str) -
                     border-radius: ${{params.inputBorderRadius}}px !important;
                     padding: ${{params.inputPaddingY}}px ${{params.inputPaddingX}}px !important;
                     font-family: ${{params.bodyFont}} !important;
-                    font-size: ${{params.bodySize}}px !important;
-                    font-weight: ${{params.bodyWeight}} !important;
-                    line-height: 1.4 !important;
+                    /* Preserve original font-size, font-weight, line-height, letter-spacing from MHTML */
                     transition: all ${{params.transitionSpeed}}s ease !important;
                     box-sizing: border-box !important;
                     vertical-align: middle !important;
@@ -168,7 +201,7 @@ def generate_style_js(params: dict, common_base: str, style_css_template: str) -
                     background: ${{params.inputBg}} !important;
                     color: ${{params.inputTextColor}} !important;
                     padding: 6px 12px !important;
-                    line-height: 1.4 !important;
+                    /* Preserve original line-height from MHTML */
                     height: auto !important;
                     min-height: 24px !important;
                     vertical-align: middle !important;
@@ -179,12 +212,11 @@ def generate_style_js(params: dict, common_base: str, style_css_template: str) -
                     color: ${{params.btnTextColor}} !important;
                 }}
                 
-                /* Labels with dramatic styling */
+                /* Labels styling - preserve original typography, only change colors and font family */
                 label {{
                     color: ${{params.textColor}} !important;
                     font-family: ${{params.bodyFont}} !important;
-                    font-weight: ${{params.bodyWeight}} !important;
-                    font-size: ${{params.bodySize}}px !important;
+                    /* Preserve original font-size, font-weight, line-height, letter-spacing from MHTML */
                     margin-bottom: 0.5em !important;
                     display: block !important;
                 }}
@@ -393,6 +425,8 @@ def generate_style_js(params: dict, common_base: str, style_css_template: str) -
                     }}
                 }});
             }}
+            
+            {cloning_js}
         }}
     """
 

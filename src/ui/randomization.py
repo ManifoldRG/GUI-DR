@@ -155,15 +155,16 @@ def generate_diverse_ui_params():
         'headingColor': body_text_color,
         'headingFont': heading_font,
         'bodyFont': body_font,
-        # Slightly larger font size variations for more visual impact
-        'bodySize': random.choice([14, 15, 16, 17, 18, 19]),
-        'headingSize': random.choice([24, 28, 32, 36, 40]),
-        # More font weight variations
-        'bodyWeight': random.choice([400, 500, 600, 700]),
-        'headingWeight': random.choice([600, 700, 800, 900]),
-        # Letter spacing with more variation
-        'letterSpacing': round(random.uniform(-0.02, 0.03), 3),
-        'lineHeight': round(random.uniform(1.3, 1.7), 2),
+        # Fixed conservative font sizes to prevent size increases
+        'bodySize': random.choice([14, 15, 16]),
+        'headingSize': random.choice([24, 26, 28]),
+        # Normal font weights to prevent visual size increases
+        'bodyWeight': random.choice([400, 500]),
+        'headingWeight': random.choice([600, 700]),
+        # Minimal letter spacing to prevent width increases
+        'letterSpacing': round(random.uniform(-0.01, 0.01), 3),
+        # Conservative line height to prevent vertical space increases
+        'lineHeight': round(random.uniform(1.3, 1.5), 2),
         'btnBg': primary_color,
         'btnTextColor': btn_text_color,
         'linkColor': link_color,

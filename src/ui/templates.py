@@ -9,7 +9,7 @@ NEOBRUTALISM_CSS = """
                     border-radius: {btnBorderRadius}px !important;
                     box-shadow: {btnShadowX}px {btnShadowY}px {btnShadowBlur}px {btnShadowColor} !important;
                     text-transform: uppercase !important;
-                    letter-spacing: 0.1em !important;
+                    /* Preserve original letter-spacing from MHTML */
 """
 
 GLASSMORPHISM_CSS = """
