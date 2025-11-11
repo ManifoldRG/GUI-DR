@@ -5,20 +5,24 @@ Extracted from ui_injection.py for better modularity.
 
 import re
 from .templates import STYLE_CSS_MAP
-from .cloning import generate_cloning_js
 
 # Common CSS base that prevents text overflow and ensures visibility
 COMMON_BASE_CSS = """
-        /* Prevent text overflow - ensure containers adapt to content */
+        /* Preserve original button text - allow full text display */
         button, input[type="button"], input[type="submit"], .btn {
             box-sizing: border-box !important;
-            white-space: nowrap !important;
-            overflow: hidden !important;
-            text-overflow: ellipsis !important;
+            /* Allow text to wrap if needed to show full content */
+            white-space: normal !important;
+            /* Remove text truncation - show full text */
+            overflow: visible !important;
+            text-overflow: clip !important;
+            /* Allow buttons to size naturally to fit content */
             width: auto !important;
-            min-width: 0 !important;
-            max-width: 100% !important;
-            flex-shrink: 1 !important;
+            min-width: fit-content !important;
+            max-width: none !important;
+            /* Allow buttons to wrap to new line if needed to prevent overlap */
+            flex-shrink: 0 !important;
+            /* Ensure buttons don't overlap - add spacing */
             margin: 2px 4px !important;
         }
         
@@ -41,26 +45,28 @@ COMMON_BASE_CSS = """
             word-break: normal !important;
         }
         
-        /* Ensure flex/grid containers can expand */
+        /* Ensure flex/grid containers can expand and wrap */
         nav, header, section, article, aside, main, footer, ul, ol, div[class*="menu"], div[class*="nav"], div[class*="bar"] {
             min-width: 0 !important;
             overflow: visible !important;
         }
         
-        /* Prevent button containers from causing overlap - allow wrapping */
+        /* Prevent button containers from causing overlap - allow wrapping for specific containers only */
         nav, header, [class*="menu"], [class*="nav"], [class*="bar"] {
             flex-wrap: wrap !important;
             gap: 4px 8px !important;
         }
         
         nav button, nav a, header button, header a, [class*="menu"] button, [class*="menu"] a, [class*="nav"] button, [class*="nav"] a {
-            flex-shrink: 1 !important;
-            min-width: 0 !important;
-            max-width: calc(100% - 8px) !important;
-            white-space: nowrap !important;
-            overflow: hidden !important;
-            text-overflow: ellipsis !important;
+            /* Allow full text display - preserve original button text */
+            flex-shrink: 0 !important;
+            min-width: fit-content !important;
+            max-width: none !important;
+            white-space: normal !important;
+            overflow: visible !important;
+            text-overflow: clip !important;
         }
+        
         
         /* Force visibility for all text and icons - override inherited colors */
         p, span, div, td, th, li, dd, dt, em, strong, small, code, pre {
@@ -84,9 +90,6 @@ def generate_style_js(params: dict, common_base: str, style_css_template: str) -
     """Generate JavaScript with common base and style-specific CSS."""
     # Convert Python format placeholders to JavaScript template literals
     style_css = re.sub(r'\{(\w+)\}', r'${params.\1}', style_css_template)
-    
-    # Get cloning JavaScript
-    cloning_js = generate_cloning_js()
     
     return f"""
         (params) => {{
@@ -126,13 +129,12 @@ def generate_style_js(params: dict, common_base: str, style_css_template: str) -
                     margin: 0.5em 0 !important;
                 }}
                 
-                /* Buttons styling - preserve original typography, only change colors, font family, and layout */
+                /* Buttons styling - preserve original typography and dimensions, only change colors and font family */
                 button, input[type="button"], input[type="submit"], .btn {{
                     background: ${{params.btnBg}} !important;
                     color: ${{params.btnTextColor}} !important;
                     font-family: ${{params.bodyFont}} !important;
-                    /* Preserve original font-size, font-weight, line-height, letter-spacing from MHTML */
-                    padding: ${{params.btnPaddingY}}px ${{params.btnPaddingX}}px !important;
+                    /* Preserve original font-size, font-weight, line-height, letter-spacing, padding from MHTML */
                     transition: all ${{params.transitionSpeed}}s ease !important;
                     cursor: pointer !important;
                     text-transform: none !important;
@@ -141,9 +143,13 @@ def generate_style_js(params: dict, common_base: str, style_css_template: str) -
                     align-items: center !important;
                     justify-content: center !important;
                     vertical-align: middle !important;
-                    flex-shrink: 1 !important;
-                    min-width: 0 !important;
-                    max-width: 100% !important;
+                    /* Preserve full text display - allow buttons to show complete text */
+                    flex-shrink: 0 !important;
+                    min-width: fit-content !important;
+                    max-width: none !important;
+                    white-space: normal !important;
+                    overflow: visible !important;
+                    text-overflow: clip !important;
                     margin: 2px 4px !important;
                     {style_css}
                 }}
@@ -221,16 +227,85 @@ def generate_style_js(params: dict, common_base: str, style_css_template: str) -
                     display: block !important;
                 }}
                 
-                /* Additional dramatic styling for common elements */
-                /* Note: We don't force color here - let JavaScript fix it based on actual background */
-                p, span, div {{
+                /* ALL text elements - apply font-family and colors */
+                /* JavaScript will ensure proper contrast */
+                p, span, div, li, td, th, article, section, main, aside, blockquote, figcaption, caption, dd, dt,
+                nav, header, footer, ul, ol, dl, menu, menuitem, summary, details, time, mark, small, sub, sup, del, ins,
+                code, pre, samp, kbd, var, output, meter, progress {{
+                    font-family: ${{params.bodyFont}} !important;
                     /* Color will be set by JavaScript based on actual background */
+                }}
+                
+                /* Navigation, header, footer - apply background colors and visual styles */
+                nav {{
+                    background: ${{params.navBg}} !important;
+                    border: ${{params.containerBorderWidth}}px solid ${{params.containerBorderColor}} !important;
+                    border-radius: ${{params.containerBorderRadius}}px !important;
+                    box-shadow: ${{params.containerShadowX}}px ${{params.containerShadowY}}px ${{params.containerShadowBlur}}px ${{params.containerShadowColor}} !important;
+                    /* Preserve all layout properties (width, height, padding, margin, display, position) */
+                }}
+                
+                header {{
+                    background: ${{params.headerBg}} !important;
+                    border: ${{params.containerBorderWidth}}px solid ${{params.containerBorderColor}} !important;
+                    border-radius: ${{params.containerBorderRadius}}px !important;
+                    box-shadow: ${{params.containerShadowX}}px ${{params.containerShadowY}}px ${{params.containerShadowBlur}}px ${{params.containerShadowColor}} !important;
+                    /* Preserve all layout properties */
+                }}
+                
+                footer {{
+                    background: ${{params.footerBg}} !important;
+                    border: ${{params.containerBorderWidth}}px solid ${{params.containerBorderColor}} !important;
+                    border-radius: ${{params.containerBorderRadius}}px !important;
+                    box-shadow: ${{params.containerShadowX}}px ${{params.containerShadowY}}px ${{params.containerShadowBlur}}px ${{params.containerShadowColor}} !important;
+                    /* Preserve all layout properties */
+                }}
+                
+                /* Sections and articles - apply background colors and visual styles */
+                section, article {{
+                    background: ${{params.sectionBg}} !important;
+                    border: ${{params.containerBorderWidth}}px solid ${{params.containerBorderColor}} !important;
+                    border-radius: ${{params.containerBorderRadius}}px !important;
+                    box-shadow: ${{params.containerShadowX}}px ${{params.containerShadowY}}px ${{params.containerShadowBlur}}px ${{params.containerShadowColor}} !important;
+                    /* Preserve all layout properties */
+                }}
+                
+                /* Main content area */
+                main {{
+                    background: ${{params.sectionBg}} !important;
+                    border: ${{params.containerBorderWidth}}px solid ${{params.containerBorderColor}} !important;
+                    border-radius: ${{params.containerBorderRadius}}px !important;
+                    box-shadow: ${{params.containerShadowX}}px ${{params.containerShadowY}}px ${{params.containerShadowBlur}}px ${{params.containerShadowColor}} !important;
+                    /* Preserve all layout properties */
+                }}
+                
+                /* Aside elements */
+                aside {{
+                    background: ${{params.sectionBg}} !important;
+                    border: ${{params.containerBorderWidth}}px solid ${{params.containerBorderColor}} !important;
+                    border-radius: ${{params.containerBorderRadius}}px !important;
+                    box-shadow: ${{params.containerShadowX}}px ${{params.containerShadowY}}px ${{params.containerShadowBlur}}px ${{params.containerShadowColor}} !important;
+                    /* Preserve all layout properties */
+                }}
+                
+                /* Common container divs with class patterns - apply subtle styling */
+                div[class*="card"], div[class*="Card"], div[class*="container"], div[class*="Container"],
+                div[class*="box"], div[class*="Box"], div[class*="panel"], div[class*="Panel"],
+                div[class*="section"], div[class*="Section"], div[class*="block"], div[class*="Block"] {{
+                    background: ${{params.cardBg}} !important;
+                    border: ${{params.cardBorderWidth}}px solid ${{params.containerBorderColor}} !important;
+                    border-radius: ${{params.cardBorderRadius}}px !important;
+                    box-shadow: 0 0 ${{params.cardShadowBlur}}px ${{params.cardShadowColor}} !important;
+                    /* Preserve all layout properties */
                 }}
                 
                 /* Strong visual distinction for form elements */
                 form {{
                     background: transparent !important;
                 }}
+                
+                /* Note: Container wrapping is handled by JavaScript to avoid breaking layouts */
+                /* JavaScript will intelligently convert containers to flex only when needed */
             `;
             document.head.appendChild(style);
             
@@ -322,36 +397,37 @@ def generate_style_js(params: dict, common_base: str, style_css_template: str) -
                     }}
                 }});
                 
-                // Fix select dropdown options specifically
-                document.querySelectorAll('select option').forEach(opt => {{
-                    const selectBg = getBackgroundColor(opt.parentElement);
-                    if (selectBg) {{
-                        const bgLum = getLuminance(selectBg);
-                        opt.style.color = bgLum > 0.5 ? darkText : lightText;
-                        opt.style.backgroundColor = opt.selected ? (bgLum > 0.5 ? '#333333' : '#FFFFFF') : (bgLum > 0.5 ? '#FFFFFF' : '#1A1A1A');
-                        opt.style.lineHeight = '1.4';
-                        opt.style.padding = '6px 12px';
+                // Fix text contrast for ALL elements on the page based on their actual background
+                // This is comprehensive - handles all elements including form controls, containers, text elements, etc.
+                function fixAllElementTextContrast() {{
+                    // Create or get style element for placeholder fixes
+                    const styleId = 'text-contrast-fix-placeholders';
+                    let styleEl = document.getElementById(styleId);
+                    if (!styleEl) {{
+                        styleEl = document.createElement('style');
+                        styleEl.id = styleId;
+                        document.head.appendChild(styleEl);
                     }}
-                }});
-                
-                // Fix text contrast for ALL elements that could contain text
-                // This is more aggressive - we fix all containers, not just those with text
-                // This ensures nested sections with different backgrounds get the right text color
-                function fixAllTextElements() {{
-                    // Select all possible text containers and text elements
+                    
+                    // Clear existing placeholder rules
+                    while (styleEl.sheet && styleEl.sheet.cssRules.length > 0) {{
+                        styleEl.sheet.deleteRule(0);
+                    }}
+                    
+                    let placeholderRuleIndex = 0;
+                    
+                    // Process ALL elements on the page
                     const allElements = document.querySelectorAll('*');
                     
-                    allElements.forEach(el => {{
-                        // Skip form controls and their children (handled separately)
-                        if (el.tagName === 'BUTTON' || el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT') return;
-                        if (el.closest('button, input[type="button"], input[type="submit"]')) return;
-                        if (el.closest('input, textarea, select')) return;
-                        
-                        // Skip links inside buttons
-                        if (el.tagName === 'A' && el.closest('button')) return;
-                        
+                    allElements.forEach((el, index) => {{
                         // Skip script and style elements
                         if (el.tagName === 'SCRIPT' || el.tagName === 'STYLE') return;
+                        
+                        // Skip SVG elements (handled separately for icons)
+                        if (el.tagName === 'SVG' || el.tagName === 'PATH' || el.tagName === 'POLYGON' || 
+                            el.tagName === 'CIRCLE' || el.tagName === 'RECT' || el.tagName === 'LINE' || el.tagName === 'G') {{
+                            return;
+                        }}
                         
                         // Get the actual background color of this element
                         const bgRgb = getBackgroundColor(el);
@@ -360,29 +436,81 @@ def generate_style_js(params: dict, common_base: str, style_css_template: str) -
                         const bgLum = getLuminance(bgRgb);
                         const textColor = bgLum > 0.5 ? darkText : lightText;
                         
-                        // Only fix elements that could contain text or are text containers
-                        // This includes: text elements, containers, and any element with text content
+                        // Check if element can contain text or has text content
                         const isTextElement = ['P', 'SPAN', 'DIV', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 
                                              'LI', 'TD', 'TH', 'LABEL', 'A', 'SECTION', 'ARTICLE', 'ASIDE', 
-                                             'MAIN', 'HEADER', 'FOOTER', 'EM', 'STRONG', 'SMALL', 'CODE', 
+                                             'MAIN', 'HEADER', 'FOOTER', 'NAV', 'EM', 'STRONG', 'SMALL', 'CODE', 
                                              'PRE', 'DD', 'DT', 'BLOCKQUOTE', 'FIGCAPTION', 'CAPTION',
-                                             'B', 'I', 'U', 'MARK', 'SUB', 'SUP', 'DEL', 'INS'].includes(el.tagName);
+                                             'B', 'I', 'U', 'MARK', 'SUB', 'SUP', 'DEL', 'INS', 'UL', 'OL', 'DL',
+                                             'MENU', 'MENUITEM', 'SUMMARY', 'DETAILS', 'TIME', 'OUTPUT', 
+                                             'METER', 'PROGRESS', 'SAMP', 'KBD', 'VAR', 'BUTTON', 'INPUT', 
+                                             'TEXTAREA', 'SELECT', 'OPTION'].includes(el.tagName);
                         
                         const hasTextContent = el.textContent && el.textContent.trim();
                         const hasDirectText = Array.from(el.childNodes).some(node => 
                             node.nodeType === Node.TEXT_NODE && node.textContent.trim()
                         );
+                        const hasValue = el.value && el.value.trim && el.value.trim();
+                        const hasPlaceholder = el.placeholder && el.placeholder.trim();
                         
-                        // Fix color if it's a text element, has text content, or is a container that might have text
-                        if (isTextElement || hasTextContent || hasDirectText) {{
+                        // Special handling for buttons - ALWAYS fix based on their actual background
+                        if (el.tagName === 'BUTTON' || (el.tagName === 'INPUT' && (el.type === 'button' || el.type === 'submit'))) {{
+                            // Get button's actual background (may have been set by CSS or params)
+                            const btnBgRgb = getBackgroundColor(el);
+                            if (btnBgRgb) {{
+                                const btnBgLum = getLuminance(btnBgRgb);
+                                const btnTextColor = btnBgLum > 0.5 ? darkText : lightText;
+                                // Force button text color with !important
+                                el.style.setProperty('color', btnTextColor, 'important');
+                                // Also fix any child elements (like icons or spans inside buttons)
+                                el.querySelectorAll('*').forEach(child => {{
+                                    child.style.setProperty('color', btnTextColor, 'important');
+                                }});
+                            }}
+                            return; // Skip further processing for buttons
+                        }}
+                        
+                        // Fix text color for any element that can have text
+                        if (isTextElement || hasTextContent || hasDirectText || hasValue || hasPlaceholder) {{
                             // Set color with !important to override any CSS
                             el.style.setProperty('color', textColor, 'important');
+                            
+                            // Special handling for input/textarea placeholders
+                            if ((el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') && hasPlaceholder) {{
+                                // Assign unique ID if needed for placeholder styling
+                                if (!el.id) {{
+                                    el.id = `input-placeholder-${{index}}-${{Date.now()}}`;
+                                }}
+                                
+                                // Add placeholder color rule
+                                try {{
+                                    styleEl.sheet?.insertRule(
+                                        `#${{el.id}}::placeholder {{ color: ${{textColor}} !important; opacity: 0.7 !important; }}`,
+                                        placeholderRuleIndex++
+                                    );
+                                }} catch (e) {{
+                                    console.debug('Could not set placeholder color via CSS rule:', e);
+                                }}
+                            }}
+                            
+                            // Special handling for select options
+                            if (el.tagName === 'OPTION') {{
+                                const selectBg = getBackgroundColor(el.parentElement);
+                                if (selectBg) {{
+                                    const selectBgLum = getLuminance(selectBg);
+                                    el.style.setProperty('background-color', el.selected ? 
+                                        (selectBgLum > 0.5 ? '#333333' : '#FFFFFF') : 
+                                        (selectBgLum > 0.5 ? '#FFFFFF' : '#1A1A1A'), 'important');
+                                    el.style.lineHeight = '1.4';
+                                    el.style.padding = '6px 12px';
+                                }}
+                            }}
                         }}
                     }});
                 }}
                 
-                // Run the fix
-                fixAllTextElements();
+                // Run the comprehensive fix
+                fixAllElementTextContrast();
             }}
             
             // Run immediately and also after a short delay to ensure styles are applied
@@ -394,11 +522,14 @@ def generate_style_js(params: dict, common_base: str, style_css_template: str) -
                 setTimeout(ensureReadableText, 50);
             }}).observe(document.body, {{ childList: true, subtree: true }});
             
-            // Apply button colors
+            // Apply button colors - but let contrast fix override if needed
+            // The contrast fix will ensure proper contrast even if params have issues
             document.querySelectorAll('button, input[type="button"], input[type="submit"]').forEach(el => {{
                 el.style.backgroundColor = params.btnBg;
                 el.style.color = params.btnTextColor;
                 el.style.transition = `all ${{params.transitionSpeed}}s ease`;
+                // The fixAllElementTextContrast() function will ensure proper contrast
+                // It runs after this, so it will override if needed
             }});
             
             // Reorder DOM elements if enabled and not intentionally alphabetically ordered
@@ -425,8 +556,6 @@ def generate_style_js(params: dict, common_base: str, style_css_template: str) -
                     }}
                 }});
             }}
-            
-            {cloning_js}
         }}
     """
 

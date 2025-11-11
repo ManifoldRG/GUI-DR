@@ -12,6 +12,8 @@ from PIL import Image
 from loguru import logger
 from ui.randomization import generate_diverse_ui_params
 from ui.injection import generate_injection_js
+from ui.config import UIModificationConfig
+from ui.element_analyzer import analyze_page_elements, generate_llm_texts_for_groups
 from exceptions import ElementLocatorError, ElementNotFoundError, AmbiguousMatchError, ElementValidationError
 from locators.element_locator import ElementLocator
 from locators.nearest_element_finder import NearestElementFinder
@@ -32,12 +34,22 @@ Image.MAX_IMAGE_PIXELS = 500_000_000
 class MHTMLProcessor:
     """Minimal MHTML processor with UI modification support"""
     
-    def __init__(self, playwright_page, screenshots_base_dir: str = None, refresh_ui_params_per_step: bool = True, enable_element_reordering: bool = True):
+    def __init__(
+        self, 
+        playwright_page, 
+        screenshots_base_dir: str = None, 
+        refresh_ui_params_per_step: bool = True, 
+        enable_element_reordering: bool = True,
+        ui_config: Optional[UIModificationConfig] = None,
+        text_generator = None
+    ):
         self.page = playwright_page
         self.screenshots_base_dir = screenshots_base_dir or "screenshots"
         self._refresh_ui_params_per_step = refresh_ui_params_per_step
         self._ui_params_cache = None
         self._enable_element_reordering = enable_element_reordering
+        self.ui_config = ui_config or UIModificationConfig()  # Default: only style variants
+        self.text_generator = text_generator  # For Type 2 LLM text generation
         self.page_pre_actions: List[Dict[str, Any]] = []  # Store {pos_candidate, target_element_type, target_element_text, coordinates, op}
         
         # Initialize helper classes
@@ -110,33 +122,62 @@ class MHTMLProcessor:
         """
         self._enable_element_reordering = enable
     
-    async def inject_ui_modifications(self) -> Dict[str, Any]:
-        """Inject random UI modifications: colors, fonts, styles, and reorder DOM elements.
+    async def inject_ui_modifications(self, target_element_text: Optional[str] = None) -> Dict[str, Any]:
+        """Inject UI modifications based on configuration.
+        
+        Supports 3 types:
+        1. Zoom (viewport scaling)
+        2. Dense info (paraphrase + clone with LLM text) - requires target_element_text
+        3. Style variants (colors, fonts, styles)
+        
+        Args:
+            target_element_text: Text content of target element (required for Type 2)
         
         Returns:
             The parameters used for UI modifications.
         """
-        # Use cached params if refresh_per_step is False, otherwise generate new ones
-        if self._refresh_ui_params_per_step or self._ui_params_cache is None:
-            params = self._generate_ui_params()
-            self._ui_params_cache = params
-        else:
-            params = self._ui_params_cache
-        
-        # Make a copy of params for return
-        params_return = params.copy()
+        # Generate style params if Type 3 is enabled
+        params = {}
+        if self.ui_config.enable_style_variants:
+            if self._refresh_ui_params_per_step or self._ui_params_cache is None:
+                params = self._generate_ui_params()
+                self._ui_params_cache = params
+            else:
+                params = self._ui_params_cache
         
         # Add reordering flag to params
-        params_with_reorder = params.copy()
-        params_with_reorder['enableElementReordering'] = self._enable_element_reordering
+        params['enableElementReordering'] = self._enable_element_reordering
         
-        # Generate JavaScript injection code based on design style
-        injection_js = generate_injection_js(params)
+        # Generate LLM texts for Type 2 if enabled
+        llm_texts = None
+        if self.ui_config.enable_dense_info:
+            # Check if target element has text content
+            if not target_element_text or not target_element_text.strip():
+                logger.warning("Type 2 enabled but target element has no text content, skipping dense info modifications")
+            elif self.text_generator:
+                try:
+                    groups = await analyze_page_elements(self.page)
+                    if groups:
+                        llm_texts = generate_llm_texts_for_groups(
+                            groups, 
+                            self.text_generator,
+                            num_clones_per_group=2
+                        )
+                except Exception as e:
+                    logger.warning(f"Failed to generate LLM texts: {e}")
+        
+        # Generate JavaScript injection code
+        injection_js = generate_injection_js(
+            params=params,
+            config=self.ui_config,
+            llm_texts=llm_texts,
+            target_element_text=target_element_text
+        )
         
         # Execute the generated JavaScript
-        await self.page.evaluate(injection_js, params_with_reorder)
-        logger.info("✅ Random UI modifications injected")
-        return params_return
+        await self.page.evaluate(injection_js, params)
+        logger.info("✅ UI modifications injected")
+        return params
 
     async def find_element_by_pos_info(
         self, pos_element: Union[str, List[str]], target_element_type: str, target_element_text: str
@@ -195,7 +236,13 @@ class MHTMLProcessor:
             'nearest_element_info': nearest_element_info  # Include nearest element info
         }
     
-    async def _prepare_action_context(self, should_reset_page_pre_actions: bool, type_action_value: str, should_randomize: bool) -> Dict[str, Any]:
+    async def _prepare_action_context(
+        self, 
+        should_reset_page_pre_actions: bool, 
+        type_action_value: str, 
+        should_randomize: bool,
+        target_element_text: Optional[str] = None
+    ) -> Dict[str, Any]:
         """Prepare action context: reset pre-actions, replay previous actions, inject UI modifications."""
         if should_reset_page_pre_actions:
             self.page_pre_actions = []
@@ -209,7 +256,7 @@ class MHTMLProcessor:
             # Continue processing even if replay fails - the MHTML might already have the state we need
         
         if should_randomize:
-            return await self.inject_ui_modifications()
+            return await self.inject_ui_modifications(target_element_text=target_element_text)
         return {}
     
     async def _find_and_prepare_element(self, pos_candidate: str, target_element_type: str, target_element_text: str, action_op: str):
@@ -254,12 +301,19 @@ class MHTMLProcessor:
         return element, element_info
     
     async def _get_element_coordinates(self, element, element_info: Dict[str, Any]) -> Tuple[Tuple[int, int], Tuple[float, float, float, float]]:
-        """Get coordinates and bounding box from element."""
+        """Get coordinates and bounding box from element.
+        
+        IMPORTANT: This is called AFTER scrolling, so coordinates are in viewport space.
+        They will be converted to cropped image coordinates later if screenshot is cropped.
+        """
+        # Get bounding box AFTER scrolling (element is already scrolled into view)
         bbox = await element.bounding_box()
         if bbox:
+            # These are viewport-relative coordinates (after scrolling)
             coordinates = (int(bbox['x'] + bbox['width'] / 2), int(bbox['y'] + bbox['height'] / 2))
             bounding_box = (bbox['x'], bbox['y'], bbox['width'], bbox['height'])
         else:
+            # Fallback to element_info if bounding_box() fails
             coordinates = element_info.get('coordinates')
             bounding_box = element_info.get('bounding_box')
         
@@ -304,7 +358,12 @@ class MHTMLProcessor:
         
         try:
             # Prepare context: reset, replay, inject UI
-            ui_params = await self._prepare_action_context(should_reset_page_pre_actions, type_action_value, should_randomize)
+            ui_params = await self._prepare_action_context(
+                should_reset_page_pre_actions, 
+                type_action_value, 
+                should_randomize,
+                target_element_text=target_element_text
+            )
             
             # Find and prepare element
             element, element_info = await self._find_and_prepare_element(pos_candidate, target_element_type, target_element_text, action_op)
@@ -344,8 +403,26 @@ class MHTMLProcessor:
                     coordinates, bounding_box, crop_info
                 )
 
-            # Extract nearest element info from element_info
+            # Extract nearest element info from element_info and convert its coordinates for crop if needed
             nearest_element_info = element_info.get('nearest_element_info')
+            if nearest_element_info and crop_info is not None:
+                # Convert nearest element bbox from page coordinates to cropped image coordinates
+                nearest_bbox = nearest_element_info.get('bbox')
+                if nearest_bbox:
+                    effective_crop_left, effective_crop_top, scroll_x, scroll_y = crop_info
+                    # Nearest element bbox is already in page coordinates (x + scrollX, y + scrollY)
+                    # Convert to cropped image coordinates
+                    nearest_bbox_x = nearest_bbox['x'] - effective_crop_left
+                    nearest_bbox_y = nearest_bbox['y'] - effective_crop_top
+                    # Create a copy of nearest_element_info with converted bbox
+                    nearest_element_info = nearest_element_info.copy()
+                    nearest_element_info['bbox'] = {
+                        'x': nearest_bbox_x,
+                        'y': nearest_bbox_y,
+                        'width': nearest_bbox['width'],
+                        'height': nearest_bbox['height']
+                    }
+                    logger.debug(f"Converted nearest element bbox for crop: ({nearest_bbox['x']:.1f}, {nearest_bbox['y']:.1f}) -> ({nearest_bbox_x:.1f}, {nearest_bbox_y:.1f})")
             
             return {
                 'action_uid': action_uid,

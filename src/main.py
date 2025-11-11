@@ -9,6 +9,7 @@ from datetime import datetime
 
 from utils import load_parquet_files_by_split, find_tasks_from_parquet, print_trajectory_summary
 from core import process_mhtml_actions
+from ui.config import UIModificationConfig
 
 DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 # DEBUG_TASK_UIDS = ['0a2130e7-1108-4281-8772-25c8671fb88e']
@@ -23,7 +24,7 @@ HEADLESS = True
 # DEBUG_TASK_UIDS = None
 
 
-async def main(split: str = 'train'):
+async def main(split: str = 'train', ui_config: UIModificationConfig = UIModificationConfig()):
     """Entry point - loads parquet files for specified split and processes corresponding tasks.
     
     Args:
@@ -41,7 +42,7 @@ async def main(split: str = 'train'):
         raise ValueError(f"Invalid split: {split}. Must be one of {valid_splits}")
     
     refresh_ui_params_per_step = True
-    
+
     # Load parquet files for the specified split
     print(f"\n{'='*80}")
     print(f"📦 Loading {split} parquet files from {mm_mind2web_base}/data/...")
@@ -103,7 +104,8 @@ async def main(split: str = 'train'):
                 refresh_ui_params_per_step,
                 run_dir,
                 headless=HEADLESS,
-                should_randomize=SHOULD_RANDOMIZE
+                should_randomize=SHOULD_RANDOMIZE,
+                ui_config=ui_config
             )
             trajectory_stats.append(stats)
         except Exception as e:
@@ -142,8 +144,46 @@ Examples:
         choices=['train', 'test_domain', 'test_task', 'test_website'],
         help='Data split to process (default: train)'
     )
-    
+
+    parser.add_argument(
+        '--enable_zoom',
+        type=bool,
+        default=False,
+        help='Enable zoom (default: False)'
+    )
+
+    parser.add_argument(
+        '--zoom_level',
+        type=float,
+        default=0.7,
+        help='Zoom level (default: 0.7)'
+    )
+
+    parser.add_argument(
+        '--enable_dense_info',
+        type=bool,
+        default=False,
+        help='Enable dense info (default: False)'
+    )
+
+    parser.add_argument(
+        '--enable_style_variants',
+        type=bool,
+        default=True,
+        help='Enable style variants (default: True)'
+    )
+
     args = parser.parse_args()
     
     print(f"🚀 Processing {args.split} split")
-    asyncio.run(main(split=args.split))
+    asyncio.run(
+        main(
+            split=args.split, 
+            ui_config=UIModificationConfig(
+                enable_zoom=args.enable_zoom, 
+                zoom_level=args.zoom_level, 
+                enable_dense_info=args.enable_dense_info, 
+                enable_style_variants=args.enable_style_variants
+            )
+        )
+    )

@@ -10,6 +10,7 @@ from typing import Dict, Any, Optional
 import pandas as pd
 from loguru import logger
 
+from ui.config import UIModificationConfig
 from .mhtml_processor import MHTMLProcessor
 from exceptions import ElementLocatorError, ElementValidationError
 from utils.data_loaders import load_dom_content_json, load_action_list_from_mhtml, load_current_page_urls
@@ -43,7 +44,8 @@ async def process_mhtml_actions(
     refresh_ui_params_per_step: bool,
     run_dir: str,
     headless: bool = False,
-    should_randomize: bool = True
+    should_randomize: bool = True,
+    ui_config: Optional[UIModificationConfig] = None
 ) -> Dict[str, Any]:
     """Main processing function for a single trajectory.
     
@@ -109,7 +111,8 @@ async def process_mhtml_actions(
         processor = MHTMLProcessor(
             page,
             screenshots_base_dir=task_screenshots_dir,
-            refresh_ui_params_per_step=refresh_ui_params_per_step
+            refresh_ui_params_per_step=refresh_ui_params_per_step,
+            ui_config=ui_config
         )
 
         trajectory = []

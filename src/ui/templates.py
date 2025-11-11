@@ -15,7 +15,7 @@ NEOBRUTALISM_CSS = """
 GLASSMORPHISM_CSS = """
                     border: {btnBorderWidth}px solid {btnBorderColor} !important;
                     border-radius: {btnBorderRadius}px !important;
-                    backdrop-filter: blur({btnBackdropBlur}px) !important;
+                    /* Removed backdrop-filter blur to prevent text blurring */
                     box-shadow: {btnShadowX}px {btnShadowY}px {btnShadowBlur}px {btnShadowColor} !important;
                     background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0)) !important;
 """
@@ -39,7 +39,7 @@ DARK_MODE_CSS = """
                     border-radius: {btnBorderRadius}px !important;
                     box-shadow: 0 0 {btnShadowBlur}px {btnShadowColor}, 0 0 {btnShadowBlur}px {btnShadowColor} !important;
                     background: {btnBg} !important;
-                    text-shadow: 0 0 10px {btnTextColor} !important;
+                    /* Removed text-shadow to prevent text blurring */
 """
 
 PASTEL_CSS = """
@@ -54,7 +54,7 @@ CYBERPUNK_CSS = """
                     border-radius: {btnBorderRadius}px !important;
                     box-shadow: 0 0 {btnShadowBlur}px {btnShadowColor}, inset 0 0 {btnShadowBlur}px {btnShadowColor} !important;
                     background: {btnBg} !important;
-                    text-shadow: 0 0 5px {btnTextColor}, 0 0 10px {btnTextColor} !important;
+                    /* Removed text-shadow to prevent text blurring */
 """
 
 MODERN_CSS = """

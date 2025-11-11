@@ -293,7 +293,11 @@ class IdStrategy(LocatorStrategy):
         if 'id' not in self.fingerprint:
             return None
         
-        candidates = await page.locator(f"#{self.fingerprint['id']}").all()
+        element_id = self.fingerprint['id']
+        # Use attribute selector instead of #id to handle IDs starting with digits or special characters
+        # Escape quotes in the ID value to prevent injection issues
+        escaped_id = element_id.replace('"', '\\"').replace("'", "\\'")
+        candidates = await page.locator(f'[id="{escaped_id}"]').all()
         if len(candidates) == 1:
             print(f"  ✅ ID: found 1 element (unique)")
             return candidates[0]

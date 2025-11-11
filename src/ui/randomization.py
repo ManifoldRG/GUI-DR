@@ -122,12 +122,26 @@ def generate_diverse_ui_params():
     colors = COLOR_PALETTES[style]
     bg_color = random.choice(colors['backgrounds'])
     primary_color = random.choice(colors['primaries'])
-    body_text_color = find_accessible_text_color(bg_color, colors['dark_text'], colors['light_text'])
-    btn_text_color = find_accessible_text_color(primary_color, colors['dark_text'], colors['light_text'])
     
-    # Validate initial color combinations
+    # ALWAYS ensure text colors have sufficient contrast with their backgrounds
+    # This is critical - never allow poor contrast combinations
+    body_text_color = find_accessible_text_color(bg_color, colors['dark_text'], colors['light_text'], min_ratio=4.5)
+    
+    # For buttons: first choose background, then ensure text color contrasts
+    # This ensures we never have light bg + light text or dark bg + dark text
+    btn_bg = primary_color
+    btn_text_color = find_accessible_text_color(btn_bg, colors['dark_text'], colors['light_text'], min_ratio=4.5)
+    
+    # Double-check button contrast - if still poor, force a contrasting color
+    btn_contrast = get_contrast_ratio(btn_bg, btn_text_color)
+    if btn_contrast < 4.5:
+        # Force high contrast - use black or white based on button background
+        btn_bg_lum = get_luminance(hex_to_rgb(btn_bg) if isinstance(btn_bg, str) else btn_bg)
+        btn_text_color = '#FFFFFF' if btn_bg_lum < 0.5 else '#000000'
+    
+    # Validate initial color combinations (should always pass now)
     validate_color_contrast(body_text_color, bg_color, element_name="body text")
-    validate_color_contrast(btn_text_color, primary_color, element_name="button text")
+    validate_color_contrast(btn_text_color, btn_bg, element_name="button text")
     
     # Get font combination for the selected style
     heading_font, body_font = random.choice(FONT_COMBINATIONS.get(style, FONT_COMBINATIONS['modern_minimal']))
@@ -145,6 +159,43 @@ def generate_diverse_ui_params():
                 if get_contrast_ratio(bg_color, candidate) >= 3.0 and candidate != body_text_color:
                     link_color = candidate
                     break
+    
+    # Generate container/section background variations
+    # Use subtle variations of the main background or complementary colors
+    container_bg_options = colors.get('solid_backgrounds', colors['backgrounds'])
+    if isinstance(bg_color, str) and 'rgba' in bg_color:
+        # For transparent backgrounds, use solid alternatives
+        container_bg_options = colors.get('solid_backgrounds', ['#FFFFFF', '#F8FAFC', '#F1F5F9'])
+    
+    # Select container backgrounds that complement the main background
+    section_bg = random.choice(container_bg_options) if container_bg_options else bg_color
+    nav_bg = random.choice(container_bg_options) if container_bg_options else bg_color
+    header_bg = random.choice(container_bg_options) if container_bg_options else bg_color
+    footer_bg = random.choice(container_bg_options) if container_bg_options else bg_color
+    
+    # Ensure container backgrounds have good contrast with text
+    section_text_color = find_accessible_text_color(section_bg, colors['dark_text'], colors['light_text'])
+    
+    # Generate container border and shadow parameters
+    container_border_width = random.choice([0, 1, 2]) if random.random() > 0.5 else 0
+    container_border_color = random.choice(colors.get('borders', [primary_color]))
+    container_border_radius = random.randint(0, 12) if random.random() > 0.6 else 0
+    container_shadow_x = random.randint(0, 4) if random.random() > 0.5 else 0
+    container_shadow_y = random.randint(0, 4) if random.random() > 0.5 else 0
+    container_shadow_blur = random.randint(0, 12) if random.random() > 0.5 else 0
+    container_shadow_color = f"rgba(0, 0, 0, {random.uniform(0.1, 0.3)})" if container_shadow_blur > 0 else 'transparent'
+    
+    # Generate additional visual style parameters for divs and other containers
+    # Apply subtle background variations to common container classes
+    div_bg_probability = 0.3  # 30% chance to apply background to divs
+    div_bg = random.choice(container_bg_options) if container_bg_options and random.random() < div_bg_probability else 'transparent'
+    
+    # Card/container styling (for elements with common class patterns)
+    card_bg = random.choice(container_bg_options) if container_bg_options else 'transparent'
+    card_border_width = random.choice([0, 1]) if random.random() > 0.7 else 0
+    card_border_radius = random.randint(0, 8) if random.random() > 0.7 else 0
+    card_shadow_blur = random.randint(0, 8) if random.random() > 0.6 else 0
+    card_shadow_color = f"rgba(0, 0, 0, {random.uniform(0.05, 0.2)})" if card_shadow_blur > 0 else 'transparent'
     
     # Base parameters with more dramatic variations
     base_params = {
@@ -165,10 +216,30 @@ def generate_diverse_ui_params():
         'letterSpacing': round(random.uniform(-0.01, 0.01), 3),
         # Conservative line height to prevent vertical space increases
         'lineHeight': round(random.uniform(1.3, 1.5), 2),
-        'btnBg': primary_color,
-        'btnTextColor': btn_text_color,
+        'btnBg': btn_bg,  # Use the validated button background
+        'btnTextColor': btn_text_color,  # Use the validated button text color with guaranteed contrast
         'linkColor': link_color,
         'transitionSpeed': round(random.uniform(0.15, 0.4), 2),
+        # Container/section styling (visual only, no layout changes)
+        'sectionBg': section_bg,
+        'navBg': nav_bg,
+        'headerBg': header_bg,
+        'footerBg': footer_bg,
+        'sectionTextColor': section_text_color,
+        'containerBorderWidth': container_border_width,
+        'containerBorderColor': container_border_color,
+        'containerBorderRadius': container_border_radius,
+        'containerShadowX': container_shadow_x,
+        'containerShadowY': container_shadow_y,
+        'containerShadowBlur': container_shadow_blur,
+        'containerShadowColor': container_shadow_color,
+        # Additional container styling
+        'divBg': div_bg,
+        'cardBg': card_bg,
+        'cardBorderWidth': card_border_width,
+        'cardBorderRadius': card_border_radius,
+        'cardShadowBlur': card_shadow_blur,
+        'cardShadowColor': card_shadow_color,
     }
     
     # Style-specific parameters with more dramatic variations
@@ -221,9 +292,12 @@ def generate_diverse_ui_params():
             'inputBackdropBlur': random.randint(10, 20),
         })
     elif style == 'neumorphism':
+        # Ensure button colors have proper contrast
+        neumorphism_btn_bg = bg_color
+        neumorphism_btn_text = find_accessible_text_color(neumorphism_btn_bg, colors['dark_text'], colors['light_text'], min_ratio=4.5)
         base_params.update({
-            'btnBg': bg_color,
-            'btnTextColor': body_text_color,
+            'btnBg': neumorphism_btn_bg,
+            'btnTextColor': neumorphism_btn_text,
             'btnBorderWidth': 0,
             'btnBorderRadius': random.randint(16, 24),
             'btnPaddingX': random.randint(22, 32),
@@ -260,18 +334,25 @@ def generate_diverse_ui_params():
             'inputPaddingY': random.randint(10, 14),
         })
     elif style == 'dark_mode':
+        # For dark mode, ensure better contrast - use higher minimum ratio
+        # Dark backgrounds need very light text for good contrast
+        dark_bg = bg_color
+        dark_text_color = find_accessible_text_color(dark_bg, colors['light_text'], colors['dark_text'], min_ratio=7.0)
+        dark_btn_text_color = find_accessible_text_color(primary_color, colors['light_text'], colors['dark_text'], min_ratio=7.0)
+        
         base_params.update({
+            'textColor': dark_text_color,  # Override with high-contrast color
+            'headingColor': dark_text_color,
+            'btnTextColor': dark_btn_text_color,  # Override with high-contrast color
             'btnBorderWidth': random.choice([0, 2, 3]),
             'btnBorderColor': primary_color,
             'btnBorderRadius': random.randint(8, 16),
-            'btnPaddingX': random.randint(20, 32),
-            'btnPaddingY': random.randint(12, 18),
             'btnShadowX': 0,
             'btnShadowY': random.randint(4, 8),
             'btnShadowBlur': random.randint(16, 24),
             'btnShadowColor': f"{primary_color}80",
             'inputBg': '#1A1A1A',
-            'inputTextColor': body_text_color,
+            'inputTextColor': dark_text_color,  # Use high-contrast color
             'inputBorderWidth': random.randint(2, 4),
             'inputBorderColor': primary_color,
             'inputBorderRadius': random.randint(8, 12),
