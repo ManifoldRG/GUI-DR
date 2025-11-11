@@ -191,6 +191,18 @@ async def process_mhtml_actions(
                 if result['op'] != 'TYPE' and result['coordinates']:
                     coordinates = list(result['coordinates'])
                 
+                # Extract and format nearest element info if available
+                nearest_element_info = result.get('nearest_element_info')
+                nearest_element_data = None
+                if nearest_element_info:
+                    # Extract only the fields needed for trajectory.json
+                    nearest_element_data = {
+                        'text': nearest_element_info.get('text', ''),
+                        'relative_position': nearest_element_info.get('relative_position', []),
+                        'tag': nearest_element_info.get('tag', ''),
+                        'distance': nearest_element_info.get('center_distance')
+                    }
+                
                 # Add action data to trajectory list
                 action_data = {
                     'task_uid': task_uid,
@@ -206,7 +218,8 @@ async def process_mhtml_actions(
                     'bounding_box': result['bounding_box'],
                     'screenshot': result['screenshot'],
                     'augmentation_success': result['augmentation_success'],
-                    'ui_params': result.get('ui_params')
+                    'ui_params': result.get('ui_params'),
+                    'nearest_element': nearest_element_data
                 }
                 trajectory.append(action_data)
                 logger.info(f"{'='*60}")

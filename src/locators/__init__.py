@@ -3,6 +3,7 @@ Element location modules for finding and disambiguating elements.
 """
 
 from .element_locator import ElementLocator
+from .nearest_element_finder import NearestElementFinder
 from .strategies import (
     LocatorStrategy,
     IdStrategy,
@@ -16,6 +17,7 @@ from .strategies import (
 
 __all__ = [
     'ElementLocator',
+    'NearestElementFinder',
     'LocatorStrategy',
     'IdStrategy',
     'DataTestIdStrategy',

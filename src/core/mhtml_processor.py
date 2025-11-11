@@ -14,6 +14,7 @@ from ui.randomization import generate_diverse_ui_params
 from ui.injection import generate_injection_js
 from exceptions import ElementLocatorError, ElementNotFoundError, AmbiguousMatchError, ElementValidationError
 from locators.element_locator import ElementLocator
+from locators.nearest_element_finder import NearestElementFinder
 from core.action_replay import ActionReplayer
 from core.element_validator import ElementValidator
 from core.element_type_resolver import ElementTypeResolver
@@ -46,6 +47,7 @@ class MHTMLProcessor:
         self.element_scroller = ElementScroller(self.page)
         self.screenshot_handler = ScreenshotHandler(self.page, self.screenshots_base_dir)
         self.element_highlighter = ElementHighlighter(self.page)
+        self.nearest_element_finder = NearestElementFinder(max_distance=500)
     
     async def load_mhtml(self, mhtml_path: str) -> bool:
         """Load MHTML file into Playwright page. Clears page state but preserves page_pre_actions.
@@ -167,11 +169,30 @@ class MHTMLProcessor:
         
         center_x, center_y = (int(bounding_box['x'] + bounding_box['width'] / 2), int(bounding_box['y'] + bounding_box['height'] / 2))
 
+        # Find nearest interactable element and log information
+        # This is optional - if it fails, we continue without nearest element info
+        nearest_element_info = None
+        try:
+            nearest_element_info = await self.nearest_element_finder.find_nearest_interactable(
+                self.page, 
+                element,
+                prefer_below=True
+            )
+            if nearest_element_info:
+                self.nearest_element_finder.log_nearest_element_info(
+                    target_element_text,
+                    nearest_element_info
+                )
+        except Exception as e:
+            # Nearest element finding is optional - don't break the step if it fails
+            logger.debug(f"Could not find or log nearest interactable element: {e}")
+
         return {
             'coordinates': (center_x, center_y),
             'bounding_box': (bounding_box['x'], bounding_box['y'], bounding_box['width'], bounding_box['height']),
             'locator': element,
-            'original_box': locator.original_box  # Include for debug highlighting
+            'original_box': locator.original_box,  # Include for debug highlighting
+            'nearest_element_info': nearest_element_info  # Include nearest element info
         }
     
     async def _prepare_action_context(self, should_reset_page_pre_actions: bool, type_action_value: str, should_randomize: bool) -> Dict[str, Any]:
@@ -323,6 +344,9 @@ class MHTMLProcessor:
                     coordinates, bounding_box, crop_info
                 )
 
+            # Extract nearest element info from element_info
+            nearest_element_info = element_info.get('nearest_element_info')
+            
             return {
                 'action_uid': action_uid,
                 'op': action_op,
@@ -330,7 +354,8 @@ class MHTMLProcessor:
                 'coordinates': converted_coordinates,
                 'bounding_box': converted_bounding_box,
                 'screenshot': screenshot_path,
-                'ui_params': ui_params
+                'ui_params': ui_params,
+                'nearest_element_info': nearest_element_info
             }
         except Exception as e:
             logger.error(f"Error in process_action: {e}")
