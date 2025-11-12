@@ -13,7 +13,6 @@ from .config import UIModificationConfig
 def generate_injection_js(
     params: dict,
     config: Optional[UIModificationConfig] = None,
-    llm_texts: Optional[Dict[str, list]] = None,
     target_element_text: Optional[str] = None
 ) -> str:
     """Generate JavaScript code for injecting UI modifications.
@@ -21,8 +20,7 @@ def generate_injection_js(
     Args:
         params: UI style parameters (for Type 3)
         config: UI modification configuration
-        llm_texts: LLM-generated texts for Type 2 (dense info)
-        target_element_text: Text content of target element (required for Type 2)
+        target_element_text: Text content of target element (unused, kept for compatibility)
     
     Returns:
         Complete JavaScript injection code
@@ -45,10 +43,7 @@ def generate_injection_js(
     # Type 2: Dense info
     dense_info_js = ""
     if config.enable_dense_info:
-        dense_info_js = generate_dense_info_js(
-            llm_texts=llm_texts,
-            target_element_text=target_element_text
-        )
+        dense_info_js = generate_dense_info_js()
     
     # Combine all types
     config_dict = config.to_dict()

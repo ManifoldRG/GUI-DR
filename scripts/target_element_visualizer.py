@@ -77,22 +77,32 @@ def main(run_folder: str):
                     ax.add_patch(nearest_rect)
                     has_nearest_bbox = True
             
-            # Add information text
-            op = entry.get("op", "UNKNOWN")
-            target_text = entry.get("target_element_text", "")
-            title = f"{op}: {target_text}\nTarget BBox: [{x:.1f}, {y:.1f}, {width:.1f}, {height:.1f}]"
+            # Build title with step instruction, nearest element info, and target bbox
+            step_instruction = entry.get("step_instruction", "No instruction")
+            title = f"Step: {step_instruction}"
+            
+            # Add target element bounding box
+            title += f"\nTarget BBox: [{x:.1f}, {y:.1f}, {width:.1f}, {height:.1f}]"
             
             # Add nearest element info to title if available
             if has_nearest_bbox:
                 nearest_text = nearest_element.get("text", "")
-                nearest_tag = nearest_element.get("tag", "")
-                title += f"\nNearest: {nearest_tag} '{nearest_text[:30]}...' BBox: [{nx:.1f}, {ny:.1f}, {nwidth:.1f}, {nheight:.1f}]"
+                relative_position = nearest_element.get("relative_position", "")
+                # Handle both string and list formats
+                if isinstance(relative_position, list):
+                    if len(relative_position) > 0:
+                        relative_pos_str = relative_position[0] if isinstance(relative_position[0], str) else str(relative_position)
+                    else:
+                        relative_pos_str = "N/A"
+                else:
+                    relative_pos_str = str(relative_position) if relative_position else "N/A"
+                title += f"\nNearest: '{nearest_text}' | Relative Position: {relative_pos_str}"
             
             ax.set_title(title, fontsize=10, pad=10)
             
-            # Add legend if nearest element is drawn
-            if has_nearest_bbox:
-                ax.legend(loc='upper right', fontsize=8)
+            # Add compact legend in bottom-left corner (less obstructing)
+            # Include text density region if it was drawn
+            ax.legend(loc='lower left', fontsize=9, framealpha=0.9, edgecolor='black', fancybox=True)
             
             # Remove axes
             ax.axis('off')

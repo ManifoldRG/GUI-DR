@@ -42,27 +42,26 @@ class ScreenshotHandler:
     
     def calculate_crop_region(self, bounding_box: Tuple[float, float, float, float], page_info: Dict[str, float], 
                                crop_width: int = 1920, crop_height: int = 1080, padding: int = 20) -> Tuple[float, float]:
-        """Calculate crop region coordinates to include bounding box with padding."""
+        """Calculate crop region coordinates to include bounding box with padding.
+        
+        IMPORTANT: Only adjusts vertically. Horizontal crop always starts at scrollX (or 0 if page is smaller).
+        This ensures no horizontal scrolling or cropping - always uses full 1920px width.
+        """
         x, y, width, height = bounding_box
         bbox_left = x + page_info['scrollX']
         bbox_top = y + page_info['scrollY']
         bbox_right = bbox_left + width
         bbox_bottom = bbox_top + height
         
-        # Calculate crop region center to include bounding box with padding
-        bbox_center_x = (bbox_left + bbox_right) / 2
-        bbox_center_y = (bbox_top + bbox_bottom) / 2
+        # HORIZONTAL: Always start at scrollX (no horizontal adjustment)
+        # If page is smaller than 1920px, start at 0
+        crop_left = max(0, page_info['scrollX'])
         
-        # Start with crop centered on bounding box
-        crop_left = bbox_center_x - crop_width / 2
+        # VERTICAL: Center crop on bounding box vertically
+        bbox_center_y = (bbox_top + bbox_bottom) / 2
         crop_top = bbox_center_y - crop_height / 2
         
-        # Adjust if bounding box with padding would be cut off
-        if bbox_left - padding < crop_left:
-            crop_left = max(0, bbox_left - padding)
-        if bbox_right + padding > crop_left + crop_width:
-            crop_left = max(0, bbox_right + padding - crop_width)
-        
+        # Adjust vertically if bounding box with padding would be cut off
         if bbox_top - padding < crop_top:
             crop_top = max(0, bbox_top - padding)
         if bbox_bottom + padding > crop_top + crop_height:
@@ -72,15 +71,21 @@ class ScreenshotHandler:
     
     def crop_and_pad_image(self, img: Image.Image, crop_left: float, crop_top: float, 
                            crop_width: int = 1920, crop_height: int = 1080) -> Tuple[Image.Image, Tuple[int, int], Tuple[float, float]]:
-        """Crop image and pad if necessary. Returns (final_image, (paste_x, paste_y), (clamped_crop_left, clamped_crop_top))."""
+        """Crop image and pad if necessary. Returns (final_image, (paste_x, paste_y), (clamped_crop_left, clamped_crop_top)).
+        
+        IMPORTANT: Horizontal crop always uses full width (or full page if smaller than crop_width).
+        Only vertical crop is adjusted.
+        """
         page_width, page_height = img.size
         
-        # Clamp crop coordinates to image boundaries
-        clamped_crop_left = max(0, min(crop_left, page_width - crop_width))
-        clamped_crop_top = max(0, min(crop_top, page_height - crop_height))
-        
-        # Calculate actual crop dimensions
+        # HORIZONTAL: Always use full page width (or start at 0 if page is smaller than crop_width)
+        # No horizontal clamping - we want full width
+        clamped_crop_left = max(0, min(crop_left, page_width))  # Don't subtract crop_width here
+        # Actual horizontal crop width is min of crop_width and available page width from crop_left
         actual_crop_width = min(crop_width, page_width - int(clamped_crop_left))
+        
+        # VERTICAL: Clamp crop coordinates to image boundaries
+        clamped_crop_top = max(0, min(crop_top, page_height - crop_height))
         actual_crop_height = min(crop_height, page_height - int(clamped_crop_top))
         
         # Crop the image
@@ -97,7 +102,10 @@ class ScreenshotHandler:
         paste_x, paste_y = 0, 0
         if actual_crop_width < crop_width or actual_crop_height < crop_height:
             final_img = Image.new('RGB', (crop_width, crop_height), color='white')
-            paste_x = (crop_width - actual_crop_width) // 2 if actual_crop_width < crop_width else 0
+            # HORIZONTAL: Always paste at x=0 (left-aligned, no centering)
+            # This ensures the content starts at the left edge of the 1920px image
+            paste_x = 0
+            # VERTICAL: Center vertically (only vertical adjustment)
             paste_y = (crop_height - actual_crop_height) // 2 if actual_crop_height < crop_height else 0
             final_img.paste(cropped_img, (paste_x, paste_y))
             cropped_img = final_img
@@ -132,12 +140,14 @@ class ScreenshotHandler:
                 if scroll_info is None:
                     page_info = await self.get_page_info()
                 else:
-                    # Convert scroll_info dict to page_info format
+                    # Get full page info to know page dimensions for horizontal crop
+                    full_page_info = await self.get_page_info()
+                    # Convert scroll_info dict to page_info format, but keep page dimensions
                     page_info = {
                         'scrollX': scroll_info.get('scrollX', 0),
                         'scrollY': scroll_info.get('scrollY', 0),
-                        'pageWidth': 0,  # Not needed for crop calculation
-                        'pageHeight': 0  # Not needed for crop calculation
+                        'pageWidth': full_page_info['pageWidth'],  # Needed to ensure horizontal crop is correct
+                        'pageHeight': full_page_info['pageHeight']  # Needed for vertical crop bounds
                     }
                 
                 # Take full-page screenshot

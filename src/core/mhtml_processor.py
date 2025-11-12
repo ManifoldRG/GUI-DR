@@ -13,7 +13,6 @@ from loguru import logger
 from ui.randomization import generate_diverse_ui_params
 from ui.injection import generate_injection_js
 from ui.config import UIModificationConfig
-from ui.element_analyzer import analyze_page_elements, generate_llm_texts_for_groups
 from exceptions import ElementLocatorError, ElementNotFoundError, AmbiguousMatchError, ElementValidationError
 from locators.element_locator import ElementLocator
 from locators.nearest_element_finder import NearestElementFinder
@@ -23,6 +22,7 @@ from core.element_type_resolver import ElementTypeResolver
 from core.element_scroller import ElementScroller
 from core.screenshot_handler import ScreenshotHandler
 from core.element_highlighter import ElementHighlighter
+from core.text_density_measurement import measure_viewport_text_density, measure_crop_text_density
 
 DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 
@@ -148,29 +148,10 @@ class MHTMLProcessor:
         # Add reordering flag to params
         params['enableElementReordering'] = self._enable_element_reordering
         
-        # Generate LLM texts for Type 2 if enabled
-        llm_texts = None
-        if self.ui_config.enable_dense_info:
-            # Check if target element has text content
-            if not target_element_text or not target_element_text.strip():
-                logger.warning("Type 2 enabled but target element has no text content, skipping dense info modifications")
-            elif self.text_generator:
-                try:
-                    groups = await analyze_page_elements(self.page)
-                    if groups:
-                        llm_texts = generate_llm_texts_for_groups(
-                            groups, 
-                            self.text_generator,
-                            num_clones_per_group=2
-                        )
-                except Exception as e:
-                    logger.warning(f"Failed to generate LLM texts: {e}")
-        
         # Generate JavaScript injection code
         injection_js = generate_injection_js(
             params=params,
             config=self.ui_config,
-            llm_texts=llm_texts,
             target_element_text=target_element_text
         )
         
@@ -395,6 +376,17 @@ class MHTMLProcessor:
                 step_index, action_op, bounding_box, scroll_info_at_bbox
             )
             
+            # Measure text density in viewport (1920x1080, same as screenshot)
+            # IMPORTANT: Scroll viewport to match the crop region so density measurement matches screenshot
+            if crop_info is not None:
+                effective_crop_left, effective_crop_top, scroll_x, scroll_y = crop_info
+                # Scroll viewport to match the vertical crop region
+                # Horizontal already matches (crop_left = scrollX)
+                await self.page.evaluate(f"window.scrollTo({scroll_x}, {effective_crop_top})")
+                await asyncio.sleep(0.1)  # Small delay for scroll to complete
+            
+            viewport_density = await measure_viewport_text_density(self.page)
+            
             # Convert coordinates if screenshot was cropped
             converted_coordinates = coordinates
             converted_bounding_box = bounding_box
@@ -424,6 +416,16 @@ class MHTMLProcessor:
                     }
                     logger.debug(f"Converted nearest element bbox for crop: ({nearest_bbox['x']:.1f}, {nearest_bbox['y']:.1f}) -> ({nearest_bbox_x:.1f}, {nearest_bbox_y:.1f})")
             
+            # Prepare crop_info for saving (convert tuple to dict for JSON serialization)
+            crop_info_dict = None
+            if crop_info is not None:
+                crop_info_dict = {
+                    'effective_crop_left': crop_info[0],
+                    'effective_crop_top': crop_info[1],
+                    'scrollX': crop_info[2],
+                    'scrollY': crop_info[3]
+                }
+            
             return {
                 'action_uid': action_uid,
                 'op': action_op,
@@ -432,7 +434,11 @@ class MHTMLProcessor:
                 'bounding_box': converted_bounding_box,
                 'screenshot': screenshot_path,
                 'ui_params': ui_params,
-                'nearest_element_info': nearest_element_info
+                'nearest_element_info': nearest_element_info,
+                'crop_info': crop_info_dict,  # Save crop_info for verification
+                'text_density': {
+                    'viewport': viewport_density
+                }
             }
         except Exception as e:
             logger.error(f"Error in process_action: {e}")

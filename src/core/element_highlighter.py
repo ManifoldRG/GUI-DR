@@ -24,36 +24,6 @@ class ElementHighlighter:
                     }
                 }
             """)
-            # Add arrow pointing at element
-            bbox = await element_locator.bounding_box()
-            if bbox:
-                await self.page.evaluate("""
-                    ({x, y, width, height}) => {
-                        const existing = document.getElementById('debug-element-arrow');
-                        if (existing) existing.remove();
-                        const arrow = document.createElement('div');
-                        arrow.id = 'debug-element-arrow';
-                        const centerX = x + width / 2;
-                        const arrowY = y - 50;
-                        Object.assign(arrow.style, {
-                            position: 'absolute',
-                            left: centerX + 'px',
-                            top: arrowY + 'px',
-                            width: '0',
-                            height: '0',
-                            borderLeft: '10px solid transparent',
-                            borderRight: '10px solid transparent',
-                            borderTop: '30px solid #FF0000',
-                            transform: 'translateX(-50%)',
-                            pointerEvents: 'none',
-                            zIndex: '999999'
-                        });
-                        if (document.body.style.position !== 'relative' && document.body.style.position !== 'absolute') {
-                            document.body.style.position = 'relative';
-                        }
-                        document.body.appendChild(arrow);
-                    }
-                """, bbox)
         except Exception as e:
             print(f"⚠️ Could not highlight element: {e}")
 

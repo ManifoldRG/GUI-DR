@@ -6,15 +6,15 @@ import asyncio
 import argparse
 import os
 from datetime import datetime
-
+from typing import Optional
 from utils import load_parquet_files_by_split, find_tasks_from_parquet, print_trajectory_summary
 from core import process_mhtml_actions
 from ui.config import UIModificationConfig
 
 DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
-# DEBUG_TASK_UIDS = ['0a2130e7-1108-4281-8772-25c8671fb88e']
 # DEBUG_TASK_UIDS = ['f4c21e9f-fbd7-4c45-a282-de06ae3b73c5'] # many button
-# DEBUG_TASK_UIDS = ['ff173880-e7f5-4b4e-b941-79e9c3504add', # step 4 arrow and bbox are apart, INVESTIGATE coordinates update after scrolling and cropping
+# DEBUG_TASK_UIDS = ['0a2130e7-1108-4281-8772-25c8671fb88e',
+#                     'ff173880-e7f5-4b4e-b941-79e9c3504add', # step 4 arrow and bbox are apart, INVESTIGATE coordinates update after scrolling and cropping
 #                     '38fe67f7-14af-4259-8309-aa350abdc395', # 3rd star symbol div
 #                     'e6643cfb-567e-4e11-8cab-f85483573539', # dense text interface
 #                     'f4c21e9f-fbd7-4c45-a282-de06ae3b73c5', # many button
@@ -25,7 +25,7 @@ HEADLESS = True
 # DEBUG_TASK_UIDS = None
 
 
-async def main(split: str = 'train', ui_config: UIModificationConfig = UIModificationConfig()):
+async def main(split: str = 'train', ui_config: Optional[UIModificationConfig] = None):
     """Entry point - loads parquet files for specified split and processes corresponding tasks.
     
     Args:
@@ -125,6 +125,18 @@ async def main(split: str = 'train', ui_config: UIModificationConfig = UIModific
     print(f"   Structure: {run_dir}/<task_id>/screenshots/ and {run_dir}/<task_id>/trajectory.json")
 
 
+def str_to_bool(v):
+    """Convert string to boolean for argparse."""
+    if isinstance(v, bool):
+        return v
+    if v.lower() in ('yes', 'true', 't', 'y', '1'):
+        return True
+    elif v.lower() in ('no', 'false', 'f', 'n', '0'):
+        return False
+    else:
+        raise argparse.ArgumentTypeError(f'Boolean value expected, got: {v}')
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description='Process MHTML files with UI randomization based on parquet data splits',
@@ -148,7 +160,7 @@ Examples:
 
     parser.add_argument(
         '--enable_zoom',
-        type=bool,
+        type=str_to_bool,
         default=False,
         help='Enable zoom (default: False)'
     )
@@ -162,14 +174,14 @@ Examples:
 
     parser.add_argument(
         '--enable_dense_info',
-        type=bool,
+        type=str_to_bool,
         default=False,
         help='Enable dense info (default: False)'
     )
 
     parser.add_argument(
         '--enable_style_variants',
-        type=bool,
+        type=str_to_bool,
         default=True,
         help='Enable style variants (default: True)'
     )

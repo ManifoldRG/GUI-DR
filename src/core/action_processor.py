@@ -231,7 +231,8 @@ async def process_mhtml_actions(
                     'screenshot': result['screenshot'],
                     'augmentation_success': result['augmentation_success'],
                     'ui_params': result.get('ui_params'),
-                    'nearest_element': nearest_element_data
+                    'nearest_element': nearest_element_data,
+                    'text_density': result.get('text_density')
                 }
                 trajectory.append(action_data)
                 logger.info(f"{'='*60}")
