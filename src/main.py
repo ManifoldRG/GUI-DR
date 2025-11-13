@@ -28,7 +28,7 @@ HEADLESS = True
 async def main(split: str = 'train', ui_config: Optional[UIModificationConfig] = None):
     """Entry point - loads parquet files for specified split and processes corresponding tasks.
     
-    Args:
+    Args:  
         split: One of 'train', 'test_domain', 'test_task', 'test_website'
     
     Data structure:

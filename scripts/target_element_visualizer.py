@@ -39,7 +39,7 @@ def main(run_folder: str):
                 continue
             
             # Construct full image path (screenshot path is relative to project root)
-            image_path = project_root / screenshot_rel_path
+            image_path = project_root / run_folder / task_folder / "screenshots" / screenshot_rel_path.split("/")[-1]
             
             if not image_path.exists():
                 print(f"Skipping entry {idx}: image not found at {image_path}")
