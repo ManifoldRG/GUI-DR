@@ -1,0 +1,500 @@
+split,task_id,step_index,step_instruction,target_bbox,nearest_bbox,relative_position,target_correct,nearest_correct,rejected
+test_domain_original,4fbcf13b-d798-4c94-b9a4-de37ed93b84f,3,Type 'hypoallergenic' in '' input,"[1228.25, 313.90625, 132.484375, 34.9375]","[1186.734375, 255, 142.46875, 64]",['near'],,,True
+test_domain_original,fb29f0cf-2b86-4dd4-b3c4-1290bf280a0a,0,Click on 'Ongoing' button,"[362.15625, 261, 77.890625, 32]","[275, 261, 83.15625, 32]",['right'],True,True,False
+test_domain_original,37ced294-11bf-42f3-bccb-8b22a3112ca9,5,Click on 'Medium' checkbox,"[1149.859375, 308, 18, 18]","[1186.859375, 304, 56.90625, 17]",['left'],True,True,False
+test_domain_original,f484bada-3df1-4be5-845d-342ca34c63e9,5,Click on 'Resources' button,"[762.140625, 218.171875, 125.125, 70.5625]","[689.59375, 244.171875, 56.546875, 18]",['right'],True,True,False
+test_domain_original,c3e1b4ad-5238-4582-8082-2ebbddb1c65a,0,"Type 'Microsoft corporation' in 'Search for news, symbols or companies' textbox","[564.5, 37, 557, 35]","[867.140625, 101.140625, 15, 15]",['above'],,,True
+test_domain_original,f42ec75e-a87f-4706-b6bf-8e1001f97535,2,Click on 'Get Directions' link,"[434.015625, 418.5625, 303.984375, 19.1875]","[463.265625, 488.9375, 109.421875, 18]",['above'],,,True
+test_domain_original,81035475-4c20-45e0-93d1-8b51f6f4ca74,2,Click on 'to eat healthier' p,"[636, 224.5, 295, 26]","[585, 351.5, 50, 40]","['above', 'right']",,,True
+test_domain_original,89a03889-bbfe-4922-8c70-17b91f956b34,0,Click on 'Black' li,"[479, 517, 82, 20]","[487, 559, 20.96875, 17]",['above'],True,True,False
+test_domain_original,373a92f6-a76b-4d36-9649-a7f83a526d40,3,Click on 'Vegan Diet for Weight Loss: Does It Work?' link,"[585, 203, 450.875, 24]","[701.28125, 203, 6.609375, 24]",['near'],,,True
+test_domain_original,c4a26624-ffae-466f-86bc-f5bdf4e5198c,0,"Type 'microsoft' in 'Search for news, symbols or companies' textbox","[564.5, 37, 557, 35]","[867.140625, 101.140625, 15, 15]",['above'],,,True
+test_domain_original,b60cd6a1-05e7-4e1b-a48c-e513c53c1c0f,3,Click on 'London' div,"[552.5, 190, 382, 28]","[552.5, 218, 382, 29]",['near'],True,True,False
+test_domain_original,b3963653-ae2f-4b5b-9365-42490affa67c,2,Type '123456' in 'Pill Imprint' textbox,"[404, 516.375, 406, 45.1875]","[404, 581.5625, 406, 76.375]",['above'],,,True
+test_domain_original,631b0391-797f-486b-a098-ec5d6a73d1fe,3,Type 'diabetes' in 'Search group name or keyword' searchbox,"[382.21875, 410.921875, 722.203125, 45]","[680.125, 239.75, 76.28125, 24.5]",['below'],True,True,False
+test_domain_original,ce8dfc6b-3044-4838-a3bd-799b6c403dde,0,Click on 'Fever - Symptoms and causes - Mayo Clinic' link,"[724, 288, 379.1875, 51.65625]","[830.21875, 434.65625, 50.203125, 24]",['above'],,,True
+test_domain_original,a02e8361-07ad-4448-81a0-b4894f68de4e,7,Type '75228' in '' input,"[745, 338.953125, 165, 40]","[745, 348.625, 0, 17]",['near'],,,True
+test_domain_original,89a03889-bbfe-4922-8c70-17b91f956b34,2,Type '123' in 'Enter search terms' textbox,"[458.5, 408, 296, 48]","[519.234375, 467, 109.59375, 17]",['above'],True,True,False
+test_domain_original,e7e02515-da3c-4925-9802-e85d1aebbb08,3,Click on 'apply' button,"[104.390625, 523.796875, 88.109375, 32.40625]","[12.6875, 590.1875, 58.53125, 15]","['above', 'right']",,,True
+test_domain_original,0e48ad89-c2f1-42a0-a8fa-904d11200768,0,Click on 'air conditioning' checkbox,"[7.5, 478.171875, 13, 13]","[7.5, 507.171875, 12.640625, 14.40625]",['above'],True,True,False
+test_domain_original,0fd6eca4-fd90-4500-adaf-0ac2ad90d82b,0,Type '10019' in 'Location' searchbox,"[945.9375, 504.0, 386.375, 72]","[1044.640625, 601.0, 79.125, 20]",['above'],,,True
+test_domain_original,a498c980-379d-4729-b667-29127e4ee0f5,1,Click on 'Search' button,"[1109.375, 173.15625, 98.625, 40]","[1079.921875, 266.15625, 49.90625, 17]",['above'],,,True
+test_domain_original,215efc73-2d25-4126-b108-99856b19dc6c,3,Click on 'Distance' button,"[663.875, 351.375, 115, 34]","[705.875, 383.78125, 89.828125, 19.1875]",['above'],,,True
+test_domain_original,ad61cc39-ccb1-49c8-b569-4de3bf189f3e,3,Click on 'Securing Amazon EC2 Instances: AWS Elastic Compute...' div,"[843, 511.203125, 480, 57.59375]","[843, 572.796875, 480, 44.78125]",['above'],True,True,False
+test_domain_original,e60febbe-af4c-4d2c-8cc4-39041485654d,0,Click on '1 Bed' li,"[562.515625, 203, 350, 44]","[562.515625, 159, 350, 44]",['near'],True,True,False
+test_domain_original,606fe671-57d7-4b6c-8642-ef7b59fa7229,14,Click on 'Tailored Resumes ($187 Complete Package)' div,"[915.640625, 426.1875, 327.53125, 24]","[997.609375, 455.78125, 211.03125, 24]",['above'],True,True,False
+test_domain_original,6fe6fa2a-6199-40f8-a08f-e8c43d23ff26,1,Click on 'Government' link,"[1362.765625, 124.390625, 129.78125, 89]","[1417.953125, 95.1875, 12.71875, 20]",['below'],True,False,False
+test_domain_original,5b224de7-505b-449d-8a34-8c3c33464bb9,4,"Type 'xrp' in 'Search coin, pair, contract address or exchange' textbox","[894, 84, 310, 18]","[869, 146.5, 380, 40]",['above'],True,False,False
+test_domain_original,6ab62146-463e-4ea7-b9d6-5168f623dcf2,17,Click on 'Apply Now' button,"[285, 510.0, 148.140625, 60]","[298, 645.0, 116.40625, 105.28125]",['above'],,,True
+test_domain_original,b41de74c-7493-444c-92ad-641b0ca164ee,10,Click on 'Next ' button,"[643.15625, 522.2578125, 287.6875, 35.484375]","[737.859375, 468.2578125, 88.953125, 24.328125]",['below'],True,True,False
+test_domain_original,421c39c0-ca19-4c31-a023-c64d54ba6e4c,2,Type 'nutritionist' in 'What' textbox,"[577.484375, 143, 304.515625, 18]","[789.328125, 197, 134.25, 15]",['above'],,,True
+test_domain_original,bcc293b4-9638-4a83-be0b-ae3df42e706e,0,Click on 'Find Storage' button,"[1346.984375, 520.875, 156, 38]","[1516, 668, 29, 29]","['above', 'left']",,,True
+test_domain_original,f484bada-3df1-4be5-845d-342ca34c63e9,3,Click on 'Forms' link,"[779.140625, 383.359375, 206, 27]","[779.140625, 426.671875, 90.578125, 18]",['above'],True,True,False
+test_domain_original,7b8fa61f-5bfd-4a67-a4f2-3db344faa43a,3,Click on 'Sep' li,"[1279.5, 386, 65, 42]","[1279.5, 436, 65, 42]",['above'],True,False,False
+test_domain_original,3272dc52-9003-4127-8949-6abd41560af9,3,Click on 'Sort ' button,"[472, 137, 66.015625, 24]","[489, 190, 20, 20]",['above'],,,True
+test_domain_original,b7069c40-4bfd-4cfe-9fdc-1c546e995edd,12,Click on '4.0' span,"[84, 528.0, 22.25, 24]","[58.785606384277344, 534.7276000976562, 14.430290222167969, 10.54669189453125]",['right'],,,True
+test_domain_original,a02e8361-07ad-4448-81a0-b4894f68de4e,1,Click on '*' checkbox,"[711, 529.0, 22, 22]","[751, 561.390625, 10, 0]","['above', 'left']",,,True
+test_domain_original,3d8c4d03-3791-481d-8782-cae61d63960d,4,"Click on '₹ 25,000.00+/month (2)' link","[554.515625, 207, 239, 44]","[554.515625, 251, 239, 44]",['near'],,,True
+test_domain_original,952b24e0-6ebe-4fac-b282-05d552f51e07,4,Click on 'American University' span,"[560, 464, 810, 40]","[560, 528, 842, 40]",['above'],True,True,False
+test_domain_original,290c13e2-b488-41b3-8b17-1fe6963fadd3,3,Click on 'Farms and Ranches' div,"[606.125, 525.0, 348.859375, 30]","[606.125, 555.0, 348.859375, 27]",['near'],True,False,False
+test_domain_original,6f21856c-0b1c-4814-86fe-e0311ca566b8,4,"Type 'Wilkes County, NC' in 'Enter a City, County, State, or ID' button","[486.359375, 207.5, 817.28125, 50]","[899.453125, 293.5, 121.078125, 23]",['above'],True,True,False
+test_domain_original,d27a6164-d276-4c2f-b9b6-b402bcd6d6a3,1,Click on 'Data Analyst' link,"[429, 236, 384, 36]","[428, 281, 384, 38]",['above'],True,True,False
+test_domain_original,70cb365b-5a62-4a3a-88cb-60df9cafe041,10,Click on 'Let go and let God. :) Would you like it framed? C...' img,"[590, 392.5, 236, 295]","[842, 392.5, 236, 296]",['left'],True,True,False
+test_domain_original,978c579a-b7b1-486e-aa3c-1b9ccea1a5c0,1,Click on 'Search' button,"[590.203125, 513.0, 89.796875, 54]","[480.953125, 583.0, 67.453125, 19]","['above', 'right']",True,False,False
+test_domain_original,97f68d19-fa5a-4a87-be20-deff9f301a41,11,Click on 'Every Door Direct Mail' a,"[918.40625, 226.984375, 258.8125, 55]","[918.34375, 289.109375, 220, 28.6875]",['above'],,,True
+test_domain_original,75b3bf74-04d4-4ae4-b09e-f86fa8b1e2d1,3,"Type 'Biostatistician' in 'Job title, skills, benefits, certifications, any k...' textbox","[480, 241, 474, 44]","[634.720458984375, 429.3205261230469, 12.30908203125, 7.35882568359375]",['above'],,,True
+test_domain_original,2bc717a1-d1cc-4a95-91ca-700cce9ab18c,4,Click on 'Advanced' checkbox,"[272, 528.0, 24, 24]","[272.5, 580.5, 23, 23]",['above'],True,True,False
+test_domain_original,aa254179-b2a4-4d59-baa9-982356e71e29,4,Click on 'CONTINUE' button,"[860, 517.5, 200, 45]","[596, 636.5, 728, 90]",['above'],True,True,False
+test_domain_original,ae26c7ab-e3a9-4575-94b6-5cb92888a890,1,Click on 'Teen Driver Safety' link,"[634.40625, 484.59375, 314.828125, 24.703125]","[634.40625, 459.890625, 314.828125, 24.703125]",['near'],True,True,False
+test_domain_original,fa73b47e-f277-4d36-8ac0-3c5a3032f42e,2,Click on 'Update' button,"[901.65625, 290.1875, 52.765625, 24]","[871.125, 316.5625, 115, 55]",['above'],,,True
+test_domain_original,f24a6c7c-e205-450d-a946-8a845bc7ba21,0,"Type 'Aston University' in 'Search by college, city or property' textbox","[526, 405, 752, 24]","[916, 340, 8, 8]",['below'],,,True
+test_domain_original,ea3e8b42-1e5d-4d8d-b556-14aa37b8cb57,2,Click on 'Apply now for Pharmacy Technician (Internal Only R...' link,"[1244.984375, 130, 285, 50]","[1145.1875, 10.5, 494.796875, 44]",['below'],True,False,False
+test_domain_original,349f5f06-acda-4d1c-8569-c97a31c6107c,6,Click on 'date' link,"[400.609375, 403.015625, 26.40625, 16]","[277, 484.34375, 197.0625, 18]",['above'],True,True,False
+test_domain_original,f670ae67-e875-4fb5-aa51-070dff354aa6,0,Click on 'Highway Safety' link,"[1128.78125, 263.78125, 134.328125, 37]","[970.6875, 324.578125, 339.53125, 28.046875]",['above'],,,True
+test_domain_original,8a8b5502-924a-403f-8e36-3982877d0275,2,Click on 'Search Stocktwits' textbox,"[663, 9, 432, 34]","[847.265625, 64, 34.03125, 16]",['above'],True,True,False
+test_domain_original,c5c0b8f7-7a3e-4263-a3b9-2a5b703ed791,2,Click on 'Budget & Performance' link,"[481, 422.671875, 206, 27]","[481, 461.984375, 206, 27]",['above'],True,True,False
+test_domain_original,958167d8-f3d2-4116-af58-4b6e7b1f39fc,5,Click on 'Topic' button,"[523, 379.984375, 44.359375, 25]","[523, 440.984375, 107.734375, 25]",['above'],True,True,False
+test_domain_original,593f78ad-903d-4e34-b2db-6344625afb20,15,Click on 'Continue' button,"[480, 409.96875, 100.0625, 38]","[478, 337.96875, 44, 44]",['below'],True,False,False
+test_domain_original,369a4134-9710-4868-b6a2-3dc761294c45,0,Click on 'Visiting Information ' link,"[506, 529.203125, 274, 21.59375]","[506, 571.796875, 274, 21.59375]",['above'],True,True,False
+test_domain_original,369a4134-9710-4868-b6a2-3dc761294c45,1,Click on 'Next' link,"[1525.015625, 355.1875, 28.796875, 28.796875]","[1516.96875, 484.609375, 35.84375, 22.75]",['above'],,,True
+test_domain_original,f53ce927-191a-4566-a2e2-cb0a0ec74220,1,Click on 'MONTHLY' link,"[958.21875, 94, 111.046875, 45]","[1049, 99, 14, 16]",['near'],,,True
+test_domain_original,228fc81a-5ffe-4c16-8fd4-59462690373c,7,Type 'University of Michigan' in '* Institution Name' textbox,"[1101, 519.5, 438, 41]","[1101, 572.5, 438, 24]",['above'],True,True,False
+test_domain_original,af422029-eeeb-4204-95c1-16bf92c85da8,7,Type '8888888888' in 'Phone Number' textbox,"[800, 368.5, 320, 40]","[800, 418.5, 320, 40]",['above'],,,True
+test_domain_original,d21d71f9-c372-457e-9112-8c951f705327,7,Click on '$20.00+/hour (788)' link,"[533.171875, 339, 239, 44]","[533.171875, 295, 239, 44]",['near'],True,True,False
+test_domain_original,15e1e37c-a21f-4b75-b1c0-41c50e3f514b,7,Type 'James SMith' in 'Name' textbox,"[800, 390, 320, 40]","[800, 440, 320, 40]",['above'],True,False,False
+test_domain_original,89150730-aec1-4d98-bca2-5323d8e5f958,3,Click on 'Self Storage' generic,"[333.03125, 147, 326.21875, 18]","[59.046875, 375.59375, 885.75, 60]",['above'],,,True
+test_domain_original,606fe671-57d7-4b6c-8642-ef7b59fa7229,15,Click on 'More' button,"[32, 423.34375, 46.953125, 20]","[32, 403.640625, 1, 1]",['below'],True,True,False
+test_domain_original,0c874738-6807-4b6c-baf9-703e044c67e6,1,Click on 'Audiology' link,"[360, 528.5, 389.328125, 23]","[360, 571.5, 389.328125, 23]",['above'],True,True,False
+test_domain_original,24948950-6ab9-4a90-8aae-bd4f155ace1a,4,Click on 'New Mexico 504' link,"[336, 531.5, 85.1875, 17]","[336, 555.546875, 54.3125, 17]",['above'],True,True,False
+test_domain_original,fc8c0df5-c8be-486b-b689-66cdbb51c74e,1,Click on '100 miles' div,"[508.828125, 114, 125.921875, 70]","[578, 222, 14, 14]",['above'],,,True
+test_domain_original,879426e8-6e07-4b56-ad35-1321765a9709,8,Click on '85747' link,"[379, 315, 440, 20]","[538.15625, 286.5, 125.734375, 15]",['below'],,,True
+test_domain_original,d5603064-77ea-40b7-b68b-4e5bd384daea,6,Click on '$350K - $550K' link,"[214.0625, 119.046875, 182.875, 36.78125]","[346.21875, 173.78125, 20.03125, 30.09375]",['above'],,,True
+test_domain_original,b3f27ec6-dcb2-478a-ad46-e32a9f626ce3,2,Type 'James' in 'First Name' textbox,"[676.5, 520.953125, 268.46875, 38.09375]","[676.5, 602.4375, 266.484375, 38.09375]",['above'],True,True,False
+test_domain_original,39ddfc7b-fd9a-429d-80fb-a4573b854a5a,1,Click on '2' checkbox,"[1416.828125, 240, 57.078125, 40]","[1384.859375, 208.375, 101.421875, 17]",['below'],True,False,False
+test_domain_original,bc32ce7e-8f45-43c1-98ef-27d59afb9634,0,Click on 'contact for price' span,"[1340.109375, 176.59375, 87.53125, 16]","[1340.109375, 151.59375, 87.53125, 24]",['below'],,,True
+test_domain_original,9d61cd44-0073-4e69-93c9-779131909c82,4,Click on 'Browse Cats' link,"[763.5, 454, 188.5, 168.59375]","[596, 662.59375, 728, 90]",['above'],True,False,False
+test_domain_original,5038548a-4aa7-494c-baf3-9a99ea0dd0a5,0,Click on 'apply' button,"[104.390625, 523.796875, 88.109375, 32.40625]","[212, 553.765625, 16, 16]","['above', 'left']",True,True,False
+test_domain_original,12b7d4be-c4b3-461c-9d02-e181d08bb792,2,Click on 'Living' link,"[1186.171875, 124.390625, 83.546875, 89]","[1199.453125, 88.46875, 111.296875, 33.828125]",['below'],True,False,False
+test_domain_original,89150730-aec1-4d98-bca2-5323d8e5f958,9,Click on 'All Parking' generic,"[333.03125, 147, 326.21875, 18]","[59.046875, 375.59375, 885.75, 60]",['above'],,,True
+test_domain_original,e5414fb8-9216-409a-bb69-1ccb3cb81224,3,Click on 'INSIDE ATHLETICS' link,"[522.875, 110, 437.28125, 101]","[551.390625, 211, 378.421875, 101]",['near'],True,True,False
+test_domain_original,6daf6bb2-15e2-4d7d-b323-52937fce69ca,3,Click on 'Treatment options' link,"[518.484375, 380, 188.765625, 20]","[494.296875, 422, 208.1875, 20]",['above'],True,True,False
+test_domain_original,b7069c40-4bfd-4cfe-9fdc-1c546e995edd,0,Click on 'Show 60 courses' button,"[211.59375, 522.0, 164.40625, 36]","[365, 517.0, 18, 18]",['near'],,,True
+test_domain_original,8ae1041c-eccf-42ea-b781-4a682e9435a9,4,Type '5' in 'Weight(lbs)*' textbox,"[289, 484.4375, 130, 54]","[288, 555.4375, 142.921875, 44]",['above'],,,True
+test_domain_original,422fe656-2e6c-4350-988c-2f1a8d5f36b7,1,Click on 'Turn off all' div,"[744.625, 346, 81.21875, 18]","[772.453125, 233, 72.265625, 18]",['below'],,,True
+test_domain_original,d78d07bf-bee6-4105-beba-0bdacaa53f1c,6,Click on 'Add investments' button,"[880.109375, 522.0, 159.75, 36]","[965, 857.0, 47, 20]",['above'],,,True
+test_domain_original,6cb93639-16dd-49bd-a1b9-0a4526a5800b,5,Type '2' in '' input,"[862.609375, 400, 42, 21]","[653.59375, 541, 186.125, 37]","['above', 'right']",True,True,False
+test_domain_original,38405ff5-eee4-4496-8fa2-6846fb372b7e,2,Click on 'Residence Halls' link,"[639.0625, 246.5, 123.9375, 43]","[685.296875, 209, 64.84375, 36.5]",['below'],True,True,False
+test_domain_original,37ced294-11bf-42f3-bccb-8b22a3112ca9,0,Click on 'Large' checkbox,"[1149.859375, 396, 18, 18]","[1186.859375, 392, 40.921875, 17]",['left'],,,True
+test_domain_original,8a2cf20d-ba98-4c06-a235-3a9d258e917c,0,Click on 'Follow' button,"[1306, 497.890625, 88, 40]","[1427, 510.390625, 14.828125, 15]",['left'],True,True,False
+test_domain_original,2e64ac92-0fe6-4140-ace1-382cc02a2132,0,Click on 'Turn on notifications' button,"[760, 514.0, 400, 52]","[926.390625, 598.0, 67.203125, 20]",['above'],True,True,False
+test_domain_original,f82b4d57-ab82-4c49-bc47-e3566496a068,0,Type '90028' in 'Find self storage near you' textbox,"[409.984375, 470.328125, 321.015625, 18]","[365, 571.328125, 374, 47.984375]",['above'],True,True,False
+test_domain_original,1d84ad91-a8f3-461e-aa43-014d75a8c851,10,Click on ' Filters' link,"[1392.21875, 165.34375, 90, 65]","[1486.109375, 165.34375, 90, 62]",['left'],True,True,False
+test_domain_original,a138caa3-cff4-4e3a-bde3-c1fc47e9e69a,3,Click on '' span,"[834.6875, 528.0, 24, 24]","[834.6875, 611.390625, 24, 24]",['above'],True,True,False
+test_domain_original,6b2885ba-58f3-4365-8342-635972d5b0f2,6,Click on 'Continue' button,"[480, 521.0, 100.0625, 38]","[478, 449.0, 44, 44]",['below'],True,False,False
+test_domain_original,c54b647c-2a9c-45c0-8519-bcb4dc802d01,0,Click on 'Show 40 Properties' button,"[1673.734375, 492, 222.265625, 48]","[1440, 482.578125, 472, 20]",['near'],True,True,False
+test_domain_original,0d010ed4-52a2-4fb3-b8af-f994ec6a8a09,2,"Click on 'Long Beach, CA, USA' span","[315, 487.4375, 128.640625, 15]","[300, 539.4375, 112.1875, 24]",['above'],,,True
+test_domain_original,228fc81a-5ffe-4c16-8fd4-59462690373c,12,Type 'Johndoe@gmail.com' in '* Work Email Address:' textbox,"[1101, 519.5, 438, 41]","[1101, 572.5, 438, 24]",['above'],True,True,False
+test_domain_original,b7f65d4e-30b0-4b6c-8eab-af91a27b7f0f,1,"Type 'eggplant, mushrooms' in 'Type ingredients...' textbox","[736, 181.15625, 373.375, 24]","[888.40625, 266.15625, 96.265625, 17]",['above'],,,True
+test_domain_original,2354e344-b049-4a55-8fac-0d18e7b3b646,4,"Type 'back pain' in 'DOCTOR'S NAME, CONDITION OR PROCEDURE' textbox","[599, 514.5, 358, 51]","[599, 491.5, 345, 15]",['below'],True,True,False
+test_domain_original,b1823198-2bc3-4d10-b653-7ed5a197d884,4,Click on 'Vehicle Registration Renewal' link,"[273.421875, 385.78125, 325.9375, 19.5]","[273.421875, 410.484375, 325.9375, 19.5]",['above'],True,True,False
+test_domain_original,3261eec0-d19f-4997-b0d9-454cab9b3a98,0,Click on 'L' link,"[834, 388, 36, 36]","[790, 388, 36, 36]",['right'],True,True,False
+test_domain_original,55025267-7139-4f94-86b3-0fb2157202bf,2,Click on 'Linux Administration' link,"[644, 152.390625, 259, 35.59375]","[660, 195.984375, 227, 19.59375]",['above'],,,True
+test_domain_original,55a8e749-4cbe-4a5a-b180-5dc34bf28c71,13,Click on 'Saved Quotes ' link,"[375, 185.078125, 270, 54]","[375, 241.078125, 270, 54]",['above'],True,True,False
+test_domain_original,42d231a6-b897-4ce3-8316-6e8bf8632d9b,4,Click on 'Articles' span,"[1312.3125, 312, 39.34375, 14]","[1156.3125, 342, 202, 25]",['above'],True,True,False
+test_domain_original,51a2f042-a866-41cc-bdaa-bf309bdfedb0,3,Click on 'Amoxicillin' link,"[666, 531.0, 84.171875, 18]","[666, 565.0, 50.515625, 18]",['above'],True,True,False
+test_domain_original,f7635bd8-161b-40a8-a5d5-8d76f2ba4810,10,Click on 'Apply' link,"[882.140625, 645.234375, 35.03125, 16]","[882.140625, 676.234375, 113.609375, 16]",['above'],True,True,False
+test_domain_original,feacf6a1-8671-45ad-8b96-6510d61bbfe4,0,Click on 'Continue' button,"[30, 886.1875, 285, 38]","[36, 835.1875, 188.640625, 18]",['below'],True,True,False
+test_domain_original,b6908293-685b-4a8a-8c72-521c6b85dbcf,2,Click on 'Input your monthly income after taxes' textbox,"[1006.25, 520.0, 245.328125, 40]","[984, 493.0, 340.796875, 16]",['below'],,,True
+test_domain_original,6cb93639-16dd-49bd-a1b9-0a4526a5800b,3,Click on 'ADD TO CART' link,"[1494.21875, 551, 194.25, 37]",,,,,True
+test_domain_original,c96d460a-8a18-4878-ab24-6d1dadfe057e,7,Click on 'Search' button,"[1250.03125, 418.96875, 109.96875, 35.1875]","[1258, 464.01953125, 288, 24.29296875]",['above'],,,True
+test_domain_original,efa508bf-ec07-4c34-93e8-3625fcbb640c,1,Click on 'Health' checkbox,"[852.59375, 490, 24, 24]","[853.09375, 550.5, 23, 23]",['above'],True,True,False
+test_domain_original,f4333d7a-2278-404d-bb29-ff7fbabaf5d3,4,Click on 'Find Stocks' button,"[373, 598.875, 111.296875, 34]","[394, 566.875, 104.28125, 16]",['below'],True,True,False
+test_domain_original,fb498b54-59a3-40a6-ae27-af464ab49860,4,Click on 'Fashion backlit Poster in a frame' img,"[1225, 469.9453125, 220, 140.109375]","[1225, 631.0546875, 220, 14]",['above'],True,True,False
+test_domain_original,7c394990-0eb9-4745-94c1-c0df18104577,3,Click on 'Media' span,"[966.96875, 530.0, 42.59375, 20]","[619.5, 567.5, 566, 12]",['above'],,,True
+test_domain_original,95d4b13f-bff7-48ec-a79b-018d8e873686,7,Type '75209' in 'Location' label,"[377, 512.0, 306.671875, 56]","[495.9375, 459.0, 82.390625, 32]",['below'],True,False,False
+test_domain_original,8ae1041c-eccf-42ea-b781-4a682e9435a9,5,"Click on 'New York, NY 10001, USA' span","[315, 447.4375, 153.6875, 15]","[300, 499.4375, 112.1875, 24]",['above'],True,True,False
+test_domain_original,83e54729-fd0c-40fa-bab3-3005aa83188c,1,Click on 'Apply for Birth Certificate Service Details' link,"[1153, 527.0, 253.046875, 26]","[1153, 560.3125, 190.765625, 46.390625]",['above'],True,True,False
+test_domain_original,349f5f06-acda-4d1c-8569-c97a31c6107c,1,Click on 'Within 10 miles' link,"[497.1875, 295, 239, 44]","[497.1875, 251, 239, 44]",['near'],True,True,False
+test_domain_original,fe788604-16a6-4aab-9a67-19c417b5ae18,2,Click on 'Search' button,"[831.28125, 500.0, 120.71875, 80]","[308.015625, 500.0, 523.265625, 80]",['near'],True,False,False
+test_domain_original,6fe6fa2a-6199-40f8-a08f-e8c43d23ff26,3,Click on 'Launch Service of Look Up a Bill or Law' link,"[761.65625, 319.578125, 162.09375, 38]","[949.640625, 329.578125, 12.453125, 17]",['left'],True,True,False
+test_domain_original,ec4674d2-365a-4cca-9e68-f71828b1e61c,6,Type 'buckeye.foobar@gmail.com' in 'Input email address' textbox,"[444, 516.0, 500, 48]","[444, 588.0, 500, 20]",['above'],True,True,False
+test_domain_original,f53d6c0e-1484-43e1-be9e-902d54de3697,0,Click on 'United States - English' link,"[1326.5, 664.25, 323.5, 54]","[1326.5, 610.25, 323.5, 54]",['near'],True,True,False
+test_domain_original,b7716f95-b457-4527-b0ad-335829c4c312,3,Type 'Home Decor Inspiration' in 'Name' textbox,"[722, 512, 476, 48]","[722, 489, 476, 15]",['below'],True,True,False
+test_domain_original,40e0550f-fdb5-435c-88cd-3198ba4a23a3,1,Click on 'See All Openings' link,"[297.59375, 520.5, 209.609375, 39]",,,,,True
+test_domain_original,f670ae67-e875-4fb5-aa51-070dff354aa6,1,Click on 'Request a Police Crash Report' link,"[995.390625, 527.6484375, 314.828125, 24.703125]","[995.390625, 502.9453125, 314.828125, 24.703125]",['near'],True,True,False
+test_domain_original,993878c1-0352-45aa-83ba-8ce855132e03,0,Click on 'Bitcoin (BTC)' div,"[540, 333.5, 80.4375, 21]","[529, 265, 406, 40]",['below'],True,False,False
+test_domain_original,89150730-aec1-4d98-bca2-5323d8e5f958,7,Click on 'APPLY' link,"[1313.75, 516.0078125, 127.984375, 47.984375]","[1378.109375, 573.4765625, 0, 22]",['above'],,,True
+test_domain_original,f7f87ceb-0e39-4d83-8c4e-8b708c82adc5,1,Click on '+ADD TO MY LOCATIONS' link,"[921.625, 532.5, 175.375, 15]","[794, 576.890625, 287, 17]",['above'],True,True,False
+test_domain_original,30542c68-4a4a-4efb-8f55-503401e4ee67,3,Click on 'Sort ' button,"[472, 137, 66.015625, 24]","[489, 189, 20, 20]",['above'],,,True
+test_domain_original,e60febbe-af4c-4d2c-8cc4-39041485654d,5,Click on '1 Bed' li,"[562.515625, 247, 350, 44]","[562.515625, 203, 350, 44]",['near'],,,True
+test_domain_original,3f17e5ec-6570-4952-9ffc-ee756e557cdd,3,Click on 'r/announcements' div,"[445.765625, 95.5, 156.0625, 18]","[510.453125, 119.5, 4, 4]",['above'],,,True
+test_domain_original,6c3bb227-7d2f-4e6f-9c3b-2aaff225a407,7,Click on 'First pregnancy' div,"[430, 465, 100, 38]","[439.4375, 385, 81.109375, 73]",['below'],,,True
+test_domain_original,17a3488c-8b75-4ec6-9899-f32bcec2f808,0,Click on 'Recommended' span,"[1141.5, 333, 106.5, 27]","[1203.859375, 400, 40.140625, 16]",['above'],,,True
+test_domain_original,5bf46b56-d849-449b-a8aa-ef603fa2a3ae,0,Click on 'Follow' div,"[1317.921875, 181, 41.96875, 48]","[1294.921875, 199, 12, 12]",['right'],,,True
+test_domain_original,5b224de7-505b-449d-8a34-8c3c33464bb9,2,Click on 'Search' div,"[1417, 78, 200, 21]","[1488.828125, 11, 69.8125, 32]",['below'],True,False,False
+test_domain_original,57a7153d-3e7c-4fff-bbe7-aa54d2c15a65,3,Click on 'Search' button,"[1364.28125, 516.0, 114.703125, 48]","[1365.5, 600.0, 1, 1]",['above'],,,True
+test_domain_original,20bc1709-b43e-4da1-a71e-440d8fb93fd3,2,Click on 'Show all filters. Clicking this button displays al...' button,"[1198.53125, 65, 91.40625, 32]","[932, 129, 560, 31.984375]",['above'],,,True
+test_domain_original,09d8499c-41f0-4a1d-997e-830e7c3a9087,6,Type '500000' in '' input,"[397.390625, 211.421875, 142.71875, 36.78125]","[384.015625, 165.734375, 156.09375, 36.78125]",['below'],,,True
+test_domain_original,ecfeb19a-d007-465c-875b-24264503891f,4,Click on 'Select' button,"[272.21875, 527.5, 59.28125, 25]","[272.21875, 566.5, 59.28125, 25]",['above'],True,True,False
+test_domain_original,516ae2e8-7a26-452b-aee1-e7fbb445bd10,2,Click on 'Orange shrimp skewers' link,"[883.59375, 531.0, 170.390625, 18]","[976.1875, 568.0, 31.875, 17.5]",['above'],True,False,False
+test_domain_original,697f9915-795a-40a6-8ed2-6a4a0324e3e9,1,Click on 'Search Events Calendar' strong,"[761, 504.09375, 206.3125, 28]","[761, 543.09375, 176.734375, 46]",['above'],True,True,False
+test_domain_original,733d1e8f-ff4b-4d5e-b8bd-d52bb4083c59,1,Type 'Psychology' in 'What do you want to learn?' textbox,"[301, 12, 453.015625, 40]","[754.015625, 12, 36.984375, 0]",['near'],,,True
+test_domain_original,6ab62146-463e-4ea7-b9d6-5168f623dcf2,23,Click on 'No' radio,"[797.5, 510.0, 120, 60]","[707.046875, 527.0, 28.890625, 26]",['right'],,,True
+test_domain_original,c740e976-09c2-48a8-80fb-063f82a43be6,7,Type '77494' in 'Location' label,"[377, 512.0, 306.671875, 56]","[495.9375, 459.0, 82.390625, 32]",['below'],True,False,False
+test_domain_original,248803b0-b351-403e-8419-96d3cda4ecb5,1,"Click on 'Dr. Nathaniel Johns, MD' link","[528, 411, 206.046875, 20]","[528, 432.5, 185.984375, 16]",['above'],True,True,False
+test_domain_original,2854bdb8-783d-4ee9-a87c-4de3a5ac0654,4,Click on 'Drugs A-Z' link,"[696, 36.40625, 89.03125, 25]","[794.84375, 36.40625, 105.59375, 25]",['left'],True,True,False
+test_domain_original,6f8b5ff4-b485-4b3c-8e04-745685596ddf,0,Click on 'AMC' div,"[685, 315, 550, 55]","[922.015625, 379, 49.984375, 24]",['above'],,,True
+test_domain_original,4c224b36-5550-4129-accd-de155481eb4d,2,Type 'Belo Horizonte' in 'Search' textbox,"[440, 131, 342.28125, 18]","[392, 164, 532, 42]",['above'],True,True,False
+test_domain_original,9f590239-3f67-4544-bc7a-50a5fede9a09,3,Click on 'TSLA' div,"[580.5, 115.890625, 80, 16.890625]","[563.5625, 87, 75.328125, 38]",['near'],True,True,False
+test_domain_original,5e58544f-e9a2-49d9-aba3-e6195df7bc73,3,Click on 'Settings' generic,"[974, 346, 63.4375, 18]","[974, 380, 159.3125, 18]",['above'],True,True,False
+test_domain_original,ce41fd2f-21ed-4468-a849-a84c3b1757be,0,Click on '✕' div,"[1218.5, 391.5, 12, 12]","[1172.609375, 45.15625, 0, 16]","['below', 'right']",True,True,False
+test_domain_original,6380770e-d1ff-4f00-a8ab-f82dd4af4be7,1,Click on 'See All Departments' button,"[857, 453, 206, 40]","[1034.40625, 21.375, 0, 17]",['below'],,,True
+test_domain_original,65c2867e-3c0b-4e7d-a5fa-37355c8462a4,1,Click on 'More Resources' link,"[1291.125, 36.40625, 52.296875, 25]","[1188.078125, 36.40625, 93.234375, 25]",['right'],True,True,False
+test_domain_original,e034b288-4074-4db5-92ca-0304cddb7d8e,0,Click on 'More ' button,"[1254.359375, 57, 96.28125, 35]","[1163, 103.390625, 597.09375, 42]",['above'],True,True,False
+test_domain_original,0fd6eca4-fd90-4500-adaf-0ac2ad90d82b,7,Click on 'Apply' button,"[1134.25, 524.0, 84.390625, 32]","[1205.328125, 724.625, 266.65625, 17.5]",['above'],,,True
+test_domain_original,277e3468-f8cb-45c6-9e4b-0328066c42d3,18,Click on 'Find USPS Locations' p,"[743.34375, 166.875, 115, 55]","[843.40625, 238.515625, 11.09375, 13]",['above'],,,True
+test_domain_original,bf40a88e-ebac-4d0a-bf05-6a0c93571c02,6,Click on 'Show navigation menu' button,"[1285.21875, 0, 104.78125, 50]","[1405, 15, 1, 1]",['left'],,,True
+test_domain_original,f6d10418-08fc-4aff-bfb8-97ff708f7e6a,4,Type 'Detroit' in 'Search by Location or Point of Interest' textbox,"[418, 418.5, 916, 75]","[519, 772, 441, 297.234375]",['above'],,,True
+test_domain_original,c8426127-f4e0-40ea-99c2-b257e9fa2c80,0,"Click on 'alt=""""' img","[566, 387, 82.015625, 82.015625]","[598.140625, 510.765625, 8.75, 12]",['above'],,,True
+test_domain_original,5a05fede-f629-4323-a5f7-204d7dbe81cd,0,Click on 'AAS 103 - First Year Social Science Seminar' link,"[398, 421.15625, 293.890625, 14]","[398, 514.5625, 293.890625, 14]",['above'],True,True,False
+test_domain_original,7133792d-7ae7-4f3b-a2c5-9795b10d3115,1,Click on 'New' div,"[930.3125, 162.1875, 495.3125, 18]","[930.3125, 196.1875, 495.3125, 18]",['above'],,,True
+test_domain_original,ec4674d2-365a-4cca-9e68-f71828b1e61c,12,Click on 'Desired move-out date' textbox,"[444, 516.0, 500, 48]","[444, 588.0, 500, 20]",['above'],,,True
+test_domain_original,884a7c23-dab4-45cd-aedb-ffd8e58e4e64,3,Click on 'Yes' radio,"[478, 522, 44, 44]","[478, 572, 44, 44]",['above'],True,True,False
+test_domain_original,bcfeed8e-ad1d-430e-85db-b1c7246282a5,0,Click on 'Exhibition(127)' checkbox,"[28.59375, 505.40625, 422.8125, 22.03125]","[28.59375, 483.375, 422.8125, 22.03125]",['near'],True,True,False
+test_domain_original,593f78ad-903d-4e34-b2db-6344625afb20,7,Click on 'No' radio,"[478, 312.984375, 44, 44]","[520, 314.984375, 54.296875, 38]",['near'],,,True
+test_domain_original,27620cc4-869c-4b9f-bdc7-4c353f823b95,5,"Type 'London' in 'To address, type in the full address your mailing ...' textbox","[607.75, 368, 704.5, 60]","[607.75, 306, 704.5, 60]",['below'],True,False,False
+test_domain_original,05e827ee-e11d-42d3-8ff5-04b6f8f74ebf,0,Click on 'Tramadol Oral vs. Dilaudid Oral' link,"[806, 433.125, 295.09375, 23]","[887, 409.578125, 110, 70]",['near'],,,True
+test_domain_original,4fbcf13b-d798-4c94-b9a4-de37ed93b84f,1,Click on 'Search' button,"[1358.359375, 313.90625, 61.203125, 34.9375]","[1228.25, 313.90625, 132.484375, 34.9375]",['near'],,,True
+test_domain_original,7a8f2c58-bccb-42a2-bee4-98feec1d9d69,6,Click on 'Continue' button,"[390, 668.328125, 116.203125, 31.984375]","[440.3125, 746.109375, 145.71875, 17]",['above'],True,True,False
+test_domain_original,ea02c8da-9fd9-41b9-ac53-e16e730bab35,0,Click on 'Comments' button,"[554.125, 72, 112.359375, 41]","[515.921875, 113, 188.75, 22]",['near'],True,True,False
+test_domain_original,b7069c40-4bfd-4cfe-9fdc-1c546e995edd,3,Click on 'View courses (106)' span,"[985, 528.0, 566, 24]","[985, 487.0, 566, 21]",['below'],True,True,False
+test_domain_original,17a3488c-8b75-4ec6-9899-f32bcec2f808,1,Click on '' svg,"[1480, 214, 18, 18]","[1477.5498046875, 149.3467254638672, 11.9005126953125, 11.900405883789062]",['below'],,,True
+test_domain_original,e424cce6-76db-4f0a-be3c-e649840bb249,1,Click on 'Search' button,"[1109.375, 173.15625, 98.625, 40]","[1079.921875, 266.15625, 49.90625, 17]",['above'],,,True
+test_domain_original,60e7234b-3a6b-4029-bd0a-bee8a98192e7,0,Type 'charity' in 'Find' searchbox,"[617.765625, 419.0625, 263.25, 35]","[560, 418.96875, 107.265625, 18]",['near'],,,True
+test_domain_original,6b2acd86-88b6-4312-9395-beb69996bf22,3,Click on 'RV Storage' link,"[713.484375, 400.96875, 240, 32]","[713.484375, 459.734375, 240, 32]",['above'],True,True,False
+test_domain_original,a02e8361-07ad-4448-81a0-b4894f68de4e,3,Click on '50 miles' label,"[625.796875, 496.75, 75.84375, 15]","[624.796875, 539.71875, 1, 1]",['above'],True,True,False
+test_domain_original,7e24f1bf-b807-4972-843c-30c657beada1,2,Type 'Elevate' in 'Search by Location or Point of Interest' textbox,"[418, 418.5, 916, 75]","[850, 0.375, 220, 38.25]",['below'],,,True
+test_domain_original,b9f1cc21-806f-44d1-8d59-7c6f091de9c6,0,Click on 'New list' button,"[624.984375, 522.0, 92.21875, 36]","[673.609375, 629.0, 121.234375, 32]",['above'],,,True
+test_domain_original,215efc73-2d25-4126-b108-99856b19dc6c,7,Click on 'Continue' button,"[898, 522.40625, 124, 35.1875]","[823.375, 540.484375, 155.625, 19.1875]",['near'],,,True
+test_domain_original,20bc1709-b43e-4da1-a71e-440d8fb93fd3,7,Click on 'Jobs' button,"[396, 65, 60.734375, 32]","[395.4166564941406, 8.916666984558105, 34.16668701171875, 34.166664123535156]",['below'],True,True,False
+test_domain_original,e06945d3-c1e5-4fcc-8c91-fa30b6f2d2e0,3,Click on 'Add Reaction' button,"[636, 907.859375, 34, 24]","[684, 819.859375, 102.515625, 17]","['below', 'left']",True,False,False
+test_domain_original,69abd425-1e56-4b82-b81f-abfeced850c0,0,Click on 'GET STARTED' button,"[365, 516.0078125, 374, 47.984375]","[409.984375, 415.0078125, 321.015625, 18]",['below'],,,True
+test_domain_original,7e24f1bf-b807-4972-843c-30c657beada1,3,Click on 'Elevate' li,"[419, 518.75, 914, 42.5]","[419, 476.25, 914, 42.5]",['near'],,,True
+test_domain_original,6b2885ba-58f3-4365-8342-635972d5b0f2,9,Click on 'What you need to do' link,"[480, 388, 186.828125, 21]","[480, 569, 141.453125, 21]",['above'],True,True,False
+test_domain_original,90314b88-3bf2-4260-acb7-90050780eaeb,2,Click on 'Dentist' link,"[378, 433.0, 270, 214]","[495.6792297363281, 513.18701171875, 52.883575439453125, 47.9293212890625]",['below'],,,True
+test_domain_original,4946dd68-cfdb-42fa-b227-60713c0b4a34,5,Click on 'Recommended' span,"[1141.5, 333, 106.5, 27]","[1150.125, 384, 57.125, 37]",['above'],True,True,False
+test_domain_original,a844bd83-483f-43c2-854b-cbadd4f2aacc,1,Click on 'Locations' link,"[1343.953125, 263.78125, 99.65625, 37]","[1263.109375, 263.78125, 80.84375, 37]",['near'],True,True,False
+test_domain_original,feacf6a1-8671-45ad-8b96-6510d61bbfe4,1,Click on 'Vehicle Registration Renewal' link,"[273.421875, 385.78125, 325.9375, 19.5]","[273.421875, 410.484375, 325.9375, 19.5]",['above'],True,True,False
+test_domain_original,1d84ad91-a8f3-461e-aa43-014d75a8c851,12,Click on 'Career/Education Level' link,"[704.9375, 532.0, 164.765625, 16]","[704.9375, 563.59375, 88.484375, 16]",['above'],True,True,False
+test_domain_original,f09c5fe6-0734-4c2d-b330-97aba7bae539,4,Click on 'Employment' button,"[984.640625, 218.171875, 139.84375, 70.5625]","[911.265625, 242.171875, 49.375, 22.5625]",['right'],True,True,False
+test_domain_original,d7b3fa4b-6c25-4941-bc54-702333a23e08,3,Click on '❤️ 2' button,"[733, 380, 75.625, 24]","[745, 438, 41.484375, 20]",['above'],,,True
+test_domain_original,03d4147d-8130-4814-b57b-6a5de01285c6,1,Type 'pork' in 'Search the site' textbox,"[350, 236, 600, 48]","[614, 388, 36, 36]",['above'],True,True,False
+test_domain_original,c4166e68-7917-4d68-b091-e74dfaf23457,0,Click on 'Find Companies' button,"[1152, 306, 288, 44]","[1146.21875, 581.390625, 251.546875, 18.390625]",['above'],True,True,False
+test_domain_original,7b39d904-5808-46e5-981b-044e157cc1ae,5,Click on 'Texas' span,"[1156.25, 529.6953125, 36.578125, 16]","[1156.25, 562.8984375, 29.578125, 16]",['above'],True,True,False
+test_domain_original,d5603064-77ea-40b7-b68b-4e5bd384daea,4,Click on ' Single Family' button,"[22.28125, 290.671875, 246.796875, 36.78125]","[22.28125, 336.359375, 246.796875, 36.78125]",['above'],True,True,False
+test_domain_original,12e66aec-3dcd-4fcf-a64a-58cff58e8464,3,"Type 'cardano' in 'Search coin, pair, contract address or exchange' textbox","[894, 84, 310, 18]","[869, 146.5, 380, 40]",['above'],,,True
+test_domain_original,86fff327-2a98-4b37-9e14-8f976d74aa92,3,Type '25000' in '' input,"[477.875, 353.328125, 177.796875, 53.515625]","[477.875, 422.21875, 92.859375, 21]",['above'],True,False,False
+test_domain_original,3363038b-183b-40b9-9b68-6f46d6195e8f,3,"Click on '$105,000+ (188)' link","[641.171875, 207, 239, 44]","[641.171875, 251, 239, 44]",['near'],True,True,False
+test_domain_original,697f9915-795a-40a6-8ed2-6a4a0324e3e9,2,Click on 'APPLY' button,"[1153, 301.8828125, 130, 32]","[1156.25, 396.8828125, 82.515625, 16]",['above'],True,True,False
+test_domain_original,f6d10418-08fc-4aff-bfb8-97ff708f7e6a,2,Click on 'Sort ' button,"[1697.984375, 57, 80, 40]","[1701.203125, 107.390625, 136.796875, 58]",['above'],True,True,False
+test_domain_original,bb82ff0a-c389-4f82-91d3-f4ae438af266,4,Click on 'Search' button,"[1250.03125, 418.96875, 109.96875, 35.1875]","[1258, 464.01953125, 288, 24.29296875]",['above'],,,True
+test_domain_original,c35ea9f3-798d-47da-8557-58f406bc2e5b,3,Click on 'JavaScript' link,"[644, 180.796875, 259, 35.59375]","[660, 224.390625, 227, 19.59375]",['above'],,,True
+test_domain_original,ec10879f-45c5-4fae-9cb2-7ea224e90b4f,4,Click on 'Civil Division' li,"[806.75, 527.5, 434.5, 25]","[806.75, 502.5, 434.5, 25]",['near'],True,True,False
+test_domain_original,b47f2eb1-58d1-442d-a4b1-2463db44840f,1,Click on 'Report a Scam' button,"[64, 517.5, 120.71875, 45]","[71, 690.1875, 111.1875, 22.390625]",['above'],True,True,False
+test_domain_original,ea02c8da-9fd9-41b9-ac53-e16e730bab35,4,Type 'Amazon' in 'Search all of Reddit' searchbox,"[469, 13.5, 859.640625, 20]","[81, 77, 1382, 38]",['above'],True,False,False
+test_domain_original,b3f27ec6-dcb2-478a-ad46-e32a9f626ce3,8,Click on ' INSURANCE' button,"[345, 438, 317.65625, 48]","[345, 500, 317.65625, 48]",['above'],True,True,False
+test_domain_original,a8637b2a-ddcb-41a1-ba40-675d90aeed75,3,Click on 'Save Data Entry Coordinator at BGIS' button,"[1041.921875, 296.96875, 76.484375, 40]","[1001.921875, 309.96875, 13, 13]",['right'],True,True,False
+test_domain_original,60e916ed-b901-4326-bf4c-58854ddad217,9,Click on 'Search' button,"[1250.03125, 418.96875, 109.96875, 35.1875]","[1258, 464.01953125, 288, 24.29296875]",['above'],,,True
+test_domain_original,f5da4b14-026d-4a10-ab89-f5720418f2b4,1,Type 'hamburger' in 'Type ingredients...' textbox,"[736, 181.15625, 373.375, 24]","[908.59375, 266.15625, 55.578125, 17]",['above'],True,True,False
+test_domain_original,d69f6b51-7864-4046-89fa-f479b747998b,4,Click on 'Ford' div,"[448, 512.5, 674.5, 55]","[692, 541.5, 185, 80]",['near'],,,True
+test_domain_original,f304652c-30d8-48ac-8419-909b774b7665,3,"Type 'Tallahassee, FL' in 'Search' textbox","[440, 163, 342.28125, 18]","[392, 196, 532, 42]",['above'],,,True
+test_domain_original,7b8fa61f-5bfd-4a67-a4f2-3db344faa43a,0,Click on 'Recommended' span,"[1141.5, 333, 106.5, 27]","[1150.125, 384, 57.125, 37]",['above'],,,True
+test_domain_original,03d4147d-8130-4814-b57b-6a5de01285c6,3,Click on 'GO' button,"[862.21875, 236, 87.78125, 48]","[878, 388, 36, 36]",['above'],True,True,False
+test_domain_original,018eb03a-cfe0-4bb3-9316-2029e8938ddf,1,Click on 'More ' button,"[1131.09375, 57, 96.28125, 35]","[1163, 107.390625, 237.9375, 34]",['above'],True,True,False
+test_domain_original,81593c29-cd59-4bfa-b739-02db2222bc00,6,Click on 'Past Year' radio,"[798, 519.0, 42, 42]","[840, 529.84375, 74.90625, 19]",['near'],,,True
+test_domain_original,33fc9bc6-d0e5-4bf3-ac79-58446f25a9f5,1,Click on 'Add one share' button,"[818, 518.5, 30, 30]","[868, 540.5, 30, 16]","['above', 'left']",,,True
+test_domain_original,4946dd68-cfdb-42fa-b227-60713c0b4a34,0,"Type 'leeds' in 'Search by college, city or property' textbox","[526, 405, 752, 24]","[916, 340, 8, 8]",['below'],,,True
+test_domain_original,acb41370-15e1-46ff-9d3a-fea889a29b36,10,"Click on 'Search By Breed, Any' button","[350, 241.390625, 250, 55]","[366, 343.78125, 184, 55]",['above'],True,True,False
+test_domain_original,183fec0a-36fd-4da7-9e59-bd445be459ae,3,Click on 'Find out more' link,"[1310.828125, 532.0, 86.375, 16]","[1231.4375, 502.0, 86.375, 16]",['below'],,,True
+test_domain_original,9e03f99a-354d-44d0-ad7f-c69ec3dc5dfd,1,Click on 'Freight' link,"[618, 335, 240, 52]","[618, 283, 240, 52]",['near'],True,True,False
+test_domain_original,cbc5bf23-9e39-4168-88c4-1091d8792fea,10,Click on 'Distance' button,"[663.875, 351.375, 115, 34]","[705.875, 342.78125, 89.828125, 19.1875]",['near'],,,True
+test_domain_original,f004058d-9b9c-41c4-ac84-24797f016a8f,2,"Type 'Illinois' in 'City, State or ZIP' textbox","[370, 520.0, 168, 40]","[370, 568.0, 168, 40]",['above'],True,False,False
+test_domain_original,ec4674d2-365a-4cca-9e68-f71828b1e61c,5,Click on 'Desired move-in date' textbox,"[444, 516.0, 500, 48]","[444, 588.0, 500, 20]",['above'],,,True
+test_domain_original,3cbbbbaa-6fc9-4341-a7ab-c85027a26b87,2,Click on 'Students' link,"[1338.953125, 15.59375, 71.96875, 28.796875]","[1419.921875, 15.59375, 64.125, 28.796875]",['left'],,,True
+test_domain_original,a5b1f3a6-2040-48b5-8a1f-b4a016d1e70e,11,Click on '' svg,"[1502, 50, 26, 26]","[1374.5, 166.5, 56.6875, 13]","['above', 'right']",,,True
+test_domain_original,34e0bf85-6441-40cb-b7f6-d107e5bcb049,2,Click on '' path,"[1237.01611328125, 332.4239501953125, 13.867431640625, 13.866668701171875]","[1210.5009765625, 321.140625, 15.9990234375, 16]",['right'],,,True
+test_domain_original,33fc9bc6-d0e5-4bf3-ac79-58446f25a9f5,7,Type 'Tech Stocks' in 'Portfolio name' textbox,"[796, 494, 328, 56]","[972.7916870117188, 483.6666564941406, 10.6666259765625, 10.66668701171875]",['near'],,,True
+test_domain_original,fa64e4d4-b7c6-46b4-88ef-b9dd8deab335,3,Click on 'INGREDIENTS' link,"[538.015625, 111, 106.6875, 16]","[452.015625, 111, 54, 16]",['right'],True,True,False
+test_domain_original,281bb2ae-2687-4ae3-9f89-03f4979aeb44,2,Click on 'Search' div,"[1417, 529.5, 200, 21]","[1597, 609.5, 48, 24]",['above'],True,False,False
+test_domain_original,89150730-aec1-4d98-bca2-5323d8e5f958,10,Type 'atlanta' in 'Find Storage Near You' textbox,"[333.03125, 147, 326.21875, 18]","[59.046875, 375.59375, 885.75, 60]",['above'],,,True
+test_domain_original,952b24e0-6ebe-4fac-b282-05d552f51e07,0,Click on 'Recommended' span,"[1141.5, 300, 106.5, 27]","[1203.859375, 367, 40.140625, 16]",['above'],,,True
+test_domain_original,67857faa-cc46-4cbd-a9a0-2caba2de8f49,3,"Click on 'hiring your first -- or next -- employee, This lin...' link","[1022.796875, 530.5, 268.953125, 19]","[530, 606.28125, 900, 28.796875]",['above'],,,True
+test_domain_original,9c4a64e6-7d3e-4799-a5ea-b613c5a25bdf,8,Click on 'writing / editing' link,"[1161.484375, 660.84375, 133.65625, 18.4375]","[1161.484375, 643.84375, 100.046875, 15]",['below'],True,True,False
+test_domain_original,e7cab3cb-e597-42f3-92fb-39b60d4eaa42,5,Click on 'Browse drugs and medications by letter: V' link,"[510.328125, 520.0, 40.78125, 40]","[555.109375, 520.0, 40.765625, 40]",['left'],True,True,False
+test_domain_original,432a58b4-450d-4768-b049-90f6681bc22e,6,Type '5555555555555555' in 'Card Number' textbox,"[1012, 279.21875, 524, 49]","[1192, 344.21875, 164, 49]",['above'],True,False,False
+test_domain_original,4b7571c7-732c-4c1e-946f-8bbc5397ce8b,2,Click on 'Tesla' div,"[685, 315, 550, 55]","[972.7916870117188, 385.6666564941406, 10.6666259765625, 10.66668701171875]",['above'],,,True
+test_domain_original,7a65d9c8-e778-4912-bb74-d29274fa11e7,2,Click on 'Search by Location or Point of Interest' textbox,"[418, 418.5, 916, 75]","[519, 772, 441, 297.234375]",['above'],,,True
+test_domain_original,f0e64c18-28ca-4627-b33c-260c998d5cab,11,Click on 'Select University' div,"[446, 180, 119.796875, 40]","[433, 264, 80.4375, 24]",['above'],True,True,False
+test_domain_original,0c874738-6807-4b6c-baf9-703e044c67e6,0,Click on 'Find a Doctor' link,"[1107.796875, 9.953125, 112.328125, 55.09375]","[1045.65625, 105, 211, 44.6875]",['above'],,,True
+test_domain_original,a02e8361-07ad-4448-81a0-b4894f68de4e,8,Click on 'SEARCH' button,"[862, 516.8046875, 135, 46.390625]","[711, 516.8046875, 135, 46.390625]",['right'],True,True,False
+test_domain_original,d712a8d1-78e0-4aa7-bb2b-ee7a01105309,2,Type 'Harvard' in 'search' textbox,"[1286, 277, 496, 40]","[1339, 555.53125, 125.484375, 19.59375]",['above'],,,True
+test_domain_original,ee9cd8da-ed4f-44e9-a2ef-04f9788576b6,0,Click on 'part-time' checkbox,"[17.5, 533.5, 13, 13]","[17.5, 555.5, 13, 13]",['above'],True,True,False
+test_domain_original,ee9cd8da-ed4f-44e9-a2ef-04f9788576b6,2,Type 'cashier' in 'search jobs' textbox,"[239, 60.40625, 1621, 21.1875]","[1019.78125, 108, 38, 34]",['above'],True,False,False
+test_domain_original,73a9575b-c83a-42f0-ab41-b256eedf11ff,7,Click on 'Job Opportunities' div,"[32, 76, 141.09375, 28]","[32, 136, 173.09375, 28]",['above'],True,True,False
+test_domain_original,bfcbf289-fcf2-40ea-9aba-30c60596e617,5,Click on 'dogs ok' checkbox,"[7.5, 482.171875, 13, 13]","[7.5, 504.171875, 13, 13]",['above'],True,True,False
+test_domain_original,55a8e749-4cbe-4a5a-b180-5dc34bf28c71,0,Click on 'Edit Quote ' link,"[1207.5625, 372.1875, 14.125, 22.390625]","[1188.203125, 357.53125, 35.796875, 19.5]",['near'],,,True
+test_domain_original,5c2cf2a0-e028-4784-b302-cb1fc5fd2d75,4,"Type '90028' in 'City, state, or zip code' textbox","[702.625, 359, 288.421875, 46]","[1021.8115844726562, 371.8501892089844, 16.47064208984375, 18.300628662109375]",['left'],True,True,False
+test_domain_original,dd472743-569c-4923-9bec-fc648e8850a8,0,Type 'Senior Bioinformatician' in 'Search Keyword' textbox,"[675.5, 12, 358, 48]","[883.03125, 135, 20, 20]",['above'],True,False,False
+test_domain_original,f9e3d54d-b9e3-44a3-b992-803494aa95d1,1,Click on 'LinkedIn Learning' link,"[761, 286.96875, 192.953125, 28]","[761, 315.96875, 192.953125, 19.984375]",['above'],True,True,False
+test_domain_original,593f78ad-903d-4e34-b2db-6344625afb20,0,Click on 'Check what you can get' button,"[480, 518.5, 324.90625, 43]","[480, 754.484375, 319.171875, 17]",['above'],,,True
+test_domain_original,7b6b522c-fdd1-4872-b007-8d62214ee1bf,0,Click on 'Purchase Packaging Supplies' checkbox,"[488, 533.5, 13, 13]","[488, 556.5, 13, 13]",['above'],True,True,False
+test_domain_original,26ee4ce0-2fdd-4aa5-88b4-fe5270993337,1,Click on 'Search/Filter' button,"[264.71875, 446.140625, 83.5625, 23]","[264.71875, 489.140625, 77.6875, 14]",['above'],True,True,False
+test_domain_original,698f3edc-eb67-4d04-8b9f-99f85b77029f,2,Click on 'A bowl of strawberries on a red two tone backgroun...' img,"[350, 419.0, 364, 242]","[350, 704.6875, 364, 0]",['above'],True,True,False
+test_domain_original,e034b288-4074-4db5-92ca-0304cddb7d8e,2,Type '2500' in 'maximum Rent Input' textbox,"[624.625, 111, 140, 40]","[454, 159, 321, 44]",['above'],,,True
+test_domain_original,68ce1cf5-6292-42cd-82fc-eb03fddf5d88,2,Click on 'Similar names to Carl scroll down to item' link,"[398.21875, 530.5, 192.25, 19]","[398.21875, 572.421875, 265.640625, 19]",['above'],True,True,False
+test_domain_original,17a3488c-8b75-4ec6-9899-f32bcec2f808,4,Click on '826 9th Avenue by June' link,"[687, 391, 200.78125, 28]","[687, 427, 86.4375, 20.640625]",['above'],True,True,False
+test_domain_original,3694f716-a165-4980-a005-41925ea84aad,2,Click on 'Search' button,"[1109.375, 173.15625, 98.625, 40]","[1037.734375, 266.15625, 80.03125, 17]",['above'],,,True
+test_domain_original,884a7c23-dab4-45cd-aedb-ffd8e58e4e64,10,Click on 'Continue' button,"[480, 704, 100.0625, 38]","[480, 799, 375.328125, 17]",['above'],,,True
+test_domain_original,82c6b348-2bd2-4cae-b97b-6fad1d009c0a,1,Click on 'Burger King' link,"[544, 286, 244, 24]","[544, 310, 244, 24]",['near'],,,True
+test_domain_original,fe788604-16a6-4aab-9a67-19c417b5ae18,5,"Type 'dogs' in 'Search by job title, skill or company' searchbox","[308.015625, 500.0, 523.265625, 80]","[418.546875, 688.0, 140.78125, 18]",['above'],,,True
+test_domain_original,6ab62146-463e-4ea7-b9d6-5168f623dcf2,1,Click on 'Next' button,"[1067.5, 510.0, 190, 60]","[793.734375, 801.0, 162.46875, 14]","['above', 'right']",,,True
+test_domain_original,6decc1e5-6e75-49d1-8e30-2656e57b00c5,0,Type 'MUSIC' in 'Search all of Reddit' searchbox,"[469, 13.5, 859.640625, 20]","[81, 77, 1382, 38]",['above'],,,True
+test_domain_original,bf40a88e-ebac-4d0a-bf05-6a0c93571c02,1,Click on 'How it works' link,"[505, 292.5, 90.6875, 17]","[505, 320.796875, 104.4375, 17]",['above'],True,True,False
+test_domain_original,ab2f0102-cbf3-4863-ac12-bdd20c64b3f4,1,Click on '' svg,"[1872, 24, 18, 18]","[1884, 18, 24, 24]",['near'],,,True
+test_domain_original,2eb185df-0560-4e75-b751-17a04ad3f895,0,"Type 'chicago' in 'Search by college, city or property' textbox","[526, 405, 752, 24]","[916, 340, 8, 8]",['below'],,,True
+test_domain_original,f7635bd8-161b-40a8-a5d5-8d76f2ba4810,3,Click on 'Display Results' span,"[800.796875, 546.796875, 88.28125, 16.796875]","[797.859375, 589.703125, 94.140625, 16]",['above'],True,True,False
+test_domain_original,9da9c965-f6c6-4bcf-b33a-73e50d782aaf,2,Click on 'High Plains Region 67' link,"[336, 531.5, 132.21875, 17]","[336, 507.453125, 126.421875, 17]",['below'],True,True,False
+test_domain_original,884a7c23-dab4-45cd-aedb-ffd8e58e4e64,12,Click on 'Weekly' radio,"[478, 532, 44, 44]","[478, 582, 44, 44]",['above'],True,False,False
+test_domain_original,2a97a198-f441-43fd-8a58-df19b63d8633,9,Click on 'Any' span,"[856, 510.8046875, 187.5, 58.390625]","[942.5, 592.9921875, 114.421875, 34]",['above'],True,False,False
+test_domain_original,2e621fbb-5488-4922-b7b3-2a23af91ee8c,0,Click on '' i,"[440, 14.5, 20, 20]","[443.765625, 61.34375, 14.453125, 22]",['above'],,,True
+test_domain_original,432a58b4-450d-4768-b049-90f6681bc22e,0,Click on 'Petfinder Foundation' a,"[374, 293, 129.984375, 16]","[374, 260, 169.640625, 16]",['below'],True,True,False
+test_domain_original,ef84bb55-e36b-49b4-be37-e35287ba0c36,0,Click on 'Priority Mail Flat Rate® Padded Envelope' img,"[793.71875, 405.0, 270, 270]","[787.484375, 700.0, 267.484375, 56]",['above'],True,True,False
+test_domain_original,725d96cd-9283-4ec7-b902-d003503f2d6b,1,Click on 'Select date' span,"[74, 259.5, 144.28125, 19]","[94.3125, 307, 16, 16]",['above'],True,False,False
+test_domain_original,6c3bb227-7d2f-4e6f-9c3b-2aaff225a407,5,Click on 'Neutral colors' button,"[710, 517.5, 500, 45]","[710, 578.5, 500, 45]",['above'],True,True,False
+test_domain_original,b278b6ca-b2cd-4274-aa1d-15734cacf043,0,Type 'female infertility' in 'Search' textbox,"[947.671875, 30, 304, 47]","[986.40625, 120.5, 99.046875, 35]",['above'],True,True,False
+test_domain_original,7d6b41a1-ffb3-49a3-8ad8-71b8f3d5f5a6,0,Click on 'Dosage' link,"[710.046875, 499.578125, 64.953125, 22]","[808, 499.578125, 101.015625, 22]",['left'],True,True,False
+test_domain_original,332ed50d-4772-4eb3-9de9-27ff39abc161,5,Click on 'Done' div,"[1440.390625, 871.5, 39.609375, 18]","[1237.5, 961.484375, 224, 17]",['above'],,,True
+test_domain_original,b93b982d-1393-4b0e-8cbc-5e1717f16396,0,Click on 'Hunting Land' div,"[964.984375, 525.0, 348.859375, 30]","[964.984375, 555.0, 348.859375, 27]",['near'],,,True
+test_domain_original,bf76e110-c3b6-4a9f-9fa0-3d45fa2f2e8a,2,Click on 'Oversight' link,"[1137.3125, 531.0, 70.28125, 18]","[1137.3125, 565.390625, 242.03125, 18]",['above'],True,True,False
+test_domain_original,e3661b90-0f58-421c-b274-3f21b7d817dd,6,Click on 'FEATURED' div,"[376, 394, 1168, 198.5]","[392, 604.5, 1136, 21]",['above'],,,True
+test_domain_original,5635a86d-5ecc-4a65-b4f9-5f9b661a7303,1,Click on 'MONTHLY' link,"[958.21875, 62, 111.046875, 45]","[1049, 67, 14, 16]",['near'],,,True
+test_domain_original,7ba05167-9593-4bab-8719-711cfdae15f7,1,Click on 'Maps & Roads ' link,"[436, 418.375, 255, 43.59375]","[436, 462.96875, 255, 43.59375]",['above'],,,True
+test_domain_original,f9d02b1b-d4b1-497c-aae5-45be06feac06,0,Click on 'Open Locations Menu' link,"[956.15625, 0, 106.9375, 75]","[1050.09375, 3, 105.046875, 70]",['near'],True,True,False
+test_domain_original,ec487f0b-842e-4484-ba0a-d164440a1d06,1,Select 'Jefferson' in 'County of Residence' select,"[261, 521.203125, 258, 37.59375]","[271, 632.203125, 238, 28]",['above'],,,True
+test_domain_original,16f742f7-22c2-4426-83a6-5a1b495f6177,5,Click on ' Search for “James Cole” in r/12Monkeys' button,"[354.125, 44.5, 309, 46]","[575.46875, 14.5, 12.453125, 17]",['below'],True,False,False
+test_domain_original,24948950-6ab9-4a90-8aae-bd4f155ace1a,7,Click on 'Contact  Seller' button,"[1454, 379, 130, 39]","[1524.84375, 586, 50.421875, 19]",['above'],,,True
+test_domain_original,91f092a8-2daf-4500-a8f2-7c907d2c7299,1,Click on 'More ' button,"[1094.46875, 57, 96.28125, 35]","[1163, 107.390625, 93.796875, 34]",['above'],,,True
+test_domain_original,fe9f532e-1446-4b9f-9ea7-2ffe786d5918,2,Click on 'Person working in a delivery station' img,"[381, 478.125, 198, 123.75]","[381, 697.875, 198, 123.75]",['above'],True,True,False
+test_domain_original,659b04d5-1b77-48f2-8584-ad0f48b13617,2,Click on 'Follow' button,"[370, 520.0, 108.03125, 40]","[392.6247253417969, 534.1249389648438, 13.75628662109375, 13.1248779296875]",['right'],True,False,False
+test_domain_original,afe67cf4-e6af-4bcc-b87c-0648540ab442,1,Click on 'BTC-USD' link,"[402, 532.0, 59.734375, 16]","[402, 566.78125, 59, 16]",['above'],True,True,False
+test_domain_original,44531ae3-cdad-437b-b19a-fcc8f04b7656,2,Click on 'Get Started' button,"[1324, 511.0, 220, 58]","[1288.830078125, 536.833251953125, 13.3333740234375, 6.66668701171875]",['right'],True,False,False
+test_domain_original,158a1416-8658-46bc-8ad6-b0d5e8c77842,7,Click on 'Recipes' span,"[1378.21875, 220, 79.09375, 26]","[1396.21875, 258.5, 202, 25]",['above'],,,True
+test_domain_original,bb82ff0a-c389-4f82-91d3-f4ae438af266,7,"Click on 'Milwaukee, WI' button","[915.015625, 495.0625, 108.46875, 16]","[915.015625, 527.0625, 40.609375, 18]",['above'],True,False,False
+test_domain_original,1d84ad91-a8f3-461e-aa43-014d75a8c851,5,Click on 'High school diploma or equivalent' link,"[718.9375, 532.0, 210.125, 16]","[718.9375, 567.0, 135.4375, 16]",['above'],True,True,False
+test_domain_original,6dad2b8d-731d-4763-871a-c30db28eff67,2,"Click on 'Passports, travel and living abroad' link","[810, 325, 265.859375, 17]","[810, 363, 170.421875, 17]",['above'],True,True,False
+test_domain_original,a02e8361-07ad-4448-81a0-b4894f68de4e,5,Click on '25 miles' generic,"[745, 338.953125, 165, 40]","[745, 348.625, 0, 17]",['near'],,,True
+test_domain_original,d78cd44d-232e-4fdb-a4cb-d2125cd70f77,1,Click on 'All Career Areas' link,"[826.140625, 15.59375, 166.671875, 28.796875]","[1001.8125, 15.59375, 115.125, 28.796875]",['left'],,,True
+test_domain_original,acb41370-15e1-46ff-9d3a-fea889a29b36,2,Click on '' div,"[558, 529.0, 22, 22]","[557, 528.0, 1, 1]",['near'],,,True
+test_domain_original,dd1dc3f9-b611-48d3-88b5-ae895570ee85,7,Click on 'Education' button,"[641, 202, 108.40625, 41]","[658.171875, 165.453125, 82.453125, 16.078125]",['below'],True,True,False
+test_domain_original,7e5e0ded-437e-4fb7-897f-619ad1a6ce2b,1,Click on 'Select University' div,"[446, 180, 119.796875, 40]","[433, 264, 80.4375, 24]",['above'],,,True
+test_domain_original,9d5a39ec-fdb6-486f-8b3c-c2e89b388fbe,1,Click on 'Events & Presentations' link,"[426.890625, 15, 146.984375, 48]","[360.09375, 15, 36.796875, 48]",['right'],True,True,False
+test_domain_original,9b94f5b1-2378-4729-82ea-116cb3f1c8f0,5,Click on 'Distance to university' li,"[1103, 366, 160, 36]","[1150.125, 384, 57.125, 37]",['near'],,,True
+test_domain_original,424a9b25-30ce-457a-8484-a081f28df889,2,Click on 'Health & Medicine' link,"[1081.515625, 146.78125, 163.015625, 38.390625]","[984.625, 146.78125, 95.890625, 38.390625]",['right'],True,True,False
+test_domain_original,a1147322-4835-42ba-a03c-233777f681f3,1,Click on 'Follow' span,"[1121.125, 273.328125, 47.375, 18]","[1070.625, 280.6614685058594, 15, 3.33331298828125]",['right'],True,False,False
+test_domain_original,6c3bb227-7d2f-4e6f-9c3b-2aaff225a407,2,Click on 'Low prices and discounts' button,"[710, 517.5, 500, 45]","[710, 578.5, 500, 45]",['above'],True,True,False
+test_domain_original,56bb259c-0a01-448e-b15b-264ebd7ece66,3,Click on 'Find a PO Box Near You' textbox,"[567.984375, 519.0, 350, 42]","[717.265625, 457.0625, 0, 16]",['below'],,,True
+test_domain_original,55025267-7139-4f94-86b3-0fb2157202bf,1,Click on 'Categories' button,"[123, 12, 92.15625, 48]","[228.15625, 13, 1, 28]",['left'],True,False,False
+test_domain_original,ddc28045-4b8e-456b-8243-e5ae45c13bfe,2,"Click on 'Boston, MA, US' div","[392, 238, 532, 47]","[600, 283.90625, 144, 24.203125]",['near'],,,True
+test_domain_original,233c9a3e-c07c-4b68-ae56-6f0f05e48104,7,Click on 'Photo of Rushmore' img,"[668, 398.671875, 282.65625, 282.65625]","[688, 682.5, 242.65625, 39.015625]",['above'],,,True
+test_domain_original,cfe4eed2-a7a7-4099-941c-90ac252827e0,1,Click on 'Sort ' button,"[472, 137, 66.015625, 24]","[489, 190, 20, 20]",['above'],,,True
+test_domain_original,297361ad-bf49-4f66-b54a-763535db16dc,1,Click on 'Search' button,"[1109.375, 173.15625, 98.625, 40]","[1079.921875, 266.15625, 49.90625, 17]",['above'],,,True
+test_domain_original,90314b88-3bf2-4260-acb7-90050780eaeb,3,Click on 'Mar 30' div,"[1012.34375, 431.5, 48.90625, 20]","[1012.34375, 461.5, 48.90625, 20]",['above'],True,True,False
+test_domain_original,97f68d19-fa5a-4a87-be20-deff9f301a41,3,Click on '' span,"[1161.5625, 448.984375, 47.9375, 21]","[1204.5625, 451.984375, 16, 16]",['near'],True,False,False
+test_domain_original,7593311c-6dc2-4f50-90d9-51259fc0d9b9,2,Click on 'Chat' link,"[1451.640625, 7.5, 32, 32]","[1497.640625, 13.5, 20, 20]",['left'],,,True
+test_domain_original,ec4674d2-365a-4cca-9e68-f71828b1e61c,1,Click on '' input,"[820.53125, 516.0, 123.46875, 48]","[821.53125, 604.5, 121.46875, 0]",['above'],True,False,False
+test_domain_original,f0e64c18-28ca-4627-b33c-260c998d5cab,5,Click on 'More +' button,"[1215.828125, 255, 72.59375, 42]","[1266.09375, 266, 9.328125, 19]",['near'],,,True
+test_domain_original,1aaa652f-434d-424c-9665-23c05e1b135c,2,Type 'Healthcare' in 'Search Keyword' textbox,"[675.5, 12, 358, 48]","[883.03125, 135, 20, 20]",['above'],,,True
+test_domain_original,87e6932d-6e44-426a-9208-bf1a1f542dd1,2,Click on 'Substitute titles' link,"[1076.578125, 532.5, 88.15625, 15]","[1097.84375, 664.078125, 137.28125, 15]",['above'],True,True,False
+test_domain_original,bdbc82a2-9164-47b8-8a68-7ef5c81951e9,1,Click on 'Menu' button,"[1495, 47.296875, 35, 29]","[1496, 59.796875, 33, 5]",['below'],True,True,False
+test_domain_original,c733437c-f53f-4076-81e2-4e93629ba25b,1,Click on 'services for RESIDENTS' link,"[665.0625, 30, 182.015625, 110]","[847.078125, 86, 126.28125, 16]",['left'],,,True
+test_domain_original,3363038b-183b-40b9-9b68-6f46d6195e8f,6,Click on 'software engineer' span,"[527, 185, 111.46875, 16]","[527, 142.5, 34.484375, 18]",['below'],,,True
+test_domain_original,75b3bf74-04d4-4ae4-b09e-f86fa8b1e2d1,5,Click on 'Search' button,"[1270, 241, 138, 44]","[1147.875, 496, 239.9375, 24]",['above'],,,True
+test_domain_original,45b9f4d0-3698-41cb-9c40-0f095476a136,6,Click on 'Done' button,"[1042.671875, 372, 96, 36]","[1071.671875, 330, 14.00048828125, 8.00048828125]",['below'],,,True
+test_domain_original,ff8f6003-6068-4567-b1ef-61e3222d3bce,0,Click on '' span,"[296.140625, 109, 25.140625, 32]","[337.8125, 125, 8, 0]",['left'],True,True,False
+test_domain_original,7ffd9e73-ba5d-47a1-b5b9-00476e6f1121,0,Type 'support services' in 'Search input' textbox,"[727.515625, 522.5, 347.171875, 35]","[240, 678.5, 1440, 41.59375]",['above'],,,True
+test_domain_original,6b2885ba-58f3-4365-8342-635972d5b0f2,3,Click on 'Continue' button,"[480, 374.96875, 100.0625, 38]","[478, 302.96875, 44, 44]",['below'],True,False,False
+test_domain_original,d361b836-2f91-4a0b-a602-8ec65a31c17e,2,Click on 'United States - English' link,"[1326.5, 664.25, 323.5, 54]","[1326.5, 610.25, 323.5, 54]",['near'],True,True,False
+test_domain_original,fe788604-16a6-4aab-9a67-19c417b5ae18,1,Click on 'Display Results' span,"[800.796875, 531.6015625, 88.28125, 16.796875]","[797.859375, 574.5078125, 94.140625, 16]",['above'],True,True,False
+test_domain_original,b7069c40-4bfd-4cfe-9fdc-1c546e995edd,10,Click on 'Online' div,"[385.546875, 528.0, 284, 24]","[439.5625, 584.0, 40.578125, 24]",['above'],True,True,False
+test_domain_original,7933484c-f5c3-4575-9f4d-69d3e42cf869,7,Click on 'Breeds A-Z' a,"[643.625, 59, 153.125, 56]","[717.7062377929688, 25, 9.25, 7.049999237060547]",['below'],True,True,False
+test_domain_original,e7e02515-da3c-4925-9802-e85d1aebbb08,2,Click on 'search titles only' checkbox,"[7.5, 226.015625, 13, 13]","[7.5, 248.015625, 13, 13]",['above'],True,False,False
+test_domain_original,9da9c965-f6c6-4bcf-b33a-73e50d782aaf,7,Click on 'See More' li,"[336, 526.0, 288, 28]","[336, 628.625, 288, 0]",['above'],,,True
+test_domain_original,b47f2eb1-58d1-442d-a4b1-2463db44840f,0,Click on 'I want to warn others about a business or offer th...' radio,"[414, 518.203125, 24, 24]","[414, 582.203125, 24, 24]",['above'],True,False,False
+test_domain_original,583edc7a-746a-4a5d-8466-bb13defcaad4,0,Type 'couch' in 'search for sale' textbox,"[239, 60.40625, 1621, 21.1875]","[935.828125, 108, 38, 34]",['above'],,,True
+test_domain_original,92a49fdb-d88a-455d-a2b7-86a17b4b5b18,2,Click on 'View Hospital' link,"[991.5625, 372.5, 179.4375, 17]","[991.5625, 499.5, 179.4375, 42.078125]",['above'],True,True,False
+test_domain_original,d5603064-77ea-40b7-b68b-4e5bd384daea,11,Click on '1' link,"[87.25, 519.9296875, 61.5, 40.140625]","[26.75, 519.9296875, 60.5, 40.140625]",['near'],True,False,False
+test_domain_original,2c31fb6a-9225-4be5-b0b3-73652d06d0d7,1,Click on 'Create Community' button,"[1040.359375, 524.0, 156.46875, 32]","[952.4375, 524.0, 79.921875, 32]",['right'],True,True,False
+test_domain_original,16f742f7-22c2-4426-83a6-5a1b495f6177,4,Type 'James Cole' in 'Search within r/12Monkeys' searchbox,"[605.703125, 10.5, 646.15625, 26]","[360, 56, 1200, 64]",['above'],,,True
+test_domain_original,332ed50d-4772-4eb3-9de9-27ff39abc161,1,Type 'Fitness' in 'Name' textbox,"[722, 512, 476, 48]","[722, 489, 476, 15]",['below'],,,True
+test_domain_original,970f88ad-b8b4-46ef-b9b0-cb09af7b5b81,5,Click on 'Apply Filters' button,"[1208.09375, 524.0, 135.90625, 32]","[965.234375, 521.625, 385.25, 17.5]",['near'],,,True
+test_domain_original,bdb05ce1-5ac0-43a4-b397-3b06171fe246,4,Select 'Nursing' in 'All Programs' select,"[370, 517.0625, 168, 40]","[370, 598.0625, 168, 17]",['above'],True,True,False
+test_domain_original,6f21856c-0b1c-4814-86fe-e0311ca566b8,2,"Click on 'Wilkes County, NC' button","[477.359375, 266, 825.28125, 48]","[536.359375, 205, 0, 58]",['below'],,,True
+test_domain_original,1f7ceb24-8552-48d8-b20b-5957baae598a,1,Click on 'First Republic Bank Dep Shs Rep 1/40 non cum perp ...' div,"[504, 365, 223.828125, 20]","[504, 414, 223.828125, 20]",['above'],True,True,False
+test_domain_original,6bc6d924-1265-41f3-9021-581913ecc521,5,Click on ' Top' button,"[645.125, 399.375, 70.625, 34]","[731.75, 405.375, 15.5625, 22]",['left'],,,True
+test_domain_original,99d08027-0cfd-470d-a30f-28ceb6150df5,1,Click on 'Government' link,"[1362.765625, 124.390625, 129.78125, 89]","[1417.953125, 95.1875, 12.71875, 20]",['below'],True,False,False
+test_domain_original,3363038b-183b-40b9-9b68-6f46d6195e8f,4,Click on 'Remote' button,"[388.1875, 153, 100, 41]","[457.56695556640625, 220.7857208251953, 6.857147216796875, 3.428558349609375]",['above'],True,True,False
+test_domain_original,277e3468-f8cb-45c6-9e4b-0328066c42d3,2,Click on 'Schedule an Appointment' link,"[390, 396.1875, 225.5625, 46]","[487.78125, 466.25, 115, 55]",['above'],,,True
+test_domain_original,5e73dffe-0ca3-42f1-a89a-e8165bf7783e,2,Click on 'FIND A GROOMER' button,"[854.984375, 508, 210, 40]","[937.375, 442.5, 13, 11]",['below'],,,True
+test_domain_original,e2276e18-94bd-4371-99b9-539401f62d78,9,Click on 'Kids' div,"[350, 513.8046875, 250, 52.390625]","[366, 551.1953125, 184, 55]",['near'],True,False,False
+test_domain_original,1060037c-a31d-42db-b1f5-674b92badc1a,1,Click on 'Academics' link,"[626.828125, 146.78125, 95.890625, 38.390625]","[642, 112.140625, 78.765625, 32.640625]",['below'],True,True,False
+test_domain_original,993878c1-0352-45aa-83ba-8ce855132e03,4,Click on 'Products' span,"[849.46875, 88, 69.140625, 61]","[942.609375, 88, 45.984375, 61]",['left'],True,True,False
+test_domain_original,5a05fede-f629-4323-a5f7-204d7dbe81cd,2,Click on ' Search' link,"[390, 525.234375, 80, 25.140625]","[497.65625, 531.234375, 9.34375, 12]",['left'],True,False,False
+test_domain_original,f09c5fe6-0734-4c2d-b330-97aba7bae539,0,Click on 'Search Jobs' link,"[480, 275.921875, 142.96875, 25.203125]","[480, 250.71875, 142.96875, 25.203125]",['near'],True,False,False
+test_domain_original,b7069c40-4bfd-4cfe-9fdc-1c546e995edd,9,Click on 'Virginia Forklift Certification' div,"[369, 528.0, 1024.578125, 24]","[369, 556.0, 1182, 18]",['above'],,,True
+test_domain_original,dd1dc3f9-b611-48d3-88b5-ae895570ee85,5,Type 'Los Angeles' in 'Where' textbox,"[988.796875, 143, 296.203125, 18]","[914, 173, 387, 41.40625]",['above'],,,True
+test_domain_original,a1b343fd-8b44-4a73-915d-0dcf9d5beb65,1,Click on 'M.D. Program' link,"[371.015625, 311.015625, 112.03125, 49.5]","[282, 385.8125, 277.5, 54]",['above'],True,False,False
+test_domain_original,17cfd4fe-079b-4f9d-ae2a-d17660677d1d,1,Click on 'Benefits' link,"[480, 529.5, 74.96875, 21]","[480, 710.5, 217.484375, 21]",['above'],True,True,False
+test_domain_original,690e9a88-d996-427a-91ac-ab5f99c4c369,3,Click on 'News & Events' link,"[754.03125, 98.84375, 136.484375, 130]","[679.96875, 253.84375, 127.1875, 17]",['above'],,,True
+test_domain_original,b41de74c-7493-444c-92ad-641b0ca164ee,5,Click on 'More' link,"[1237.71875, 19.71875, 82.53125, 35.546875]","[1203.71875, 105, 208, 44.6875]",['above'],,,True
+test_domain_original,255b6359-b76d-44b9-adee-0ac217f14621,5,Click on 'Search on Thumbtack' textbox,"[450.203125, 514.0, 140, 52]","[480.953125, 583.0, 67.453125, 19]",['above'],,,True
+test_domain_original,1d84ad91-a8f3-461e-aa43-014d75a8c851,6,Select 'NY' in 'State' combobox,"[1001.78125, 301.640625, 234.59375, 44]","[1080.28125, 451.4375, 11.671875, 15]",['above'],,,True
+test_domain_original,b3f27ec6-dcb2-478a-ad46-e32a9f626ce3,3,Click on 'Rhode Island' link,"[1170.65625, 518.890625, 102.828125, 22]","[1170.65625, 561.890625, 116.734375, 22]",['above'],True,True,False
+test_domain_original,14d29c07-9b88-4509-9669-6f771e0a548e,5,Click on 'Continue  >>' button,"[960.28125, 611, 84.71875, 20]","[868.5625, 611, 80.03125, 20]",['right'],True,False,False
+test_domain_original,753bf34d-09a9-4187-b175-6e71fd8d491d,3,Click on 'Retweet' span,"[1051.671875, 531.0, 60.328125, 18]","[1088.0625, 520.6484375, 14.0625, 14.3828125]",['near'],True,False,False
+test_domain_original,421c39c0-ca19-4c31-a023-c64d54ba6e4c,0,Type 'ohio' in 'Where' textbox,"[988.796875, 143, 296.203125, 18]","[961.9375, 298.71875, 185.421875, 17]",['above'],True,True,False
+test_domain_original,606fe671-57d7-4b6c-8642-ef7b59fa7229,0,Click on '' div,"[32, 530.0, 40.71875, 20]","[32, 510.296875, 1, 1]",['below'],True,True,False
+test_domain_original,15e1e37c-a21f-4b75-b1c0-41c50e3f514b,6,Type 'Orange County FL' in 'Enter County or City' textbox,"[605, 398, 570, 40]","[713.578125, 357, 61.40625, 26]",['below'],,,True
+test_domain_original,432a58b4-450d-4768-b049-90f6681bc22e,7,Click on 'DONATE' link,"[1325.75, 18.109375, 102.375, 44]","[1444.125, 18.109375, 87.875, 44]",['left'],True,True,False
+test_domain_original,b9f1cc21-806f-44d1-8d59-7c6f091de9c6,1,Click on 'Save' button,"[1059.484375, 522.0, 80.515625, 36]","[1067.5899658203125, 494.0, 9.4100341796875, 16]","['below', 'right']",True,False,False
+test_domain_original,f5da4b14-026d-4a10-ab89-f5720418f2b4,3,Click on 'Search' button,"[1109.375, 173.15625, 98.625, 40]","[1037.734375, 266.15625, 80.03125, 17]",['above'],,,True
+test_domain_original,0baad732-ebce-451f-ac85-ebc2a1a817d2,6,Click on 'See updated estimates' button,"[772, 514.0, 376, 52]","[908.03125, 562.609375, 133.078125, 24]",['near'],,,True
+test_domain_original,b3f27ec6-dcb2-478a-ad46-e32a9f626ce3,9,Type 'buckeye.foobar@gmail.com' in 'email@example.com' textbox,"[676.5, 520.953125, 568.96875, 38.09375]","[676.5, 602.4375, 568.96875, 72]",['above'],True,False,False
+test_domain_original,8d7ac150-0b71-4980-8c9b-290a0f61db1d,3,Click on '' i,"[436, 179, 51.234375, 58]","[418, 281, 120.671875, 36]",['above'],,,True
+test_domain_original,55a8e749-4cbe-4a5a-b180-5dc34bf28c71,12,Click on 'Quote Expires:' dl,"[862.625, 515.203125, 338.125, 49.59375]","[1238, 734.203125, 28, 82]","['above', 'left']",,,True
+test_domain_original,978c579a-b7b1-486e-aa3c-1b9ccea1a5c0,0,Type '10203' in 'Zip code' textbox,"[450.203125, 514.0, 140, 52]","[480.953125, 583.0, 67.453125, 19]",['above'],,,True
+test_domain_original,2d1ea58e-3a1f-41e7-9234-fb95d7079b9c,5,Click on '' button,"[936, 435, 25, 25]","[943.25, 503.25, 10.5, 10.5]",['above'],True,False,False
+test_domain_original,7571cac4-595a-465d-8810-ab0df8013e91,3,Type 'Kitten Tales Rescue' in 'Group Name' textbox,"[758.328125, 354.375, 368.328125, 55]","[1004.296875, 429.375, 122.359375, 45]",['above'],True,False,False
+test_domain_original,70cb365b-5a62-4a3a-88cb-60df9cafe041,4,"Click on 'This ""Faith Is"" framed wall art lends inspirationa...' img","[962.5, 408.2421875, 236, 263.515625]","[1020.234375, 679.7578125, 49.125, 17]",['above'],True,True,False
+test_domain_original,21d3931e-9f36-4751-85d3-ad021c532490,5,Click on 'gluten-free' p,"[1016.5, 333, 295, 26]","[1016.5, 272, 295, 26]",['below'],True,True,False
+test_domain_original,90e320cd-bc8c-4439-8c75-782a5e9461b2,1,Click on 'Families and Individuals' link,"[1171.078125, 155, 98.078125, 58]","[913.046875, 189, 136.921875, 24]",['right'],True,True,False
+test_domain_original,18c84c8e-41d0-4890-980a-5d515c489116,0,Click on 'GET STARTED' button,"[365, 516.0078125, 374, 47.984375]","[475.5, 438.0078125, 153, 21]",['below'],,,True
+test_domain_original,ec10879f-45c5-4fae-9cb2-7ea224e90b4f,5,Click on 'Apply Filters' button,"[515, 520.0, 137.625, 40]","[515, 455.0, 267.890625, 40]",['below'],,,True
+test_domain_original,5e459a8f-b822-423b-b600-974aca665eaa,3,Click on 'Forms' link,"[1263.109375, 263.78125, 80.84375, 37]","[1343.953125, 263.78125, 99.65625, 37]",['near'],True,True,False
+test_domain_original,14d29c07-9b88-4509-9669-6f771e0a548e,1,Click on 'Complete' button,"[1160.875, 627, 52.125, 22]","[1110.625, 627, 47.25, 22]",['right'],True,False,False
+test_domain_original,17a3488c-8b75-4ec6-9899-f32bcec2f808,2,Click on 'New York' span,"[514, 529.0, 68.828125, 22]","[514, 488.0, 83.3125, 22]",['below'],True,True,False
+test_domain_original,e8a2c53e-afd8-4adf-bf10-cfe211e2f80c,5,Click on '10 Miles' link,"[780.984375, 498.171875, 163, 35.984375]","[780.984375, 462.1875, 163, 35.984375]",['near'],True,False,False
+test_domain_original,b41de74c-7493-444c-92ad-641b0ca164ee,0,Click on '1' p,"[737.859375, 527.8359375, 88.953125, 24.328125]","[737.859375, 583.8359375, 88.953125, 24.328125]",['above'],True,False,False
+test_domain_original,879426e8-6e07-4b56-ad35-1321765a9709,2,Click on 'Home type' button,"[1402.546875, 140, 122.96875, 40]","[1478.02685546875, 213.97500610351562, 8.7515869140625, 4.6757354736328125]",['above'],True,False,False
+test_domain_original,8cfafcc6-9b04-4755-a7f0-ff5021bb3c5b,7,Click on '' svg,"[1502, 18, 26, 26]","[1374.5, 134.5, 56.6875, 13]","['above', 'right']",True,False,False
+test_domain_original,73a9575b-c83a-42f0-ab41-b256eedf11ff,2,Click on 'Amazon Pharmacy' link,"[64, 526.0, 245.125, 28]","[32, 586.0, 173.09375, 28]",['above'],True,True,False
+test_domain_original,e5e57875-1361-490b-8197-2f8fcfdc002c,4,Click on 'Check Out Now' link,"[1102.484375, 517.5, 170, 45]","[1192.46875, 584.875, 170, 45]",['above'],,,True
+test_domain_original,a4a92140-cb01-4ccd-b1fe-aae5f0492f6e,1,Click on 'Part-Time' link,"[718.9375, 532.0, 60.9375, 16]","[718.9375, 567.0, 68.484375, 16]",['above'],True,True,False
+test_domain_original,7b39d904-5808-46e5-981b-044e157cc1ae,4,Click on 'Sports & Events' a,"[1221.8125, 59, 201.515625, 56]","[1351.875, 20.5, 15, 14.998844146728516]",['below'],True,False,False
+test_domain_original,7b6b522c-fdd1-4872-b007-8d62214ee1bf,2,Click on ' Location Filters' link,"[473, 531.5, 152.265625, 17]","[473, 582.46875, 138.53125, 17]",['above'],,,True
+test_domain_original,cf815d4f-cec3-4761-b4c4-08a50c9147da,1,Click on 'See Pickup Options' link,"[1099.1875, 518.0, 203.9375, 44]","[1631, 508.594970703125, 13, 13]",['left'],,,True
+test_domain_original,d78d07bf-bee6-4105-beba-0bdacaa53f1c,5,Click on 'New portfolio' button,"[1129, 463, 326, 36]","[1259, 425, 113, 20]",['below'],True,True,False
+test_domain_original,3d8c4d03-3791-481d-8782-cae61d63960d,6,Click on 'Jobs in kohima' link,"[741.328125, 434, 93.390625, 16]","[741.328125, 373, 98.828125, 16]",['below'],True,True,False
+test_domain_original,d5603064-77ea-40b7-b68b-4e5bd384daea,0,Click on '1' link,"[87.25, 519.9296875, 61.5, 40.140625]","[26.75, 519.9296875, 60.5, 40.140625]",['near'],True,False,False
+test_domain_original,c54b647c-2a9c-45c0-8519-bcb4dc802d01,1,Click on 'London' span,"[560, 464, 810, 40]","[560, 528, 842, 40]",['above'],True,True,False
+test_domain_original,21c2203c-05ba-467b-b32b-8fdb8c628fdf,3,Click on 'Symptom Checker' link,"[945.59375, 9.953125, 147.46875, 55.09375]","[900, 105, 186, 44.6875]",['above'],,,True
+test_domain_original,83e54729-fd0c-40fa-bab3-3005aa83188c,0,Click on 'Getting Services' link,"[670, 124.390625, 159.125, 89]","[834.125, 129.390625, 142.90625, 48]",['left'],True,False,False
+test_domain_original,6d95fd0c-48a1-4f61-9daa-98ebc534fe57,5,"Click on 'Anchorage, AK' div","[418, 525.6015625, 339.984375, 28.796875]","[417, 487.3515625, 341.984375, 38.25]",['near'],True,False,False
+test_domain_original,9d8ba96c-ff70-4846-a91b-818fa43bff04,1,"Click on 'No thanks, I do not need supplies' link","[1296, 529.6015625, 210.578125, 20.796875]","[1296, 475.6015625, 228, 38]",['below'],True,True,False
+test_domain_original,aa254179-b2a4-4d59-baa9-982356e71e29,3,Click on 'Adult' div,"[350, 513.8046875, 250, 52.390625]","[366, 548.8046875, 184, 55]",['near'],True,False,False
+test_domain_original,7b8fa61f-5bfd-4a67-a4f2-3db344faa43a,5,Click on 'Confirm' span,"[1330, 519.0, 130, 42]","[1320, 636.0, 20, 20]",['above'],,,True
+test_domain_original,5991ba25-6a93-4bfc-bf0d-20d6c219a837,10,Type 'Doe' in 'Last Name *' textbox,"[995, 524.0, 400, 32]","[995, 618.984375, 400, 32]",['above'],True,False,False
+test_domain_original,1c8c7da0-8140-42f5-bb57-efe749bff63c,4,Click on 'Apply Filters' button,"[1208.09375, 524.0, 135.90625, 32]","[1087.5, 524.0, 104.59375, 32]",['right'],,,True
+test_domain_original,c764c41f-af3b-42b8-b6c3-8632b6872e77,0,Click on 'Practice Exams' link,"[634.40625, 435.1875, 325.9375, 19.5]","[634.40625, 459.890625, 325.9375, 19.5]",['above'],True,True,False
+test_domain_original,233be033-8b78-43e0-8869-3de251af6677,4,Type 'r/answers' in 'Search all of Reddit' searchbox,"[469, 13.5, 859.640625, 20]","[529, 77, 486, 38]",['above'],True,False,False
+test_domain_original,95aaaaf6-21bd-4563-91be-e2e96c0b3d55,2,Click on 'Find a court or tribunal' link,"[480, 529.5, 190.09375, 21]","[480, 479.5, 209.078125, 21]",['below'],True,True,False
+test_domain_original,2192cca2-abb7-4a19-85f1-d373133085fb,3,Click on 'Food Allergies' link,"[798.890625, 528.0, 140.15625, 24]","[783.765625, 588.015625, 188.46875, 24]",['above'],True,True,False
+test_domain_original,ff1de5de-7801-4187-a064-8e3bef382eda,3,Click on 'File for Unemployment Service Details' link,"[513, 381.34375, 230.15625, 26]","[513, 414.65625, 206.40625, 46.390625]",['above'],True,True,False
+test_domain_original,5a026c85-0c6d-43c3-87e7-d05638ed5019,2,Click on 'AMC' div,"[662, 96, 203.09375, 20]","[662, 116, 203.09375, 20]",['near'],True,False,False
+test_domain_original,f004058d-9b9c-41c4-ac84-24797f016a8f,6,Click on 'Undergraduate Engineering Programs' link,"[758, 531.0, 269.8125, 18]","[758, 571.0, 240.78125, 18]",['above'],True,True,False
+test_domain_original,c96d460a-8a18-4878-ab24-6d1dadfe057e,6,Type 'SOLAR' in 'Find' searchbox,"[617.765625, 419.0625, 263.25, 35]","[560, 418.96875, 107.265625, 18]",['near'],,,True
+test_domain_original,bcfeed8e-ad1d-430e-85db-b1c7246282a5,6,Click on 'Life at Michigan' link,"[723.71875, 146.78125, 163.015625, 38.390625]","[721.75, 112.140625, 68.78125, 32.640625]",['below'],,,True
+test_domain_original,2bc717a1-d1cc-4a95-91ca-700cce9ab18c,0,Click on 'Accounting' checkbox,"[272, 528.0, 24, 24]","[272.5, 580.5, 23, 23]",['above'],True,False,False
+test_domain_original,2e64ac92-0fe6-4140-ace1-382cc02a2132,1,Click on 'Follow' span,"[1121.125, 272.328125, 47.375, 20]","[1070.625, 280.6614685058594, 15, 3.33331298828125]",['right'],,,True
+test_domain_original,2854bdb8-783d-4ee9-a87c-4de3a5ac0654,2,Click on 'Interactions' link,"[844.0625, 529.0, 100.03125, 22]","[977.09375, 529.0, 64.953125, 22]",['left'],True,True,False
+test_domain_original,f2cfae2c-fef2-423f-8b5e-eca6b4ec4c40,1,Click on 'Academics' link,"[757, 454.796875, 69.9375, 16]","[757, 472.65625, 124.8125, 16]",['above'],True,True,False
+test_domain_original,f9d02b1b-d4b1-497c-aae5-45be06feac06,2,"Type '49103' in 'City, State/Province, Zip or City & Country' textbox","[495, 218, 783.765625, 61.078125]","[540.953125, 361.078125, 42.640625, 14]",['above'],True,False,False
+test_domain_original,bc32ce7e-8f45-43c1-98ef-27d59afb9634,3,Click on 'Toilet Repair' button,"[1265.09375, 165, 106.46875, 40]","[1037.28125, 165, 223.8125, 40]",['right'],True,True,False
+test_domain_original,5be47163-4986-47ee-be88-667d9ab73e36,1,Click on 'Fifty Twenty-Five' link,"[687, 526.0, 136.859375, 28]","[687, 562.0, 62.140625, 20.640625]",['above'],True,True,False
+test_domain_original,0a060d81-3edf-4fa6-9477-3e21edfcd32a,4,Type 'university of london' in 'What do you want to learn?' textbox,"[301, 12, 453.015625, 40]","[754.015625, 12, 36.984375, 0]",['near'],True,False,False
+test_domain_original,ecfeb19a-d007-465c-875b-24264503891f,3,Click on 'Locations' link,"[1343.953125, 263.78125, 99.65625, 37]","[1263.109375, 263.78125, 80.84375, 37]",['near'],,,True
+test_domain_original,bf76e110-c3b6-4a9f-9fa0-3d45fa2f2e8a,5,Click on 'Organizational Chart' link,"[481, 383.359375, 206, 27]","[481, 426.671875, 166.265625, 18]",['above'],True,True,False
+test_domain_original,b3f27ec6-dcb2-478a-ad46-e32a9f626ce3,18,Select 'June' in 'January' select,"[717.390625, 530.5, 88, 19]","[747.890625, 594.890625, 25, 25]",['above'],True,True,False
+test_domain_original,f24a6c7c-e205-450d-a946-8a845bc7ba21,2,Click on 'Recommended' span,"[1141.5, 300, 106.5, 27]","[1150.125, 351, 57.125, 37]",['above'],,,True
+test_domain_original,d71df831-5ca0-48a2-aa3b-d297513e2c8e,1,Click on 'OK' button,"[1040.515625, 164.1875, 45.984375, 33.984375]","[898.234375, 169.75, 108.796875, 17]",['right'],,,True
+test_domain_original,bcfeed8e-ad1d-430e-85db-b1c7246282a5,3,Click on 'Events Calendar ' link,"[506, 529.203125, 274, 21.59375]","[506, 571.796875, 274, 43.1875]",['above'],True,True,False
+test_domain_original,15486e7c-eecd-4670-8066-cb7f64424448,7,"Type '10001' in 'City, state, or zip code' textbox","[702.625, 359, 288.421875, 46]","[1021.8115844726562, 371.8501892089844, 16.47064208984375, 18.300628662109375]",['left'],,,True
+test_domain_original,879426e8-6e07-4b56-ad35-1321765a9709,7,Select 'Private pool' in 'Any' select,"[1616, 521.0, 273, 38]","[1810.2191162109375, 501.98394775390625, 25.41064453125, 19.26605224609375]",['near'],,,True
+test_domain_original,fd4a3605-d037-4786-955e-d949697b7b62,5,Select '2015' in 'Choose...' select,"[396, 425.96875, 92, 38.25]","[396, 356.96875, 89.90625, 19.5]",['below'],True,True,False
+test_domain_original,8ca49b7b-ccd9-4a0d-b57e-39e82b52ed76,0,Click on 'Unreal Engine' link,"[644, 216.390625, 259, 35.59375]","[660, 259.984375, 227, 19.59375]",['above'],,,True
+test_domain_original,ceac063d-fc20-4ffb-bdb1-15d02974c525,4,Type 'beetroot' in 'Show me recipes without:' textbox,"[516.90625, 367, 313.6875, 24]","[516.90625, 261, 313.6875, 24]",['below'],True,False,False
+test_domain_original,b677741c-c8ab-4724-9f1e-62daecad1a61,1,Click on 'Central & South America' link,"[808.328125, 461, 303.328125, 14]","[808.328125, 495, 303.328125, 14]",['above'],True,True,False
+test_domain_original,9e03f99a-354d-44d0-ad7f-c69ec3dc5dfd,10,Type '44912' in 'DESTINATION POSTAL CODE' label,"[650, 530.0, 229.765625, 20]","[635, 579.0, 95.6875, 21]",['above'],True,True,False
+test_domain_original,4946dd68-cfdb-42fa-b227-60713c0b4a34,1,Click on '' span,"[1198.5625, 266, 37.265625, 19]","[1235.828125, 266, 9.328125, 19]",['near'],True,False,False
+test_domain_original,2d1ea58e-3a1f-41e7-9234-fb95d7079b9c,1,Click on '' div,"[928, 496, 41, 25]","[943.25, 564.25, 10.5, 10.5]",['above'],True,False,False
+test_domain_original,87e6932d-6e44-426a-9208-bf1a1f542dd1,0,Click on 'Replacement Titles' link,"[261.109375, 530.2421875, 314.75, 19.515625]","[261.109375, 562.7578125, 314.75, 19.515625]",['above'],True,True,False
+test_domain_original,6b2acd86-88b6-4312-9395-beb69996bf22,7,Click on 'FIND STORAGE NEAR YOU' generic,"[304, 516.0078125, 274.609375, 47.984375]","[329, 839.7734375, 387.328125, 274]",['above'],,,True
+test_domain_original,f304652c-30d8-48ac-8419-909b774b7665,0,Click on '94%' div,"[751.96875, 529.5, 36.03125, 21]","[492, 241.5, 6, 10]","['below', 'right']",True,False,False
+test_domain_original,dd1dc3f9-b611-48d3-88b5-ae895570ee85,2,Click on 'No weekends (217)' link,"[1228.34375, 518.0, 239, 44]","[1228.34375, 474.0, 239, 44]",['near'],True,False,False
+test_domain_original,86fff327-2a98-4b37-9e14-8f976d74aa92,1,Click on 'Calculate Payments' link,"[831.203125, 513.2421875, 267.59375, 53.515625]","[762.875, 751.6953125, 285, 209.609375]",['above'],,,True
+test_domain_original,0e48ad89-c2f1-42a0-a8fa-904d11200768,2,Type '78563' in 'from zip' textbox,"[7.5, 205.765625, 78.796875, 23]","[7.5, 231.765625, 67.234375, 14.40625]",['above'],True,False,False
+test_domain_original,a4a92140-cb01-4ccd-b1fe-aae5f0492f6e,2,Click on 'Search' button,"[831.28125, 500.0, 120.71875, 80]","[308.015625, 500.0, 523.265625, 80]",['near'],,,True
+test_domain_original,424a9b25-30ce-457a-8484-a081f28df889,0,Click on 'School of Nursing ' link,"[506, 529.203125, 274, 21.59375]","[506, 571.796875, 197.609375, 21]",['above'],True,True,False
+test_domain_original,d5cd0664-e9bb-4f46-a19f-daa5368247c0,0,Type 'buck19915@gmail.com' in 'Enter your email' textbox,"[723, 518.953125, 287.328125, 18]","[899.28125, 565.90625, 43.90625, 14]",['above'],True,True,False
+test_domain_original,92b1915f-5093-4090-975c-0974162cc2a2,0,Click on 'Add to List' button,"[1421.671875, 417.953125, 128.328125, 36]","[1437.671875, 429.089111328125, 16, 13.72802734375]",['right'],,,True
+test_domain_original,1d84ad91-a8f3-461e-aa43-014d75a8c851,4,Click on 'Search' button,"[831.28125, 500.0, 120.71875, 80]","[308.015625, 500.0, 523.265625, 80]",['near'],,,True
+test_domain_original,3694f716-a165-4980-a005-41925ea84aad,1,Type 'chicken' in 'Type ingredients...' textbox,"[736, 181.15625, 373.375, 24]","[908.59375, 266.15625, 55.578125, 17]",['above'],True,True,False
+test_domain_original,228fc81a-5ffe-4c16-8fd4-59462690373c,6,Type '234567890' in '* Work Phone Number' textbox,"[1101, 519.5, 438, 41]","[1101, 572.5, 438, 24]",['above'],True,True,False
+test_domain_original,3d8c4d03-3791-481d-8782-cae61d63960d,7,Click on 'Nagaland' link,"[968, 532.0, 59.9375, 16]","[968, 569.0, 40.453125, 16]",['above'],True,True,False
+test_domain_original,486706b0-0330-45f4-925b-77c77fec42b7,13,Click on 'Select University' div,"[446, 147, 119.796875, 40]","[433, 231, 80.4375, 24]",['above'],,,True
+test_domain_original,f82b4d57-ab82-4c49-bc47-e3566496a068,1,Click on 'GET STARTED' button,"[365, 516.0078125, 374, 47.984375]","[409.984375, 415.0078125, 321.015625, 18]",['below'],,,True
+test_domain_original,7980ddca-f97f-4afc-80b7-4b54c98943ad,5,Click on 'Open side menu.' button,"[0, 0, 1920, 38]","[0, 90, 64.484375, 40]",['above'],,,True
+test_domain_original,c96d460a-8a18-4878-ab24-6d1dadfe057e,1,Click on 'Solar Energy Equipment' checkbox,"[804.875, 532.0, 16, 16]","[804.875, 564.59375, 16, 16]",['above'],True,False,False
+test_domain_original,6e8d48e2-20d5-4eae-baee-d1939f2fa8b4,0,"Type 'dermatologist' in 'Condition, procedure, doctor...' textbox","[253, 421, 432.625, 46]","[488.06298828125, 824.0493774414062, 49.63201904296875, 39.94476318359375]",['above'],,,True
+test_domain_original,a2a888e7-1e21-4610-aba0-e23e5982a33b,4,Click on '10017' link,"[379, 315, 440, 20]","[538.15625, 286.5, 125.734375, 15]",['below'],,,True
+test_domain_original,b1823198-2bc3-4d10-b653-7ed5a197d884,1,Type '1234' in '' input,"[56, 537.1875, 728.828125, 38]","[308.9375, 615.1875, 222.9375, 38]",['above'],True,False,False
+test_domain_original,60e959e8-1fd6-46fe-bcc2-2a096f484ead,6,Click on 'More than 5 minutes' p,"[636, 285.5, 295, 26]","[628, 361.5, 41.4375, 20]",['above'],,,True
+test_domain_original,018eb03a-cfe0-4bb3-9316-2029e8938ddf,3,Click on 'Boston' li,"[419, 492.5, 914, 42.5]","[419, 535, 914, 42.5]",['near'],,,True
+test_domain_original,ba537ab6-59d0-4b85-8c22-91a4af753180,1,Click on 'Nutrition' link,"[695, 300.09375, 115.5, 24]","[695, 336.09375, 115.5, 24]",['above'],True,True,False
+test_domain_original,67eaaff2-8f4b-4bbf-b185-fffb34a3a3b0,4,Click on 'Create Job Alert' button,"[1454, 156, 127.59375, 40]","[1447.453125, 188, 112.546875, 24]",['near'],,,True
+test_domain_original,46b1539d-ec94-4673-8dd4-fb174b0cb5c1,1,Click on 'Favorite RALPH' button,"[797, 297, 45, 45]","[772.34375, 524, 1, 1]","['above', 'right']",True,True,False
+test_domain_original,b47f2eb1-58d1-442d-a4b1-2463db44840f,3,Click on 'Report a Scam' link,"[1348.65625, 522.40625, 157.34375, 35.1875]","[1258, 439.42578125, 288, 24.29296875]",['below'],,,True
+test_domain_original,43517267-1e02-4581-92a3-142615ddaac5,2,Click on 'Game Design' link,"[384, 311.5625, 259, 35.59375]","[400, 355.15625, 203, 19.59375]",['above'],,,True
+test_domain_original,333eca5a-acd0-45ab-8795-77279ee24b64,3,Click on 'Remote' button,"[388.1875, 153, 100, 41]","[394.859375, 214.453125, 87.328125, 16.078125]",['above'],True,True,False
+test_domain_original,60dbde86-7849-4d76-8b46-414c93089791,2,Click on 'View Profile' button,"[1300.921875, 354.78125, 126.71875, 40]","[1349.125, 202.1875, 78.421875, 16]",['below'],,,True
+test_domain_original,5038548a-4aa7-494c-baf3-9a99ea0dd0a5,4,Type '2' in 'min' textbox,"[7.5, 467.171875, 90, 23]","[7.5, 513.171875, 90, 23]",['above'],,,True
+test_domain_original,96309122-489f-4b6a-b1b9-719e2a39392b,1,Click on 'RESOURCES' button,"[1498.390625, 16, 114.03125, 48]","[1636.421875, 16.5, 85.328125, 47]",['left'],,,True
+test_domain_original,9d8ba96c-ff70-4846-a91b-818fa43bff04,16,"Click on 'No thanks, I do not need storage' link","[1334.234375, 529.6015625, 210.765625, 20.796875]","[1466.515625, 593.7421875, 11.7427978515625, 11.65716552734375]",['above'],,,True
+test_domain_original,3068d843-a323-4eae-9199-a537c9a45765,3,Click on 'All Career Areas' link,"[826.140625, 15.59375, 166.671875, 28.796875]","[839.1875, 78.421875, 174.84375, 26.5]",['above'],True,True,False
+test_domain_original,2bc717a1-d1cc-4a95-91ca-700cce9ab18c,3,Click on 'Business' span,"[308, 358, 144.0625, 24]","[308, 410, 144.0625, 24]",['above'],True,True,False
+test_domain_original,d78d07bf-bee6-4105-beba-0bdacaa53f1c,1,Click on 'Add one share' button,"[818, 518.5, 30, 30]","[868, 540.5, 30, 16]","['above', 'left']",,,True
+test_domain_original,97f68d19-fa5a-4a87-be20-deff9f301a41,6,"Type '04401' in 'Full Address, City and State, or ZIP Code™' textbox","[390, 356.984375, 639.390625, 44]","[648.0625, 410.5625, 50, 50]",['above'],,,True
+test_domain_original,0c131eb5-7d3e-41cb-8e2a-e91a994404f4,3,"Click on 'Manchester, Manchester, GB' div","[392, 238, 532, 47]","[392, 196, 532, 42]",['near'],,,True
+test_domain_original,947685ab-b0bc-4f63-8668-373c457fdcae,2,"Click on 'West Hollywood, CA' link","[416, 309.390625, 1063, 30]","[916.6875, 281, 120.671875, 36]",['near'],,,True
+test_domain_original,fe9f532e-1446-4b9f-9ea7-2ffe786d5918,7,Click on 'Delivery Station Jobs' button,"[819.5, 414, 281, 36]",,,,,True
+test_domain_original,2eb185df-0560-4e75-b751-17a04ad3f895,5,"Click on 'Search by college, city or property' textbox","[526, 405, 752, 24]","[916, 340, 8, 8]",['below'],,,True
+test_domain_original,4946dd68-cfdb-42fa-b227-60713c0b4a34,8,Click on 'University of Leeds' span,"[560, 528, 120.5, 19]","[560, 592, 155, 19]",['above'],,,True
+test_domain_original,6b5cc19d-2fc0-4f20-bfe1-e7c2d8bf981c,1,Click on 'Select a Breed' div,"[740, 520.0, 199, 40]","[754, 568.0, 131, 40]",['above'],,,True
+test_domain_original,1c8c7da0-8140-42f5-bb57-efe749bff63c,1,Click on 'Search' button,"[1364.28125, 516.0, 114.703125, 48]","[1365.5, 600.0, 1, 1]",['above'],,,True
+test_domain_original,a3d2c7ab-eadc-45c8-86a2-69300e358b04,4,Click on 'WIND FLOW' link,"[1009.265625, 94, 127.328125, 45]","[1069, 99, 132.296875, 16]",['near'],,,True
+test_domain_original,7b39d904-5808-46e5-981b-044e157cc1ae,2,Click on 'Select Event Type' span,"[484.328125, 469.640625, 226, 40.796875]","[759.34375, 470.75, 186, 40.5]",['left'],True,True,False
+test_domain_original,7a65d9c8-e778-4912-bb74-d29274fa11e7,3,Click on 'maximum Rent Input' textbox,"[624.625, 111, 140, 40]","[454, 159, 321, 44]",['above'],True,True,False
+test_domain_original,b2fd70cb-2176-447e-a55d-47dd65586dec,2,Click on 'Next' button,"[1223.140625, 520.5625, 86.859375, 38.875]","[1213.2498779296875, 594.9220581054688, 10.16943359375, 16.4818115234375]","['above', 'right']",,,True
+test_domain_original,e5e57875-1361-490b-8197-2f8fcfdc002c,1,Click on 'Add to Cart' button,"[1402.75, 517.5, 170, 45]","[1494.96875, 410.5, 20, 20]",['below'],,,True
+test_domain_original,cbc5bf23-9e39-4168-88c4-1091d8792fea,5,Click on 'Fordham Toyota' link,"[313, 525.5, 180.203125, 29]","[313, 585.6875, 111.546875, 21]",['above'],True,True,False
+test_domain_original,1564d78a-9e4d-4337-a7ab-54282a348014,3,Click on 'Display Results' span,"[800.796875, 531.6015625, 88.28125, 16.796875]","[797.859375, 574.5078125, 94.140625, 16]",['above'],True,True,False
+test_domain_original,884a7c23-dab4-45cd-aedb-ffd8e58e4e64,8,Click on 'Continue' button,"[480, 704, 100.0625, 38]","[480, 799, 375.328125, 17]",['above'],,,True
+test_domain_original,b6908293-685b-4a8a-8c72-521c6b85dbcf,1,Click on 'Search' button,"[1454.703125, 520.0, 94.125, 40]","[984, 523.0, 454.390625, 35]",['right'],,,True
+test_domain_original,23372ead-d829-4e99-8429-1963d4bfe608,0,Click on 'Redfin Premier' button,"[1338.328125, 0, 122.609375, 60]","[1293.0625, 0, 33.265625, 60]",['right'],True,True,False
+test_domain_original,9c62f688-e606-409b-a337-4954fb9ac637,1,Type '3023858502' in '' input,"[663.96875, 435, 437, 60]","[885.375, 513, 0, 16]",['above'],True,False,False
+test_domain_original,f304652c-30d8-48ac-8419-909b774b7665,2,Click on '5 mph' div,"[737.96875, 529.5, 50.03125, 21]","[492, 283.5, 6, 10]","['below', 'right']",,,True
+test_domain_original,2c7f54d8-3266-416a-bf64-7023521f94f8,3,Click on 'Notifications' div,"[28, 380, 96.828125, 18]","[28, 422, 126, 18]",['above'],True,True,False
+test_domain_original,6b5cc19d-2fc0-4f20-bfe1-e7c2d8bf981c,4,Click on 'Select a Breed' div,"[740, 520.0, 199, 40]","[754, 568.0, 131, 40]",['above'],,,True
+test_domain_original,215efc73-2d25-4126-b108-99856b19dc6c,4,Click on '< 5 Miles' radio,"[679.875, 437.96875, 16, 16]","[679.875, 470.5625, 16, 16]",['above'],True,False,False
+test_domain_original,fa64e4d4-b7c6-46b4-88ef-b9dd8deab335,1,Type 'pumpkin' in 'Search the site' textbox,"[350, 236, 600, 48]","[614, 388, 36, 36]",['above'],,,True
+test_domain_original,ac203015-1684-4b16-b062-11e69cc33c08,2,Click on '' div,"[32, 532.5, 15, 15]","[32, 569.890625, 1, 1]",['above'],True,False,False
+test_domain_original,c97d3d88-b51b-4110-a03f-0cc1cd8bbc4b,1,Click on 'Disability Hiring' link,"[495, 255.71875, 127.96875, 25.203125]","[495, 280.921875, 127.96875, 43.40625]",['near'],True,True,False
