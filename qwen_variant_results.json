@@ -1,0 +1,122 @@
+{
+    "locke_qwen_NO_thought_direct_query": {
+        "original": {
+            "action_str_em": 0.825503355704698,
+            "bbox_center_mse": 90155.86153115185,
+            "hit_box_accuracy": 0.48322147651006714,
+            "num_episodes": 304,
+            "num_steps": 298
+        },
+        "precision": {
+            "action_str_em": 0.8288590604026845,
+            "bbox_center_mse": 57571.62570227277,
+            "hit_box_accuracy": 0.4664429530201342,
+            "num_episodes": 304,
+            "num_steps": 298
+        },
+        "style": {
+            "action_str_em": 0.8225255972696246,
+            "bbox_center_mse": 90835.23311930793,
+            "hit_box_accuracy": 0.42662116040955633,
+            "num_episodes": 304,
+            "num_steps": 293
+        },
+        "text_shrink": {
+            "action_str_em": 0.8299319727891157,
+            "bbox_center_mse": 86544.99259432343,
+            "hit_box_accuracy": 0.48299319727891155,
+            "num_episodes": 304,
+            "num_steps": 294
+        }
+    },
+    "locke_qwen_NO_thought_relational_query": {
+        "original": {
+            "action_str_em": 0.8249158249158249,
+            "bbox_center_mse": 116961.605766993,
+            "hit_box_accuracy": 0.13804713804713806,
+            "num_episodes": 304,
+            "num_steps": 297
+        },
+        "precision": {
+            "action_str_em": 0.8288590604026845,
+            "bbox_center_mse": 78340.57175346473,
+            "hit_box_accuracy": 0.1040268456375839,
+            "num_episodes": 304,
+            "num_steps": 298
+        },
+        "style": {
+            "action_str_em": 0.821917808219178,
+            "bbox_center_mse": 117713.60623775852,
+            "hit_box_accuracy": 0.136986301369863,
+            "num_episodes": 304,
+            "num_steps": 292
+        },
+        "text_shrink": {
+            "action_str_em": 0.8305084745762712,
+            "bbox_center_mse": 124793.8228390712,
+            "hit_box_accuracy": 0.12203389830508475,
+            "num_episodes": 304,
+            "num_steps": 295
+        }
+    },
+    "locke_qwen_thought_direct_query": {
+        "original": {
+            "action_str_em": 0.5,
+            "bbox_center_mse": 161671.68189803575,
+            "hit_box_accuracy": 0.3772970717901882,
+            "num_episodes": 304,
+            "num_steps": 94
+        },
+        "precision": {
+            "action_str_em": 0.6306306306306306,
+            "bbox_center_mse": 116442.27305570935,
+            "hit_box_accuracy": 0.39031153213684017,
+            "num_episodes": 304,
+            "num_steps": 111
+        },
+        "style": {
+            "action_str_em": 0.5769230769230769,
+            "bbox_center_mse": 172890.33021224735,
+            "hit_box_accuracy": 0.43513281380928437,
+            "num_episodes": 304,
+            "num_steps": 78
+        },
+        "text_shrink": {
+            "action_str_em": 0.54,
+            "bbox_center_mse": 165258.9703323895,
+            "hit_box_accuracy": 0.40319416576632194,
+            "num_episodes": 304,
+            "num_steps": 100
+        }
+    },
+    "locke_qwen_thought_relational_query": {
+        "original": {
+            "action_str_em": 0.7570093457943925,
+            "bbox_center_mse": 119389.61627252038,
+            "hit_box_accuracy": 0.08911589268033521,
+            "num_episodes": 304,
+            "num_steps": 107
+        },
+        "precision": {
+            "action_str_em": 0.7857142857142857,
+            "bbox_center_mse": 56693.52131708593,
+            "hit_box_accuracy": 0.06697167755991285,
+            "num_episodes": 304,
+            "num_steps": 126
+        },
+        "style": {
+            "action_str_em": 0.6933333333333334,
+            "bbox_center_mse": 124841.34662327329,
+            "hit_box_accuracy": 0.07044334975369457,
+            "num_episodes": 304,
+            "num_steps": 75
+        },
+        "text_shrink": {
+            "action_str_em": 0.7641509433962265,
+            "bbox_center_mse": 108740.7837775927,
+            "hit_box_accuracy": 0.10570632197990688,
+            "num_episodes": 304,
+            "num_steps": 106
+        }
+    }
+}

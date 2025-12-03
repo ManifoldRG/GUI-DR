@@ -11,3 +11,6 @@ trajectories/
 outputs/
 final_data/
 data_experiments/
+baseline_results/
+
+experiments/parsed_prediction_test.ipynb
