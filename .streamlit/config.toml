@@ -1,0 +1,12 @@
+[theme]
+# Use Fira Code (VS Code-style monospace font) with fallbacks
+font = "Fira Code:https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&display=swap, 'Courier New', Consolas, monospace"
+headingFont = "Fira Code:https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&display=swap, 'Courier New', Consolas, monospace"
+codeFont = "Fira Code:https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&display=swap, 'Courier New', Consolas, monospace"
+
+# Sidebar uses same fonts
+[theme.sidebar]
+font = "Fira Code:https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&display=swap, 'Courier New', Consolas, monospace"
+headingFont = "Fira Code:https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&display=swap, 'Courier New', Consolas, monospace"
+codeFont = "Fira Code:https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&display=swap, 'Courier New', Consolas, monospace"
+
