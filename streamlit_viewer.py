@@ -21,7 +21,10 @@ def init_session_state():
         'filter_hash': None,
         'show_annotations': False,
         'selected_variant': None,
-        'pending_variant_navigation': None
+        'pending_variant_navigation': None,
+        'last_task_id': None,
+        'last_step_index': None,
+        'is_variant_change': False
     }
     for key, value in defaults.items():
         if key not in st.session_state:
@@ -36,18 +39,28 @@ init_session_state()
 @st.cache_data
 def load_data():
     """Load the dataset CSV file"""
-    csv_path = Path(__file__).parent / "data" / "final_baseline_results.csv"
+    csv_path = Path(__file__).parent / "data" / "baseline_results_full_new.csv"
     return pd.read_csv(csv_path)
 
-def apply_filters(df, model, query_type, reasoning_type, variant=None):
+def apply_filters(df, model, query_type, use_reasoning, test_split=None, variant=None, hit_box_filter=None):
     """Apply filters to dataframe and sort by task_id and step_index"""
     filtered = df[
         (df['model'] == model) &
         (df['query_type'] == query_type) &
-        (df['reasoning_type'] == reasoning_type)
+        (df['use_reasoning'] == use_reasoning)
     ].copy()
+    if test_split is not None:
+        filtered = filtered[filtered['test_split'] == test_split]
     if variant is not None:
         filtered = filtered[filtered['variant'] == variant]
+    if hit_box_filter is not None and hit_box_filter != 'All':
+        # Filter by hit_box_accuracy (handle both string and bool values)
+        # Convert to string and normalize for comparison
+        hit_box_str = filtered['hit_box_accuracy'].astype(str).str.strip().str.lower()
+        if hit_box_filter == 'False':
+            filtered = filtered[hit_box_str == 'false']
+        elif hit_box_filter == 'True':
+            filtered = filtered[hit_box_str == 'true']
     return filtered.sort_values(['task_id', 'step_index']).reset_index(drop=True)
 
 
@@ -68,22 +81,36 @@ def parse_coords(coord_str):
     return None
 
 def annotate_image(img, row):
-    """Annotate image with GT bbox and corrected_coords_2d_denormalized"""
+    """Annotate image with GT bbox and coordinates"""
     img_array = np.array(img)
     width, height = img.width, img.height
-    aspect_ratio = width / height
-    max_dim = 12
-    fig_width = max_dim if width > height else max_dim * aspect_ratio
-    fig_height = max_dim / aspect_ratio if width > height else max_dim
     
-    fig, ax = plt.subplots(1, 1, figsize=(fig_width, fig_height), dpi=100)
+    # Calculate figure size to preserve original resolution
+    # Use a higher DPI to maintain pixel accuracy
+    dpi = 100
+    fig_width = width / dpi
+    fig_height = height / dpi
+    
+    # For very large images, we still need to limit display size for browser performance
+    # but we'll use higher DPI to maintain detail
+    max_fig_size = 24  # inches (larger limit to preserve more detail)
+    if fig_width > max_fig_size or fig_height > max_fig_size:
+        scale = max_fig_size / max(fig_width, fig_height)
+        fig_width *= scale
+        fig_height *= scale
+        # Increase DPI proportionally to maintain pixel-level accuracy
+        dpi = int(100 / scale)
+        # Cap DPI at reasonable maximum to avoid memory issues
+        dpi = min(dpi, 300)
+    
+    fig, ax = plt.subplots(1, 1, figsize=(fig_width, fig_height), dpi=dpi)
     ax.imshow(img_array)
     ax.axis('off')
     
     # Draw GT bbox
-    if pd.notna(row.get('gt_bbox')):
+    if pd.notna(row.get('ground_truth_bbox')):
         try:
-            gt_bbox = ast.literal_eval(row['gt_bbox'])
+            gt_bbox = ast.literal_eval(row['ground_truth_bbox'])
             if len(gt_bbox) >= 4:
                 x, y, w, h = gt_bbox[0], gt_bbox[1], gt_bbox[2], gt_bbox[3]
                 rect = patches.Rectangle((x, y), w, h, linewidth=2, edgecolor='green', 
@@ -92,11 +119,11 @@ def annotate_image(img, row):
         except:
             pass
     
-    # Draw corrected_coords_2d_denormalized
-    coords_2d_denorm = parse_coords(row.get('corrected_coords_2d_denormalized'))
-    if coords_2d_denorm:
-        ax.plot(coords_2d_denorm[0], coords_2d_denorm[1], 'bo', markersize=12, alpha=0.8)
-        ax.plot(coords_2d_denorm[0], coords_2d_denorm[1], 'b+', markersize=20, markeredgewidth=3)
+    # Draw coordinates
+    coords = parse_coords(row.get('coordinates'))
+    if coords:
+        ax.plot(coords[0], coords[1], 'bo', markersize=12, alpha=0.8)
+        ax.plot(coords[0], coords[1], 'b+', markersize=20, markeredgewidth=3)
     
     buf = BytesIO()
     plt.savefig(buf, format='png', bbox_inches='tight', pad_inches=0, dpi=100)
@@ -122,19 +149,62 @@ def handle_filter_change(filters, filtered_df, previous_task_id=None, previous_s
     current_hash = hash(filters)
     
     if st.session_state.filter_hash != current_hash:
-        # If we have previous task_id and step_index (from variant change), try to find matching row
-        if previous_task_id is not None and previous_step_index is not None and len(filtered_df) > 0:
+        # Check if this is a variant change using the explicit flag
+        is_variant_change = st.session_state.is_variant_change
+        
+        # Priority: use previous_task_id/step_index if provided (from variant change),
+        # otherwise use stored last_task_id/step_index (from previous filter state)
+        task_id_to_find = previous_task_id if previous_task_id is not None else st.session_state.last_task_id
+        step_index_to_find = previous_step_index if previous_step_index is not None else st.session_state.last_step_index
+        
+        # Try to find matching row with same task_id and step_index
+        if task_id_to_find is not None and step_index_to_find is not None and len(filtered_df) > 0:
             matching = filtered_df[
-                (filtered_df['task_id'] == previous_task_id) &
-                (filtered_df['step_index'] == previous_step_index)
+                (filtered_df['task_id'] == task_id_to_find) &
+                (filtered_df['step_index'] == step_index_to_find)
             ]
             if len(matching) > 0:
                 # Find the position in the new filtered_df (which has reset_index, so index is sequential)
                 st.session_state.current_index = matching.index[0]
             else:
-                st.session_state.current_index = 0
+                # If exact match not found
+                if is_variant_change:
+                    # For variant changes, we MUST have exact match - don't change task_id or step_index
+                    # If exact match doesn't exist for the new variant, try to find same task_id with closest step
+                    # This handles cases where the step_index might not exist for this variant
+                    same_task = filtered_df[filtered_df['task_id'] == task_id_to_find]
+                    if len(same_task) > 0:
+                        # Find step_index closest to the target within the same task
+                        same_task = same_task.copy()
+                        same_task['step_diff'] = abs(same_task['step_index'] - step_index_to_find)
+                        closest = same_task.nsmallest(1, 'step_diff')
+                        st.session_state.current_index = closest.index[0]
+                        # Update last_task_id/last_step_index to the closest match we found
+                        # This ensures subsequent Perturb clicks use a valid target
+                        closest_row = filtered_df.iloc[st.session_state.current_index]
+                        st.session_state.last_task_id = closest_row.get('task_id')
+                        st.session_state.last_step_index = closest_row.get('step_index')
+                    else:
+                        # Even the task_id doesn't exist - reset to 0 but preserve target for next attempt
+                        if st.session_state.current_index >= len(filtered_df):
+                            st.session_state.current_index = 0
+                        # Don't update last_task_id/last_step_index - keep the original target
+                else:
+                    # For other filter changes, try to find same task_id with closest step_index
+                    same_task = filtered_df[filtered_df['task_id'] == task_id_to_find]
+                    if len(same_task) > 0:
+                        # Find step_index closest to the target
+                        same_task = same_task.copy()
+                        same_task['step_diff'] = abs(same_task['step_index'] - step_index_to_find)
+                        closest = same_task.nsmallest(1, 'step_diff')
+                        st.session_state.current_index = closest.index[0]
+                    else:
+                        st.session_state.current_index = 0
         else:
             st.session_state.current_index = 0
+        
+        # Don't reset variant change flag here - let render_main_content use it
+        # It will be reset after render_main_content processes it
         st.session_state.filter_hash = current_hash
 
 # ============================================================================
@@ -146,8 +216,10 @@ def render_filters(df):
     st.subheader("Filters")
     model = st.selectbox("Model", sorted(df['model'].unique().tolist()))
     query_type = st.selectbox("Query Type", sorted(df['query_type'].unique().tolist()))
-    reasoning_type = st.selectbox("Reasoning Type", 
-                                   sorted([x for x in df['reasoning_type'].unique().tolist() if pd.notna(x)]))
+    use_reasoning = st.selectbox("Use Reasoning", sorted(df['use_reasoning'].unique().tolist()))
+    
+    # Hit box accuracy filter
+    hit_box_filter = st.selectbox("Hit Box Accuracy", ['All', 'True', 'False'])
     
     variants = sorted([x for x in df['variant'].unique().tolist() if pd.notna(x)])
     if st.session_state.selected_variant is None or st.session_state.selected_variant not in variants:
@@ -157,7 +229,7 @@ def render_filters(df):
     # Just use the session state value directly
     variant = st.session_state.selected_variant
     
-    return model, query_type, reasoning_type, variant
+    return model, query_type, use_reasoning, variant, hit_box_filter
 
 def render_statistics(df, filtered_df):
     """Render statistics metrics"""
@@ -190,13 +262,30 @@ def render_navigation_buttons(filtered_df, variants):
             if st.button("Perturb", use_container_width=True, key="perturb"):
                 new_variant = cycle_variant(variants, st.session_state.selected_variant)
                 if new_variant:
-                    # Store current row info before changing variant
-                    if st.session_state.current_index < len(filtered_df):
-                        current_row = filtered_df.iloc[st.session_state.current_index]
+                    # Use preserved target values (last_task_id/last_step_index) if available,
+                    # otherwise fall back to current row
+                    target_task_id = st.session_state.last_task_id
+                    target_step_index = st.session_state.last_step_index
+                    
+                    # If we don't have preserved values, get from current row
+                    if target_task_id is None or target_step_index is None:
+                        if st.session_state.current_index < len(filtered_df):
+                            current_row = filtered_df.iloc[st.session_state.current_index]
+                            target_task_id = current_row.get('task_id')
+                            target_step_index = current_row.get('step_index')
+                    
+                    # Store target values for variant navigation
+                    if target_task_id is not None and target_step_index is not None:
                         st.session_state.pending_variant_navigation = {
-                            'task_id': current_row.get('task_id'),
-                            'step_index': current_row.get('step_index')
+                            'task_id': target_task_id,
+                            'step_index': target_step_index
                         }
+                        # Preserve these as the target for this and future variant changes
+                        st.session_state.last_task_id = target_task_id
+                        st.session_state.last_step_index = target_step_index
+                    
+                    # Mark this as a variant change
+                    st.session_state.is_variant_change = True
                     st.session_state.selected_variant = new_variant
                     st.rerun()
         with cols[2]:
@@ -227,20 +316,32 @@ def render_sidebar(df):
             nav_info = st.session_state.pending_variant_navigation
             previous_task_id = nav_info.get('task_id')
             previous_step_index = nav_info.get('step_index')
+            # Preserve these as last_task_id/last_step_index for variant navigation
+            # This ensures subsequent Perturb clicks use the correct target
+            st.session_state.last_task_id = previous_task_id
+            st.session_state.last_step_index = previous_step_index
             # Clear it after use
             st.session_state.pending_variant_navigation = None
         
         # Filters
-        model, query_type, reasoning_type, variant = render_filters(df)
+        model, query_type, use_reasoning, variant, hit_box_filter = render_filters(df)
         
         # Get variants list for perturb button
         variants = sorted([x for x in df['variant'].unique().tolist() if pd.notna(x)])
         
-        # Apply filters
-        filtered_df = apply_filters(df, model, query_type, reasoning_type, variant)
+        # For variant changes, temporarily bypass hit_box_accuracy filter to allow cross-variant comparison
+        # This lets you see all variants for the same task/step, even if they have different hit_box_accuracy values
+        effective_hit_box_filter = hit_box_filter
+        if st.session_state.is_variant_change and previous_task_id is not None and previous_step_index is not None:
+            # Temporarily remove hit_box_accuracy filter for variant navigation
+            effective_hit_box_filter = None
+            st.info("ℹ️ **Variant navigation mode**: Showing all variants for this task/step (hit_box_accuracy filter temporarily disabled)")
+        
+        # Apply filters (test_split=None to include all test splits)
+        filtered_df = apply_filters(df, model, query_type, use_reasoning, test_split=None, variant=variant, hit_box_filter=effective_hit_box_filter)
         
         # Handle filter changes
-        filters = (model, query_type, reasoning_type, variant)
+        filters = (model, query_type, use_reasoning, variant, effective_hit_box_filter)
         handle_filter_change(filters, filtered_df, previous_task_id, previous_step_index)
         
         st.divider()
@@ -287,7 +388,8 @@ def render_header(filtered_df, current_row):
     with col2:
         st.metric("Model", current_row['model'])
     with col3:
-        st.metric("Reasoning Type", current_row.get('reasoning_type', 'N/A'))
+        use_reasoning = current_row.get('use_reasoning', 'N/A')
+        st.metric("Use Reasoning", "Yes" if use_reasoning == True else "No" if use_reasoning == False else str(use_reasoning))
     with col4:
         st.metric("Variant", current_row.get('variant', 'N/A'))
 
@@ -300,16 +402,34 @@ def render_screenshot(row):
                                   key="show_annotations_checkbox")
     st.session_state.show_annotations = show_annotations
     
-    screenshot_path = Path(row['screenshot']).expanduser()
-    if not screenshot_path.exists():
-        st.error(f"Image not found: {screenshot_path}")
+    image_path = row.get('image_path', '')
+    if not image_path:
+        st.error("Image path not found in data")
+        return
+    
+    # Strip /mnt/ prefix if present and convert to relative path
+    if image_path.startswith('/mnt/'):
+        image_path = image_path[5:]  # Remove '/mnt/' prefix
+    
+    # Handle both absolute and relative paths
+    image_path_obj = Path(image_path)
+    if not image_path_obj.is_absolute():
+        # Try relative to project root first
+        image_path_obj = Path(__file__).parent / image_path
+        # If not found, try relative to current directory
+        if not image_path_obj.exists():
+            image_path_obj = Path(image_path)
+    
+    if not image_path_obj.exists():
+        st.error(f"Image not found: {image_path_obj}")
         return
     
     try:
-        img = Image.open(screenshot_path)
+        img = Image.open(image_path_obj)
         if show_annotations:
             img = annotate_image(img, row)
-        st.image(img, use_container_width=True, caption=screenshot_path.name)
+        # Display image at original resolution
+        st.image(img, use_container_width=False, caption=image_path_obj.name)
     except Exception as e:
         st.error(f"Error loading image: {e}")
 
@@ -319,42 +439,43 @@ def render_sample_details(row):
     st.info(row['instruction'])
     
     st.subheader("Prediction & Accuracy")
-    st.markdown("**Prediction:**")
-    st.text(row.get('prediction', 'N/A'))
+    st.markdown("**Raw Prediction:**")
+    st.text(row.get('raw_prediction', 'N/A'))
     
-    col_a, col_b = st.columns(2)
-    with col_a:
-        hit_box = row.get('hit_box_accuracy', 'N/A')
-        display_value = f"{hit_box:.2f}" if isinstance(hit_box, (int, float)) and not pd.isna(hit_box) else str(hit_box)
-        st.metric("Hit Box Accuracy", display_value)
-    with col_b:
-        st.metric("Corrected Hit Box", str(row.get('corrected_hit_box_accuracy', 'N/A')))
+    hit_box = row.get('hit_box_accuracy', 'N/A')
+    if isinstance(hit_box, bool):
+        display_value = "True" if hit_box else "False"
+    elif isinstance(hit_box, (int, float)) and not pd.isna(hit_box):
+        display_value = f"{hit_box:.2f}"
+    else:
+        display_value = str(hit_box)
+    st.metric("Hit Box Accuracy", display_value)
     
-    st.subheader("Corrected Metrics")
-    col1, col2, col3 = st.columns(3)
+    # Debug: Log metric column access
+    metric_cols = {
+        'Bbox Center MSE': 'bbox_center_mse',
+        'Normalized MSE': 'normalized_mse',
+        'GIoU': 'giou',
+        'NGIoU': 'ngiou'
+    }
     
-    with col1:
-        action_str_match = row.get('corrected_action_str_em', 'N/A')
-        if isinstance(action_str_match, bool):
-            action_str_match = "True" if action_str_match else "False"
-        elif isinstance(action_str_match, (int, float)) and not pd.isna(action_str_match):
-            action_str_match = "True" if action_str_match == 1.0 else "False"
-        st.metric("Action Str Match", action_str_match)
-    
-    with col2:
-        mse = row.get('corrected_bbox_center_mse', 'N/A')
-        mse_display = f"{mse:.2f}" if isinstance(mse, (int, float)) and not pd.isna(mse) else str(mse)
-        st.metric("MSE", mse_display)
-    
-    with col3:
-        normalized_mse = row.get('corrected_normalized_mse', 'N/A')
-        nmse_display = f"{normalized_mse:.4f}" if isinstance(normalized_mse, (int, float)) and not pd.isna(normalized_mse) else str(normalized_mse)
-        st.metric("Normalized MSE", nmse_display)
+    for metric_name, col_name in metric_cols.items():
+        value = row.get(col_name)
+        exists = col_name in row.index
+        # Only show metric if it exists and has a valid value
+        if exists and value is not None and not pd.isna(value):
+            if isinstance(value, (int, float)):
+                display_val = f"{value:.4f}" if abs(value) < 1 else f"{value:.2f}"
+            else:
+                display_val = str(value)
+            st.metric(metric_name, display_val)
+        else:
+            # Show as N/A - debug info available in Debug section below
+            st.metric(metric_name, "N/A")
     
     st.subheader("Coordinates")
-    st.markdown(f"**Coords 2D**: {row.get('corrected_coords_2d', 'N/A')}")
-    st.markdown(f"**Coords 2D Denorm**: {row.get('corrected_coords_2d_denormalized', 'N/A')}")
-    st.markdown(f"**GT Bbox**: {row.get('gt_bbox', 'N/A')}")
+    st.markdown(f"**Coordinates**: {row.get('coordinates')}")
+    st.markdown(f"**Ground Truth Bbox**: {row.get('ground_truth_bbox')}")
     
     with st.expander("View All Data Fields"):
         st.json(row.to_dict())
@@ -371,6 +492,40 @@ def render_main_content(filtered_df):
     # Get the current row - using iloc ensures we get by position, not by index label
     # Since apply_filters resets index with drop=True, iloc position matches the sequential index
     current_row = filtered_df.iloc[st.session_state.current_index].copy()
+    
+    # Store current task_id and step_index for filter change preservation
+    # BUT: If we just did a variant change, only update if the current row matches the target
+    current_task_id = current_row.get('task_id')
+    current_step_index = current_row.get('step_index')
+    
+    # Only update last_task_id/last_step_index if:
+    # 1. Not a variant change, OR
+    # 2. It's a variant change AND the current row matches what we were looking for
+    if not st.session_state.is_variant_change:
+        # Normal case: update with current row
+        st.session_state.last_task_id = current_task_id
+        st.session_state.last_step_index = current_step_index
+    else:
+        # Variant change case: check if current row matches the target
+        # The target is stored in last_task_id/last_step_index (set in render_sidebar)
+        target_task_id = st.session_state.last_task_id
+        target_step_index = st.session_state.last_step_index
+        
+        if target_task_id is not None and target_step_index is not None:
+            if current_task_id == target_task_id and current_step_index == target_step_index:
+                # Current row matches target - this is correct, values already set in render_sidebar
+                pass
+            else:
+                # Current row doesn't match target - preserve the target values
+                # Don't update last_task_id/last_step_index, keep the original target
+                pass
+        else:
+            # No target set, use current row
+            st.session_state.last_task_id = current_task_id
+            st.session_state.last_step_index = current_step_index
+    
+    # Reset variant change flag after processing in render_main_content
+    st.session_state.is_variant_change = False
     
     # Verify we're using the same row for all components
     # Store row identifier for debugging
@@ -389,10 +544,35 @@ def render_main_content(filtered_df):
     with st.expander("🔍 Debug: Row Verification", expanded=False):
         st.write(f"**Current Index**: {st.session_state.current_index}")
         st.write(f"**Row Identifier**: {row_id}")
-        st.write(f"**Screenshot Path**: {current_row.get('screenshot', 'N/A')}")
+        st.write(f"**Image Path**: {current_row.get('image_path', 'N/A')}")
         st.write(f"**Instruction**: {current_row.get('instruction', 'N/A')[:100]}...")
-        st.write(f"**GT Bbox**: {current_row.get('gt_bbox', 'N/A')}")
-        st.write(f"**Corrected Coords 2D Denorm**: {current_row.get('corrected_coords_2d_denormalized', 'N/A')}")
+        st.write(f"**Ground Truth Bbox**: {current_row.get('ground_truth_bbox', 'N/A')}")
+        st.write(f"**Coordinates**: {current_row.get('coordinates', 'N/A')}")
+        
+        st.divider()
+        st.subheader("All Columns in Row")
+        st.write(f"**Total Columns**: {len(current_row)}")
+        st.write("**Column Names:**")
+        st.code(', '.join(current_row.index.tolist()))
+        
+        st.divider()
+        st.subheader("Column Values")
+        for col in current_row.index:
+            value = current_row[col]
+            # Truncate long values for display
+            if isinstance(value, str) and len(value) > 100:
+                display_value = value[:100] + "..."
+            else:
+                display_value = value
+            st.write(f"**{col}**: `{display_value}` (type: {type(value).__name__})")
+        
+        st.divider()
+        st.subheader("Missing Metric Columns Check")
+        metric_cols = ['bbox_center_mse', 'normalized_mse', 'giou', 'ngiou']
+        for col in metric_cols:
+            exists = col in current_row.index
+            value = current_row.get(col, 'NOT FOUND')
+            st.write(f"**{col}**: {'✅ EXISTS' if exists else '❌ NOT FOUND'} - Value: `{value}`")
 
 # ============================================================================
 # Main Execution
