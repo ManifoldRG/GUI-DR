@@ -542,8 +542,9 @@ def render_statistics(df, filtered_df, model=None):
                 gridcolor = '#3a3b4a'
                 tickfont_color = '#fafafa'
             else:
-                plot_bgcolor = 'white'
-                paper_bgcolor = 'white'
+                # Match Streamlit sidebar background color in light mode
+                plot_bgcolor = '#f0f2f6'
+                paper_bgcolor = '#f0f2f6'
                 gridcolor = '#e0e0e0'
                 tickfont_color = '#1f1f1f'
             
@@ -560,7 +561,7 @@ def render_statistics(df, filtered_df, model=None):
                     title='',
                     range=[0, 1],
                     tickformat='.0%',
-                    tickfont=dict(color=tickfont_color),
+                    tickfont=dict(size=9, color=tickfont_color),
                     gridcolor=gridcolor,
                     linecolor=gridcolor
                 ),
@@ -676,15 +677,15 @@ def render_navigation_buttons(filtered_df, variants):
 def render_sidebar(df):
     """Render sidebar with filters, stats, and navigation"""
     with st.sidebar:
-        st.header("Evaluation Config")
-        
-        # Dark/Light mode toggle
+        # Dark/Light mode toggle at the very top
         dark_mode = st.toggle("🌙 Dark Mode", value=st.session_state.dark_mode, key="dark_mode_toggle")
         if dark_mode != st.session_state.dark_mode:
             st.session_state.dark_mode = dark_mode
             st.rerun()
         
         st.divider()
+        
+        st.header("Evaluation Config")
         
         # Get previous row info if available (for variant changes)
         previous_task_id = None
@@ -725,10 +726,8 @@ def render_sidebar(df):
         render_statistics(df, filtered_df, model=model)
         st.divider()
         
-        # Navigation
-        if len(filtered_df) > 0:
-            render_navigation_buttons(filtered_df, variants)
-        else:
+        # Navigation buttons moved to below the image
+        if len(filtered_df) == 0:
             st.warning("No samples match the filters!")
     
     return filtered_df
@@ -738,14 +737,18 @@ def render_header(filtered_df, current_row):
     col1, col2, col3 = st.columns([1, 1, 1])
     
     with col1:
-        st.metric("Model", current_row['model'])
+        st.markdown("**Model**")
+        st.markdown(f"<span style='font-size: 1.5em;'>{current_row['model']}</span>", unsafe_allow_html=True)
     with col2:
         use_reasoning = current_row.get('use_reasoning', 'N/A')
-        st.metric("Use Reasoning", "Yes" if use_reasoning == True else "No" if use_reasoning == False else str(use_reasoning))
+        reasoning_text = "Yes" if use_reasoning == True else "No" if use_reasoning == False else str(use_reasoning)
+        st.markdown("**Use Reasoning**")
+        st.markdown(f"<span style='font-size: 1.5em;'>{reasoning_text}</span>", unsafe_allow_html=True)
     with col3:
-        st.metric("Variant", current_row.get('variant', 'N/A'))
+        st.markdown("**Variant**")
+        st.markdown(f"<span style='font-size: 1.5em;'>{current_row.get('variant', 'N/A')}</span>", unsafe_allow_html=True)
 
-def render_screenshot(row, filtered_df):
+def render_screenshot(row, filtered_df, variants=None):
     """Render screenshot with optional annotations"""
     # Episode and Step information
     episode_id = row.get('task_id', 'N/A')
@@ -786,18 +789,39 @@ def render_screenshot(row, filtered_df):
         st.error("Image path not found in data")
         return
     
-    # Strip /mnt/ prefix if present and convert to relative path
+    # Strip /mnt/ prefix if present
     if image_path.startswith('/mnt/'):
         image_path = image_path[5:]  # Remove '/mnt/' prefix
     
-    # Handle both absolute and relative paths
+    # Get step_index from row to construct robust file path
+    step_index = row.get('step_index', None)
+    if step_index is None:
+        st.error("Step index not found in data")
+        return
+    
+    # Extract directory from image_path and find matching file
     image_path_obj = Path(image_path)
-    if not image_path_obj.is_absolute():
+    if image_path_obj.is_absolute():
+        image_dir = image_path_obj.parent
+    else:
         # Try relative to project root first
-        image_path_obj = Path(__file__).parent / image_path
-        # If not found, try relative to current directory
-        if not image_path_obj.exists():
-            image_path_obj = Path(image_path)
+        image_dir = Path(__file__).parent / image_path_obj.parent
+        if not image_dir.exists():
+            # Try relative to current directory
+            image_dir = Path(image_path_obj.parent)
+    
+    # Search for file matching step_<step_index>_*.png pattern
+    pattern = f"step_{step_index}_*.png"
+    matching_files = list(image_dir.glob(pattern))
+    
+    if len(matching_files) == 0:
+        st.error(f"No image file found matching pattern '{pattern}' in {image_dir}")
+        return
+    elif len(matching_files) > 1:
+        st.warning(f"Multiple files found matching pattern '{pattern}' in {image_dir}. Using first match: {matching_files[0].name}")
+        image_path_obj = matching_files[0]
+    else:
+        image_path_obj = matching_files[0]
     
     if not image_path_obj.exists():
         st.error(f"Image not found: {image_path_obj}")
@@ -807,8 +831,17 @@ def render_screenshot(row, filtered_df):
         img = Image.open(image_path_obj)
         if show_annotations:
             img = annotate_image(img, row)
-        # Display image at original resolution
-        st.image(img, use_container_width=False, caption=image_path_obj.name)
+        # Display image slightly bigger while maintaining original resolution
+        # Scale up by 1.2x for better visibility
+        original_width, original_height = img.size
+        scaled_width = int(original_width * 1.2)
+        scaled_height = int(original_height * 1.2)
+        img_scaled = img.resize((scaled_width, scaled_height), Image.Resampling.LANCZOS)
+        st.image(img_scaled, use_container_width=False)
+        
+        # Navigation buttons below the image
+        if variants is not None:
+            render_navigation_buttons(filtered_df, variants)
     except Exception as e:
         st.error(f"Error loading image: {e}")
 
@@ -817,15 +850,15 @@ def render_sample_details(row, filtered_df):
     st.subheader("Instruction")
     st.info(row['instruction'])
     
-    st.subheader("Prediction & Step Metrics")
+    st.subheader("Raw Prediction")
+    st.markdown(f"<span style='font-size: 0.9em;'>{row.get('raw_prediction', 'N/A')}</span>", unsafe_allow_html=True)
+
+    st.subheader("Step Metrics")
     
     # Raw Prediction and Hit Box Accuracy in the same row
     pred_col1, pred_col2 = st.columns(2)
-    with pred_col1:
-        st.markdown("**Raw Prediction**")
-        st.markdown(f"<span style='font-size: 0.9em;'>{row.get('raw_prediction', 'N/A')}</span>", unsafe_allow_html=True)
     
-    with pred_col2:
+    with pred_col1:
         hit_box = row.get('hit_box_accuracy', 'N/A')
         if isinstance(hit_box, bool):
             display_value = "True" if hit_box else "False"
@@ -876,7 +909,7 @@ def render_sample_details(row, filtered_df):
     with st.expander("View All Data Fields"):
         st.json(row.to_dict())
 
-def render_main_content(filtered_df):
+def render_main_content(filtered_df, df=None):
     """Render main content area"""
     if len(filtered_df) == 0:
         st.warning("No samples available. Please adjust your filters.")
@@ -930,45 +963,18 @@ def render_main_content(filtered_df):
     render_header(filtered_df, current_row)
     st.divider()
     
-    col1, col2 = st.columns([3, 1])
+    # Get variants list for navigation buttons
+    if df is not None:
+        variants = sorted([x for x in df['variant'].unique().tolist() if pd.notna(x)])
+    else:
+        variants = sorted([x for x in filtered_df['variant'].unique().tolist() if pd.notna(x)])
+    
+    # Use gap parameter to add spacing between columns
+    col1, col2 = st.columns([4, 0.8], gap="large")
     with col1:
-        render_screenshot(current_row, filtered_df)
+        render_screenshot(current_row, filtered_df, variants=variants)
     with col2:
         render_sample_details(current_row, filtered_df)
-    
-    # Debug: Show row identifier to verify consistency
-    with st.expander("🔍 Debug: Row Verification", expanded=False):
-        st.write(f"**Current Index**: {st.session_state.current_index}")
-        st.write(f"**Row Identifier**: {row_id}")
-        st.write(f"**Image Path**: {current_row.get('image_path', 'N/A')}")
-        st.write(f"**Instruction**: {current_row.get('instruction', 'N/A')[:100]}...")
-        st.write(f"**Ground Truth Bbox**: {current_row.get('ground_truth_bbox', 'N/A')}")
-        st.write(f"**Coordinates**: {current_row.get('coordinates', 'N/A')}")
-        
-        st.divider()
-        st.subheader("All Columns in Row")
-        st.write(f"**Total Columns**: {len(current_row)}")
-        st.write("**Column Names:**")
-        st.code(', '.join(current_row.index.tolist()))
-        
-        st.divider()
-        st.subheader("Column Values")
-        for col in current_row.index:
-            value = current_row[col]
-            # Truncate long values for display
-            if isinstance(value, str) and len(value) > 100:
-                display_value = value[:100] + "..."
-            else:
-                display_value = value
-            st.write(f"**{col}**: `{display_value}` (type: {type(value).__name__})")
-        
-        st.divider()
-        st.subheader("Missing Metric Columns Check")
-        metric_cols = ['bbox_center_mse', 'normalized_mse', 'giou', 'ngiou']
-        for col in metric_cols:
-            exists = col in current_row.index
-            value = current_row.get(col, 'NOT FOUND')
-            st.write(f"**{col}**: {'✅ EXISTS' if exists else '❌ NOT FOUND'} - Value: `{value}`")
 
 # ============================================================================
 # Main Execution
@@ -976,4 +982,4 @@ def render_main_content(filtered_df):
 
 df = load_data()
 filtered_df = render_sidebar(df)
-render_main_content(filtered_df)
+render_main_content(filtered_df, df=df)
