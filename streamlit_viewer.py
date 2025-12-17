@@ -26,13 +26,155 @@ def init_session_state():
         'pending_variant_navigation': None,
         'last_task_id': None,
         'last_step_index': None,
-        'is_variant_change': False
+        'is_variant_change': False,
+        'dark_mode': False
     }
     for key, value in defaults.items():
         if key not in st.session_state:
             st.session_state[key] = value
 
 init_session_state()
+
+def apply_theme():
+    """Apply dark or light theme based on session state"""
+    if st.session_state.dark_mode:
+        dark_theme_css = """
+        <style>
+        .stApp {
+            background-color: #0e1117 !important;
+            color: #fafafa !important;
+        }
+        .main .block-container {
+            background-color: #0e1117 !important;
+            color: #fafafa !important;
+            padding-top: 2rem;
+        }
+        h1, h2, h3, h4, h5, h6, p {
+            color: #fafafa !important;
+        }
+        .stMarkdown, .stMarkdown p {
+            color: #fafafa !important;
+        }
+        .stMetric {
+            background-color: #262730 !important;
+            border: 1px solid #3a3b4a;
+        }
+        .stMetric label {
+            color: #fafafa !important;
+        }
+        .stMetric [data-testid="stMetricValue"] {
+            color: #fafafa !important;
+        }
+        .stSelectbox label, .stNumberInput label, .stCheckbox label {
+            color: #fafafa !important;
+        }
+        .stSelectbox>div>div {
+            background-color: #262730 !important;
+            color: #fafafa !important;
+        }
+        .stNumberInput {
+            background-color: #262730 !important;
+        }
+        .stNumberInput>div {
+            background-color: #262730 !important;
+        }
+        .stNumberInput>div>div {
+            background-color: #262730 !important;
+        }
+        .stNumberInput>div>div>input {
+            background-color: #262730 !important;
+            color: #fafafa !important;
+        }
+        .stNumberInput>div>div>button {
+            background-color: #262730 !important;
+            color: #fafafa !important;
+            border: 1px solid #3a3b4a;
+        }
+        .stNumberInput input[type="number"] {
+            background-color: #262730 !important;
+            color: #fafafa !important;
+        }
+        /* Number input container and label */
+        .stNumberInput label {
+            color: #fafafa !important;
+        }
+        div[data-baseweb="input"] {
+            background-color: #262730 !important;
+        }
+        div[data-baseweb="input"] input {
+            background-color: #262730 !important;
+            color: #fafafa !important;
+        }
+        .stButton>button {
+            background-color: #262730 !important;
+            color: #fafafa !important;
+            border: 1px solid #3a3b4a;
+        }
+        .stButton>button:hover {
+            background-color: #3a3b4a !important;
+        }
+        /* Top header bar */
+        header[data-testid="stHeader"] {
+            background-color: #0e1117 !important;
+        }
+        header[data-testid="stHeader"] > div {
+            background-color: #0e1117 !important;
+        }
+        /* Deploy button and header buttons */
+        .stDeployButton {
+            background-color: #262730 !important;
+        }
+        .stDeployButton > button {
+            background-color: #262730 !important;
+            color: #fafafa !important;
+            border: 1px solid #3a3b4a;
+        }
+        /* Menu button */
+        [data-testid="stHeader"] button {
+            background-color: #262730 !important;
+            color: #fafafa !important;
+        }
+        [data-testid="stSidebar"] {
+            background-color: #0e1117 !important;
+        }
+        [data-testid="stSidebar"] .stMarkdown, [data-testid="stSidebar"] p {
+            color: #fafafa !important;
+        }
+        .stExpander {
+            background-color: #262730 !important;
+            border: 1px solid #3a3b4a;
+        }
+        .stExpander label {
+            color: #fafafa !important;
+        }
+        .stInfo {
+            background-color: #1e3a5f !important;
+            color: #fafafa !important;
+        }
+        .stWarning {
+            background-color: #5a4a00 !important;
+            color: #fafafa !important;
+        }
+        .stError {
+            background-color: #5a1a1a !important;
+            color: #fafafa !important;
+        }
+        .stSuccess {
+            background-color: #1a5a1a !important;
+            color: #fafafa !important;
+        }
+        code {
+            background-color: #262730 !important;
+            color: #fafafa !important;
+        }
+        </style>
+        """
+        st.markdown(dark_theme_css, unsafe_allow_html=True)
+    else:
+        # Light mode is default, no CSS needed
+        pass
+
+apply_theme()
 
 # ============================================================================
 # Data Loading & Processing
@@ -393,23 +535,42 @@ def render_statistics(df, filtered_df, model=None):
                     showlegend=False  # Hide from legend
                 ))
             
+            # Set plot background colors based on dark mode
+            if st.session_state.dark_mode:
+                plot_bgcolor = '#0e1117'
+                paper_bgcolor = '#0e1117'
+                gridcolor = '#3a3b4a'
+                tickfont_color = '#fafafa'
+            else:
+                plot_bgcolor = 'white'
+                paper_bgcolor = 'white'
+                gridcolor = '#e0e0e0'
+                tickfont_color = '#1f1f1f'
+            
             fig.update_layout(
                 xaxis=dict(
                     title='',
                     tickangle=0,  # Horizontal labels
-                    tickfont=dict(size=8),
-                    tickmode='linear'
+                    tickfont=dict(size=8, color=tickfont_color),
+                    tickmode='linear',
+                    gridcolor=gridcolor,
+                    linecolor=gridcolor
                 ),
                 yaxis=dict(
                     title='',
                     range=[0, 1],
-                    tickformat='.0%'
+                    tickformat='.0%',
+                    tickfont=dict(color=tickfont_color),
+                    gridcolor=gridcolor,
+                    linecolor=gridcolor
                 ),
                 barmode='group',  # Grouped bars
                 height=280,  # Increased height for better bar visibility
                 hovermode='closest',  # Show only the bar being hovered
                 showlegend=False,  # Hide overall legend
-                margin=dict(t=10, b=80, l=0, r=10)  # Minimal left margin, reduced right margin
+                margin=dict(t=10, b=80, l=0, r=10),  # Minimal left margin, reduced right margin
+                plot_bgcolor=plot_bgcolor,
+                paper_bgcolor=paper_bgcolor
             )
             
             st.plotly_chart(fig, use_container_width=True)
@@ -516,6 +677,14 @@ def render_sidebar(df):
     """Render sidebar with filters, stats, and navigation"""
     with st.sidebar:
         st.header("Evaluation Config")
+        
+        # Dark/Light mode toggle
+        dark_mode = st.toggle("🌙 Dark Mode", value=st.session_state.dark_mode, key="dark_mode_toggle")
+        if dark_mode != st.session_state.dark_mode:
+            st.session_state.dark_mode = dark_mode
+            st.rerun()
+        
+        st.divider()
         
         # Get previous row info if available (for variant changes)
         previous_task_id = None
