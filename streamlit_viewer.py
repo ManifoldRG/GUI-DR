@@ -27,7 +27,8 @@ def init_session_state():
         'last_task_id': None,
         'last_step_index': None,
         'is_variant_change': False,
-        'dark_mode': False
+        'dark_mode': False,
+        'debug_mode': False  # Enable debug logging
     }
     for key, value in defaults.items():
         if key not in st.session_state:
@@ -35,182 +36,293 @@ def init_session_state():
 
 init_session_state()
 
+# ============================================================================
+# Debug Utilities
+# ============================================================================
+
+def debug_log(message, condition=True):
+    """Log debug messages if debug mode is enabled"""
+    if st.session_state.get('debug_mode', False) and condition:
+        st.sidebar.text(f"🔍 {message}")
+
+# ============================================================================
+# Theme Management
+# ============================================================================
+
+# CSS Theme Constants
+DARK_THEME_CSS = """
+<style>
+.stApp {
+    background-color: #0e1117 !important;
+    color: #fafafa !important;
+}
+.main .block-container {
+    background-color: #0e1117 !important;
+    color: #fafafa !important;
+    padding-top: 2rem;
+}
+h1, h2, h3, h4, h5, h6, p {
+    color: #fafafa !important;
+}
+.stMarkdown, .stMarkdown p {
+    color: #fafafa !important;
+}
+.stMetric {
+    background-color: #262730 !important;
+    border: 1px solid #3a3b4a;
+}
+.stMetric label {
+    color: #fafafa !important;
+}
+.stMetric [data-testid="stMetricValue"] {
+    color: #fafafa !important;
+}
+.stSelectbox label, .stNumberInput label, .stCheckbox label {
+    color: #fafafa !important;
+}
+.stSelectbox>div>div {
+    background-color: #262730 !important;
+    color: #fafafa !important;
+}
+.stNumberInput {
+    background-color: #262730 !important;
+}
+.stNumberInput>div {
+    background-color: #262730 !important;
+}
+.stNumberInput>div>div {
+    background-color: #262730 !important;
+}
+.stNumberInput>div>div>input {
+    background-color: #262730 !important;
+    color: #fafafa !important;
+}
+.stNumberInput>div>div>button {
+    background-color: #262730 !important;
+    color: #fafafa !important;
+    border: 1px solid #3a3b4a;
+}
+.stNumberInput input[type="number"] {
+    background-color: #262730 !important;
+    color: #fafafa !important;
+}
+.stNumberInput label {
+    color: #fafafa !important;
+}
+div[data-baseweb="input"] {
+    background-color: #262730 !important;
+}
+div[data-baseweb="input"] input {
+    background-color: #262730 !important;
+    color: #fafafa !important;
+}
+.stButton>button {
+    background-color: #262730 !important;
+    color: #fafafa !important;
+    border: 1px solid #3a3b4a;
+    font-weight: bold !important;
+    font-size: 1em !important;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+}
+.stButton>button:hover {
+    background-color: #3a3b4a !important;
+}
+.navigation-buttons-container .stButton>button {
+    background-color: #0e1117 !important;
+    color: #fafafa !important;
+    border: 1px solid #3a3b4a;
+    font-weight: bold !important;
+    font-size: 1em !important;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+}
+.navigation-buttons-container .stButton>button:hover {
+    background-color: #3a3b4a !important;
+}
+header[data-testid="stHeader"] {
+    background-color: #0e1117 !important;
+}
+header[data-testid="stHeader"] > div {
+    background-color: #0e1117 !important;
+}
+.stDeployButton {
+    background-color: #262730 !important;
+    color: #fafafa !important;
+    border: 1px solid #3a3b4a;
+}
+.stDeployButton>button {
+    background-color: #262730 !important;
+    color: #fafafa !important;
+    border: 1px solid #3a3b4a;
+}
+[data-testid="stHeader"] button {
+    background-color: #262730 !important;
+    color: #fafafa !important;
+}
+[data-testid="stSidebar"] {
+    background-color: #0e1117 !important;
+}
+[data-testid="stSidebar"] .stMarkdown, [data-testid="stSidebar"] p {
+    color: #fafafa !important;
+}
+.stExpander {
+    background-color: #262730 !important;
+    border: 1px solid #3a3b4a;
+}
+.stExpander label {
+    color: #fafafa !important;
+}
+.stInfo {
+    background-color: #1e3a5f !important;
+    color: #fafafa !important;
+    border: 1px solid #3a5f7f !important;
+    border-radius: 4px !important;
+}
+.stInfo > div {
+    background-color: #1e3a5f !important;
+    color: #fafafa !important;
+}
+.stInfo p, .stInfo div {
+    color: #fafafa !important;
+}
+.stWarning {
+    background-color: #5a4a00 !important;
+    color: #fafafa !important;
+}
+.stError {
+    background-color: #5a1a1a !important;
+    color: #fafafa !important;
+}
+.stSuccess {
+    background-color: #1a5a1a !important;
+    color: #fafafa !important;
+}
+code {
+    background-color: #262730 !important;
+    color: #fafafa !important;
+}
+</style>
+"""
+
+LIGHT_THEME_CSS = """
+<style>
+.navigation-buttons-container .stButton>button {
+    background-color: #f0f2f6 !important;
+    color: #1f1f1f !important;
+    border: 1px solid #e0e0e0;
+    font-weight: bold !important;
+    font-size: 1em !important;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+}
+.navigation-buttons-container .stButton>button:hover {
+    background-color: #e0e0e0 !important;
+}
+.stButton>button,
+.stButton>button>div,
+.stButton>button span {
+    font-weight: 700 !important;
+    font-size: 1em !important;
+}
+</style>
+"""
+
 def apply_theme():
     """Apply dark or light theme based on session state"""
     if st.session_state.dark_mode:
-        dark_theme_css = """
-        <style>
-        .stApp {
-            background-color: #0e1117 !important;
-            color: #fafafa !important;
-        }
-        .main .block-container {
-            background-color: #0e1117 !important;
-            color: #fafafa !important;
-            padding-top: 2rem;
-        }
-        h1, h2, h3, h4, h5, h6, p {
-            color: #fafafa !important;
-        }
-        .stMarkdown, .stMarkdown p {
-            color: #fafafa !important;
-        }
-        .stMetric {
-            background-color: #262730 !important;
-            border: 1px solid #3a3b4a;
-        }
-        .stMetric label {
-            color: #fafafa !important;
-        }
-        .stMetric [data-testid="stMetricValue"] {
-            color: #fafafa !important;
-        }
-        .stSelectbox label, .stNumberInput label, .stCheckbox label {
-            color: #fafafa !important;
-        }
-        .stSelectbox>div>div {
-            background-color: #262730 !important;
-            color: #fafafa !important;
-        }
-        .stNumberInput {
-            background-color: #262730 !important;
-        }
-        .stNumberInput>div {
-            background-color: #262730 !important;
-        }
-        .stNumberInput>div>div {
-            background-color: #262730 !important;
-        }
-        .stNumberInput>div>div>input {
-            background-color: #262730 !important;
-            color: #fafafa !important;
-        }
-        .stNumberInput>div>div>button {
-            background-color: #262730 !important;
-            color: #fafafa !important;
-            border: 1px solid #3a3b4a;
-        }
-        .stNumberInput input[type="number"] {
-            background-color: #262730 !important;
-            color: #fafafa !important;
-        }
-        /* Number input container and label */
-        .stNumberInput label {
-            color: #fafafa !important;
-        }
-        div[data-baseweb="input"] {
-            background-color: #262730 !important;
-        }
-        div[data-baseweb="input"] input {
-            background-color: #262730 !important;
-            color: #fafafa !important;
-        }
-        .stButton>button {
-            background-color: #262730 !important;
-            color: #fafafa !important;
-            border: 1px solid #3a3b4a;
-        }
-        .stButton>button:hover {
-            background-color: #3a3b4a !important;
-        }
-        /* Top header bar */
-        header[data-testid="stHeader"] {
-            background-color: #0e1117 !important;
-        }
-        header[data-testid="stHeader"] > div {
-            background-color: #0e1117 !important;
-        }
-        /* Deploy button and header buttons */
-        .stDeployButton {
-            background-color: #262730 !important;
-        }
-        .stDeployButton > button {
-            background-color: #262730 !important;
-            color: #fafafa !important;
-            border: 1px solid #3a3b4a;
-        }
-        /* Menu button */
-        [data-testid="stHeader"] button {
-            background-color: #262730 !important;
-            color: #fafafa !important;
-        }
-        [data-testid="stSidebar"] {
-            background-color: #0e1117 !important;
-        }
-        [data-testid="stSidebar"] .stMarkdown, [data-testid="stSidebar"] p {
-            color: #fafafa !important;
-        }
-        .stExpander {
-            background-color: #262730 !important;
-            border: 1px solid #3a3b4a;
-        }
-        .stExpander label {
-            color: #fafafa !important;
-        }
-        .stInfo {
-            background-color: #1e3a5f !important;
-            color: #fafafa !important;
-        }
-        .stWarning {
-            background-color: #5a4a00 !important;
-            color: #fafafa !important;
-        }
-        .stError {
-            background-color: #5a1a1a !important;
-            color: #fafafa !important;
-        }
-        .stSuccess {
-            background-color: #1a5a1a !important;
-            color: #fafafa !important;
-        }
-        code {
-            background-color: #262730 !important;
-            color: #fafafa !important;
-        }
-        </style>
-        """
-        st.markdown(dark_theme_css, unsafe_allow_html=True)
+        st.markdown(DARK_THEME_CSS, unsafe_allow_html=True)
     else:
-        # Light mode is default, no CSS needed
-        pass
-
-apply_theme()
+        st.markdown(LIGHT_THEME_CSS, unsafe_allow_html=True)
 
 # ============================================================================
-# Data Loading & Processing
+# Data Loading & Filtering
 # ============================================================================
 
-@st.cache_data
+def get_sorted_variants(df):
+    """Get sorted list of variants from dataframe, excluding NaN values"""
+    return sorted([x for x in df['variant'].unique().tolist() if pd.notna(x)])
+
 def load_data():
-    """Load the dataset CSV file"""
+    """Load CSV data"""
     csv_path = Path(__file__).parent / "data" / "baseline_results_full_new.csv"
-    return pd.read_csv(csv_path)
+    if not csv_path.exists():
+        st.error(f"CSV file not found: {csv_path}")
+        return pd.DataFrame()
+    df = pd.read_csv(csv_path)
+    # Filter out invalid interesting_cases rows (case-insensitive)
+    if 'interesting_cases' in df.columns:
+        df = df[df['interesting_cases'].astype(str).str.strip().str.lower() != 'invalid']
+    debug_log(f"Loaded {len(df)} rows from CSV")
+    return df
 
-def apply_filters(df, model, query_type, use_reasoning, test_split=None, variant=None, hit_box_filter=None):
-    """Apply filters to dataframe and sort by task_id and step_index"""
-    filtered = df[
-        (df['model'] == model) &
-        (df['query_type'] == query_type) &
-        (df['use_reasoning'] == use_reasoning)
-    ].copy()
-    if test_split is not None:
+def apply_filters(df, model=None, query_type=None, use_reasoning=None, 
+                  test_split=None, variant=None, hit_box_filter=None, interesting_cases_filter=None):
+    """Apply filters to dataframe"""
+    filtered = df.copy()
+    
+    if model:
+        filtered = filtered[filtered['model'] == model]
+    if query_type:
+        filtered = filtered[filtered['query_type'] == query_type]
+    if use_reasoning is not None:
+        filtered = filtered[filtered['use_reasoning'] == use_reasoning]
+    if test_split:
         filtered = filtered[filtered['test_split'] == test_split]
-    if variant is not None:
+    if variant:
         filtered = filtered[filtered['variant'] == variant]
+    
     if hit_box_filter is not None and hit_box_filter != 'All':
-        # Filter by hit_box_accuracy (handle both string and bool values)
-        # Convert to string and normalize for comparison
         hit_box_str = filtered['hit_box_accuracy'].astype(str).str.strip().str.lower()
         if hit_box_filter == 'False':
             filtered = filtered[hit_box_str == 'false']
         elif hit_box_filter == 'True':
             filtered = filtered[hit_box_str == 'true']
-    return filtered.sort_values(['task_id', 'step_index']).reset_index(drop=True)
-
+    
+    if interesting_cases_filter is not None and interesting_cases_filter != 'All':
+        if 'interesting_cases' in filtered.columns:
+            # Filter by exact match (case-insensitive comparison)
+            filtered = filtered[filtered['interesting_cases'].astype(str).str.strip().str.lower() == 
+                               str(interesting_cases_filter).strip().lower()]
+    
+    result = filtered.sort_values(['task_id', 'step_index']).reset_index(drop=True)
+    debug_log(f"Filtered to {len(result)} rows")
+    return result
 
 # ============================================================================
 # Image Annotation
 # ============================================================================
+
+def resolve_image_path(row):
+    """
+    Resolve image file path from row data.
+    Returns Path object if found, None otherwise.
+    """
+    image_path = row.get('image_path', '')
+    if not image_path:
+        return None
+    
+    if image_path.startswith('/mnt/'):
+        image_path = image_path[5:]
+    
+    image_path_obj = Path(image_path)
+    if not image_path_obj.is_absolute():
+        image_dir = Path(__file__).parent / image_path_obj.parent
+        if not image_dir.exists():
+            image_dir = Path(image_path_obj.parent)
+    else:
+        image_dir = image_path_obj.parent
+    
+    step_idx_str = str(row.get('step_index'))
+    matching_files = list(image_dir.glob(f"step_{step_idx_str}_*.png"))
+    
+    if len(matching_files) == 0:
+        return None
+    elif len(matching_files) > 1:
+        st.warning(f"Multiple image files found for step {step_idx_str} in {image_dir}. Using the first one: {matching_files[0].name}")
+    
+    image_path_to_load = matching_files[0]
+    if not image_path_to_load.exists():
+        return None
+    
+    return image_path_to_load
 
 def parse_coords(coord_str):
     """Parse coordinate string like '[553, 86]' to tuple"""
@@ -226,68 +338,56 @@ def parse_coords(coord_str):
 
 def annotate_image(img, row):
     """Annotate image with GT bbox and coordinates - preserves exact pixel resolution"""
-    # Create a copy to draw on, preserving exact pixel dimensions
     annotated_img = img.copy()
     draw = ImageDraw.Draw(annotated_img)
     
-    # Draw GT bbox with two lines of different colors
+    # Draw GT bbox with two dashed lines of different colors
     if pd.notna(row.get('ground_truth_bbox')):
         try:
             gt_bbox = ast.literal_eval(row['ground_truth_bbox'])
             if len(gt_bbox) >= 4:
                 x, y, w, h = gt_bbox[0], gt_bbox[1], gt_bbox[2], gt_bbox[3]
-                # Draw two rectangles with different colors for better visibility (dashed lines)
+                
                 outer_color = (255, 0, 0)  # Red (outer)
                 inner_color = (255, 255, 0)  # Yellow (inner)
                 outer_width = 5
                 inner_width = 3
-                offset = 2  # Offset between outer and inner rectangles
+                offset = 2
                 dash_length = 8
                 gap_length = 8
                 
-                # Draw outer rectangle (red) with dashed lines
-                # Top edge
-                for i in range(0, int(w), dash_length + gap_length):
-                    draw.line([(x + i, y), (x + min(i + dash_length, w), y)], 
-                             fill=outer_color, width=outer_width)
-                # Right edge
-                for i in range(0, int(h), dash_length + gap_length):
-                    draw.line([(x + w, y + i), (x + w, y + min(i + dash_length, h))], 
-                             fill=outer_color, width=outer_width)
-                # Bottom edge
-                for i in range(0, int(w), dash_length + gap_length):
-                    draw.line([(x + w - min(i + dash_length, w), y + h), 
-                              (x + w - i, y + h)], 
-                             fill=outer_color, width=outer_width)
-                # Left edge
-                for i in range(0, int(h), dash_length + gap_length):
-                    draw.line([(x, y + h - min(i + dash_length, h)), 
-                              (x, y + h - i)], 
-                             fill=outer_color, width=outer_width)
-                
-                # Draw inner rectangle (yellow) with dashed lines and offset
-                inner_x, inner_y = x + offset, y + offset
-                inner_w, inner_h = w - 2 * offset, h - 2 * offset
-                # Top edge
-                for i in range(0, int(inner_w), dash_length + gap_length):
-                    draw.line([(inner_x + i, inner_y), (inner_x + min(i + dash_length, inner_w), inner_y)], 
-                             fill=inner_color, width=inner_width)
-                # Right edge
-                for i in range(0, int(inner_h), dash_length + gap_length):
-                    draw.line([(inner_x + inner_w, inner_y + i), (inner_x + inner_w, inner_y + min(i + dash_length, inner_h))], 
-                             fill=inner_color, width=inner_width)
-                # Bottom edge
-                for i in range(0, int(inner_w), dash_length + gap_length):
-                    draw.line([(inner_x + inner_w - min(i + dash_length, inner_w), inner_y + inner_h), 
-                              (inner_x + inner_w - i, inner_y + inner_h)], 
-                             fill=inner_color, width=inner_width)
-                # Left edge
-                for i in range(0, int(inner_h), dash_length + gap_length):
-                    draw.line([(inner_x, inner_y + inner_h - min(i + dash_length, inner_h)), 
-                              (inner_x, inner_y + inner_h - i)], 
-                             fill=inner_color, width=inner_width)
-        except:
-            pass
+                # Helper to draw dashed line
+                def draw_dashed_line(p1, p2, color, width):
+                    dx = p2[0] - p1[0]
+                    dy = p2[1] - p1[1]
+                    dist = (dx**2 + dy**2)**0.5
+                    if dist == 0: return
+                    
+                    num_dashes = int(dist / (dash_length + gap_length))
+                    
+                    for i in range(num_dashes + 1):
+                        start_factor = i * (dash_length + gap_length) / dist
+                        end_factor = min(1.0, (i * (dash_length + gap_length) + dash_length) / dist)
+                        
+                        start_point = (p1[0] + dx * start_factor, p1[1] + dy * start_factor)
+                        end_point = (p1[0] + dx * end_factor, p1[1] + dy * end_factor)
+                        draw.line([start_point, end_point], fill=color, width=width)
+
+                # Draw outer dashed rectangle
+                draw_dashed_line((x, y), (x + w, y), outer_color, outer_width)
+                draw_dashed_line((x + w, y), (x + w, y + h), outer_color, outer_width)
+                draw_dashed_line((x + w, y + h), (x, y + h), outer_color, outer_width)
+                draw_dashed_line((x, y + h), (x, y), outer_color, outer_width)
+
+                # Draw inner dashed rectangle
+                x_inner, y_inner, w_inner, h_inner = x + offset, y + offset, w - 2*offset, h - 2*offset
+                if w_inner > 0 and h_inner > 0:
+                    draw_dashed_line((x_inner, y_inner), (x_inner + w_inner, y_inner), inner_color, inner_width)
+                    draw_dashed_line((x_inner + w_inner, y_inner), (x_inner + w_inner, y_inner + h_inner), inner_color, inner_width)
+                    draw_dashed_line((x_inner + w_inner, y_inner + h_inner), (x_inner, y_inner + h_inner), inner_color, inner_width)
+                    draw_dashed_line((x_inner, y_inner + h_inner), (x_inner, y_inner), inner_color, inner_width)
+        except Exception as e:
+            debug_log(f"Error drawing bounding box: {e}")
     
     # Draw coordinates as mouse cursor icon
     coords = parse_coords(row.get('coordinates'))
@@ -304,92 +404,157 @@ def annotate_image(img, row):
             (cx + 21, cy + 54), # Bottom left of tail (7 * 3, 18 * 3)
             (cx + 27, cy + 51), # Bottom right of tail (9 * 3, 17 * 3)
             (cx + 18, cy + 33), # Inner notch right (6 * 3, 11 * 3)
-            (cx + 30, cy + 30), # Right edge (10 * 3)
+            (cx + 33, cy + 33), # Right edge (10 * 3)
         ]
-        
-        # Draw filled white cursor with black outline
         draw.polygon(cursor_points, fill=(255, 255, 255), outline=(0, 0, 0), width=2)
         
     return annotated_img
 
 # ============================================================================
-# Navigation Logic
+# Navigation Logic - Refactored
 # ============================================================================
 
 def cycle_variant(variants, current_variant):
-    """Cycle to next variant in list, wrapping to first if at last"""
+    """Cycle to next variant in list"""
     if not variants or current_variant not in variants:
         return variants[0] if variants else None
     current_idx = variants.index(current_variant)
     next_idx = (current_idx + 1) % len(variants)
     return variants[next_idx]
 
+def find_row_by_task_and_step(filtered_df, task_id, step_index):
+    """
+    Find row index in filtered_df matching task_id and step_index.
+    Returns (index, row) if found, (None, None) otherwise.
+    """
+    if task_id is None or step_index is None or len(filtered_df) == 0:
+        return None, None
+    
+    task_id_str = str(task_id)
+    step_index_val = int(step_index) if pd.notna(step_index) else step_index
+    
+    matching = filtered_df[
+        (filtered_df['task_id'].astype(str) == task_id_str) &
+        (filtered_df['step_index'] == step_index_val)
+    ]
+    
+    if len(matching) > 0:
+        idx = matching.index[0]
+        return idx, filtered_df.iloc[idx]
+    return None, None
+
+def update_current_row_state(filtered_df, index):
+    """Update all current row state variables from filtered_df at index"""
+    if len(filtered_df) == 0:
+        return
+    
+    index = max(0, min(index, len(filtered_df) - 1))
+    st.session_state.current_index = index
+    
+    if index < len(filtered_df):
+        current_row = filtered_df.iloc[index]
+        st.session_state.last_task_id = current_row.get('task_id')
+        st.session_state.last_step_index = current_row.get('step_index')
+        if 'variant' in current_row:
+            st.session_state.selected_variant = current_row.get('variant')
+        
+        debug_log(f"State updated: task_id={st.session_state.last_task_id}, step_index={st.session_state.last_step_index}, variant={st.session_state.selected_variant}")
+
+def handle_variant_navigation(filtered_df, target_task_id, target_step_index):
+    """
+    Handle variant navigation: find exact match for target task_id/step_index.
+    Returns (index, found_exact_match).
+    If exact match not found, returns (None, False) - DO NOT update target.
+    """
+    debug_log(f"Variant nav: looking for task_id={target_task_id}, step_index={target_step_index}")
+    
+    idx, row = find_row_by_task_and_step(filtered_df, target_task_id, target_step_index)
+    
+    if idx is not None:
+        debug_log(f"Variant nav: Found exact match at index {idx}")
+        return idx, True
+    else:
+        debug_log(f"Variant nav: No exact match found - keeping original target")
+        return None, False
+
 def handle_filter_change(filters, filtered_df, previous_task_id=None, previous_step_index=None):
-    """Handle filter changes and update current_index accordingly"""
+    """
+    Handle filter changes and update current_index accordingly.
+    For variant changes, preserves target task_id/step_index.
+    """
     current_hash = hash(filters)
     
     if st.session_state.filter_hash != current_hash:
-        # Check if this is a variant change using the explicit flag
         is_variant_change = st.session_state.is_variant_change
         
-        # Priority: use previous_task_id/step_index if provided (from variant change),
-        # otherwise use stored last_task_id/step_index (from previous filter state)
+        # Determine target task_id/step_index
         task_id_to_find = previous_task_id if previous_task_id is not None else st.session_state.last_task_id
         step_index_to_find = previous_step_index if previous_step_index is not None else st.session_state.last_step_index
         
-        # Try to find matching row with same task_id and step_index
+        debug_log(f"Filter change: is_variant={is_variant_change}, target=({task_id_to_find}, {step_index_to_find})")
+        
         if task_id_to_find is not None and step_index_to_find is not None and len(filtered_df) > 0:
-            matching = filtered_df[
-                (filtered_df['task_id'] == task_id_to_find) &
-                (filtered_df['step_index'] == step_index_to_find)
-            ]
-            if len(matching) > 0:
-                # Find the position in the new filtered_df (which has reset_index, so index is sequential)
-                st.session_state.current_index = matching.index[0]
-            else:
-                # If exact match not found
-                if is_variant_change:
-                    # For variant changes, we MUST have exact match - don't change task_id or step_index
-                    # If exact match doesn't exist for the new variant, try to find same task_id with closest step
-                    # This handles cases where the step_index might not exist for this variant
-                    same_task = filtered_df[filtered_df['task_id'] == task_id_to_find]
-                    if len(same_task) > 0:
-                        # Find step_index closest to the target within the same task
-                        same_task = same_task.copy()
-                        same_task['step_diff'] = abs(same_task['step_index'] - step_index_to_find)
-                        closest = same_task.nsmallest(1, 'step_diff')
-                        st.session_state.current_index = closest.index[0]
-                        # Update last_task_id/last_step_index to the closest match we found
-                        # This ensures subsequent Perturb clicks use a valid target
-                        closest_row = filtered_df.iloc[st.session_state.current_index]
-                        st.session_state.last_task_id = closest_row.get('task_id')
-                        st.session_state.last_step_index = closest_row.get('step_index')
-                    else:
-                        # Even the task_id doesn't exist - reset to 0 but preserve target for next attempt
-                        if st.session_state.current_index >= len(filtered_df):
-                            st.session_state.current_index = 0
-                        # Don't update last_task_id/last_step_index - keep the original target
+            if is_variant_change:
+                # For variant changes: MUST find exact match, NEVER update target
+                # The target (task_id/step_index) must remain constant across all variant changes
+                idx, found = handle_variant_navigation(filtered_df, task_id_to_find, step_index_to_find)
+                if found:
+                    st.session_state.current_index = idx
+                    # DO NOT update last_task_id/last_step_index - preserve the original target!
+                    # The matched row should have the same task_id/step_index as target anyway,
+                    # but we don't want to risk any drift by updating from the matched row
+                    debug_log(f"Variant change: Set index to {idx}, preserving target=({task_id_to_find}, {step_index_to_find})")
                 else:
-                    # For other filter changes, try to find same task_id with closest step_index
-                    same_task = filtered_df[filtered_df['task_id'] == task_id_to_find]
+                    # No exact match - keep current index if valid, but DO NOT update target
+                    # This preserves the original target for next variant attempt
+                    if st.session_state.current_index >= len(filtered_df):
+                        st.session_state.current_index = 0
+                    debug_log(f"Variant change: No exact match, keeping index {st.session_state.current_index}, preserving target=({task_id_to_find}, {step_index_to_find})")
+            else:
+                # For other filter changes: try to find exact match, fallback to closest
+                idx, row = find_row_by_task_and_step(filtered_df, task_id_to_find, step_index_to_find)
+                if idx is not None:
+                    st.session_state.current_index = idx
+                    update_current_row_state(filtered_df, idx)
+                else:
+                    # Find closest step_index within same task_id
+                    same_task = filtered_df[filtered_df['task_id'].astype(str) == str(task_id_to_find)]
                     if len(same_task) > 0:
-                        # Find step_index closest to the target
                         same_task = same_task.copy()
                         same_task['step_diff'] = abs(same_task['step_index'] - step_index_to_find)
                         closest = same_task.nsmallest(1, 'step_diff')
                         st.session_state.current_index = closest.index[0]
+                        update_current_row_state(filtered_df, st.session_state.current_index)
                     else:
                         st.session_state.current_index = 0
         else:
             st.session_state.current_index = 0
         
-        # Don't reset variant change flag here - let render_main_content use it
-        # It will be reset after render_main_content processes it
         st.session_state.filter_hash = current_hash
 
 # ============================================================================
 # UI Components
 # ============================================================================
+
+def format_metric_value(row, col_name):
+    """Format a metric value from a row for display"""
+    value = row.get(col_name)
+    exists = col_name in row.index
+    if exists and value is not None and not pd.isna(value):
+        if isinstance(value, (int, float)):
+            return f"{value:.4f}" if abs(value) < 1 else f"{value:.2f}"
+        else:
+            return str(value)
+    return "N/A"
+
+def format_hit_box_accuracy(hit_box):
+    """Format hit_box_accuracy value for display"""
+    if isinstance(hit_box, bool):
+        return "True" if hit_box else "False"
+    elif isinstance(hit_box, (int, float)) and not pd.isna(hit_box):
+        return f"{hit_box:.2f}"
+    else:
+        return str(hit_box)
 
 def render_filters(df):
     """Render filter selectboxes and return selected values"""
@@ -397,27 +562,208 @@ def render_filters(df):
     query_type = st.selectbox("Query Type", sorted(df['query_type'].unique().tolist()))
     use_reasoning = st.selectbox("Use Reasoning", sorted(df['use_reasoning'].unique().tolist()))
     
-    # Hit box accuracy filter
-    hit_box_filter = st.selectbox("Hit Box Accuracy", ['All', 'True', 'False'])
+    hit_box_filter = st.selectbox("Success", ['All', 'True', 'False'])
     
-    variants = sorted([x for x in df['variant'].unique().tolist() if pd.notna(x)])
+    interesting_cases_filter = 'All'
+    if 'interesting_cases' in df.columns:
+        unique_cases = sorted([str(x) for x in df['interesting_cases'].unique().tolist() if pd.notna(x)])
+        filter_options = ['All'] + unique_cases
+        interesting_cases_filter = st.selectbox("Interesting Cases", filter_options)
+    
+    variants = get_sorted_variants(df)
     if st.session_state.selected_variant is None or st.session_state.selected_variant not in variants:
         st.session_state.selected_variant = variants[0] if variants else None
     
-    # Variant is controlled by perturb button only - no dropdown shown
-    # Just use the session state value directly
     variant = st.session_state.selected_variant
     
-    return model, query_type, use_reasoning, variant, hit_box_filter
+    return model, query_type, use_reasoning, variant, hit_box_filter, interesting_cases_filter
 
-def render_statistics(df, filtered_df, model=None):
+def convert_hit_box_to_numeric(df):
+    """Convert hit_box_accuracy column to numeric (0/1)"""
+    df_copy = df.copy()
+    if 'hit_box_accuracy' in df_copy.columns:
+        df_copy['hit_box_accuracy_numeric'] = df_copy['hit_box_accuracy'].apply(
+            lambda x: 1 if (isinstance(x, bool) and x) or (isinstance(x, str) and x.lower() == 'true') else 0
+        )
+    return df_copy
+
+def get_plot_colors():
+    """Get plot colors based on theme"""
+    if st.session_state.dark_mode:
+        return {
+            'plot_bgcolor': '#0e1117',
+            'paper_bgcolor': '#0e1117',
+            'gridcolor': '#3a3b4a',
+            'tickfont_color': '#fafafa'
+        }
+    else:
+        return {
+            'plot_bgcolor': '#f0f2f6',
+            'paper_bgcolor': '#f0f2f6',
+            'gridcolor': '#e0e0e0',
+            'tickfont_color': '#1f1f1f'
+        }
+
+def render_success_rate_chart(df, model):
+    """Render success rate distribution chart"""
+    if 'hit_box_accuracy' not in df.columns:
+        return
+    
+    model_df = df[df['model'] == model].copy()
+    viz_df = convert_hit_box_to_numeric(model_df)
+    viz_df['is_success'] = viz_df['hit_box_accuracy_numeric'].astype(bool)
+    
+    if not all(col in viz_df.columns for col in ['query_type', 'use_reasoning', 'variant']):
+        return
+    
+    success_stats = viz_df.groupby(['query_type', 'use_reasoning', 'variant']).agg({
+        'is_success': ['sum', 'count']
+    }).reset_index()
+    success_stats.columns = ['query_type', 'use_reasoning', 'variant', 'successes', 'total']
+    success_stats['success_rate'] = success_stats['successes'] / success_stats['total']
+    
+    fig = go.Figure()
+    
+    variants = sorted(success_stats['variant'].unique())
+    query_types = sorted(success_stats['query_type'].unique())
+    reasoning_types = sorted(success_stats['use_reasoning'].unique())
+    
+    x_labels = []
+    for query_type_val in query_types:
+        for use_reasoning_val in reasoning_types:
+            reasoning_abbr = "R" if use_reasoning_val else "NR"
+            query_abbr = query_type_val[:8] if len(query_type_val) > 8 else query_type_val
+            short_label = f"{query_abbr}\n{reasoning_abbr}"
+            x_labels.append(short_label)
+    
+    colors = px.colors.qualitative.Set3
+    colors_dict = get_plot_colors()
+    
+    for variant_idx, variant_val in enumerate(variants):
+        y_values = []
+        custom_data_list = []
+        for query_type_val in query_types:
+            for use_reasoning_val in reasoning_types:
+                variant_data = success_stats[
+                    (success_stats['query_type'] == query_type_val) &
+                    (success_stats['use_reasoning'] == use_reasoning_val) &
+                    (success_stats['variant'] == variant_val)
+                ]
+                if len(variant_data) > 0:
+                    y_values.append(variant_data['success_rate'].iloc[0])
+                    custom_data_list.append([
+                        variant_data['successes'].iloc[0],
+                        variant_data['total'].iloc[0],
+                        query_type_val,
+                        use_reasoning_val
+                    ])
+                else:
+                    y_values.append(None)
+                    custom_data_list.append([None, None, query_type_val, use_reasoning_val])
+        
+        fig.add_trace(go.Bar(
+            name=variant_val,
+            x=x_labels,
+            y=y_values,
+            marker=dict(
+                color=colors[variant_idx % len(colors)],
+                opacity=0.8
+            ),
+            hovertemplate='<b>Variant:</b> ' + variant_val + '<br>' +
+                        '<b>Query Type:</b> %{customdata[2]}<br>' +
+                        '<b>Use Reasoning:</b> %{customdata[3]}<br>' +
+                        '<b>Success Rate:</b> %{y:.2%}<br>' +
+                        '<b>Successes:</b> %{customdata[0]}/%{customdata[1]}<extra></extra>',
+            customdata=custom_data_list,
+            showlegend=False
+        ))
+    
+    fig.update_layout(
+        xaxis=dict(
+            title='',
+            tickangle=0,
+            tickfont=dict(size=12, color=colors_dict['tickfont_color']),
+            tickmode='linear',
+            gridcolor=colors_dict['gridcolor'],
+            linecolor=colors_dict['gridcolor']
+        ),
+        yaxis=dict(
+            title='',
+            range=[0, 1],
+            tickformat='.0%',
+            tickfont=dict(size=12, color=colors_dict['tickfont_color']),
+            gridcolor=colors_dict['gridcolor'],
+            linecolor=colors_dict['gridcolor']
+        ),
+        barmode='group',
+        height=280,
+        hovermode='closest',
+        showlegend=False,
+        margin=dict(t=10, b=80, l=0, r=10),
+        plot_bgcolor=colors_dict['plot_bgcolor'],
+        paper_bgcolor=colors_dict['paper_bgcolor']
+    )
+    
+    st.plotly_chart(fig, use_container_width=True)
+
+def render_overall_statistics(filtered_df_agg, metrics, model, query_type_flag, use_reasoning_flag, variant_flag):
+    """Render overall statistics metrics"""
+    st.subheader(f"**Statistics**")
+    display_model = model if model is not None else 'N/A'
+    display_query_type = query_type_flag if query_type_flag is not None else 'N/A'
+    display_use_reasoning = use_reasoning_flag if use_reasoning_flag is not None else 'N/A'
+    display_variant = variant_flag if variant_flag is not None else 'N/A'
+    
+    if isinstance(display_use_reasoning, bool):
+        reasoning_text = "with reasoning" if display_use_reasoning else "no reasoning"
+    elif isinstance(display_use_reasoning, str):
+        reasoning_text = "with reasoning" if display_use_reasoning.lower() == 'true' else "no reasoning"
+    else:
+        reasoning_text = "no reasoning"
+    
+    st.markdown(f"{display_model} | {display_query_type} | {reasoning_text} | {display_variant}")
+    
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        if 'hit_box_accuracy' in metrics:
+            hit_box_mean = filtered_df_agg['hit_box_accuracy_numeric'].mean() if 'hit_box_accuracy_numeric' in filtered_df_agg.columns else 0
+            st.markdown(f"**Accuracy**")
+            st.info(f"{hit_box_mean:.4f}")
+            hit_box_count = filtered_df_agg['hit_box_accuracy_numeric'].sum() if 'hit_box_accuracy_numeric' in filtered_df_agg.columns else 0
+            st.caption(f"({int(hit_box_count)}/{len(filtered_df_agg)})")
+    
+    with col2:
+        if 'normalized_mse' in metrics:
+            mse_mean = filtered_df_agg['normalized_mse'].mean() if pd.notna(filtered_df_agg['normalized_mse']).any() else None
+            if mse_mean is not None:
+                st.markdown(f"**NMSE**")
+                st.info(f"{mse_mean:.4f}")
+                mse_std = filtered_df_agg['normalized_mse'].std()
+                st.caption(f"(σ: {mse_std:.4f})")
+            else:
+                st.markdown(f"**NMSE**")
+                st.info("N/A")
+    
+    with col3:
+        if 'ngiou' in metrics:
+            ngiou_mean = filtered_df_agg['ngiou'].mean() if pd.notna(filtered_df_agg['ngiou']).any() else None
+            if ngiou_mean is not None:
+                st.markdown(f"**NGIoU**")
+                st.info(f"{ngiou_mean:.4f}")
+                ngiou_std = filtered_df_agg['ngiou'].std()
+                st.caption(f"(σ: {ngiou_std:.4f})")
+            else:
+                st.markdown(f"**NGIoU**")
+                st.info("N/A")
+
+def render_statistics(df, filtered_df, model=None, query_type_flag=None, use_reasoning_flag=None, variant_flag=None):
     """Render aggregated statistics by variant and overall"""
     
     if len(filtered_df) == 0:
         st.warning("No data available for statistics.")
         return
     
-    # Check which metrics are available
     metrics = {}
     if 'hit_box_accuracy' in filtered_df.columns:
         metrics['hit_box_accuracy'] = 'Accuracy'
@@ -430,335 +776,166 @@ def render_statistics(df, filtered_df, model=None):
         st.info("No metrics available for display.")
         return
     
-    # Convert hit_box_accuracy to numeric for aggregation (True/False -> 1/0)
-    filtered_df_agg = filtered_df.copy()
-    if 'hit_box_accuracy' in filtered_df_agg.columns:
-        # Convert boolean/string to numeric
-        filtered_df_agg['hit_box_accuracy_numeric'] = filtered_df_agg['hit_box_accuracy'].apply(
-            lambda x: 1 if (isinstance(x, bool) and x) or (isinstance(x, str) and x.lower() == 'true') else 0
-        )
+    filtered_df_agg = convert_hit_box_to_numeric(filtered_df)
     
-    # Failure distribution visualization - Show this first
+    # Success rate distribution visualization
     if 'hit_box_accuracy' in filtered_df_agg.columns and model is not None:
-        st.markdown(f"**{model} - Failure Distribution**")
-        
-        # Get all data for the selected model, regardless of other filters
-        # This shows all configurations for the model
-        model_df = df[df['model'] == model].copy()
-        
-        # Prepare data for visualization
-        viz_df = model_df.copy()
-        if 'hit_box_accuracy' in viz_df.columns:
-            # Convert hit_box_accuracy to numeric for this visualization
-            viz_df['hit_box_accuracy_numeric'] = viz_df['hit_box_accuracy'].apply(
-                lambda x: 1 if (isinstance(x, bool) and x) or (isinstance(x, str) and x.lower() == 'true') else 0
-            )
-        viz_df['is_failure'] = ~(viz_df['hit_box_accuracy_numeric'].astype(bool))
-        
-        # Create a comprehensive view of all combinations
-        if all(col in viz_df.columns for col in ['query_type', 'use_reasoning', 'variant']):
-            # Group by all three dimensions
-            failure_stats = viz_df.groupby(['query_type', 'use_reasoning', 'variant']).agg({
-                'is_failure': ['sum', 'count']
-            }).reset_index()
-            failure_stats.columns = ['query_type', 'use_reasoning', 'variant', 'failures', 'total']
-            failure_stats['failure_rate'] = failure_stats['failures'] / failure_stats['total']
-            failure_stats['success_rate'] = 1 - failure_stats['failure_rate']
-            
-            # Create a multi-bar chart grouped by variant
-            # x-axis: query_type/use_reasoning combinations
-            # bars: variants
-            fig = go.Figure()
-            
-            # Get unique values for grouping
-            variants = sorted(failure_stats['variant'].unique())
-            query_types = sorted(failure_stats['query_type'].unique())
-            reasoning_types = sorted(failure_stats['use_reasoning'].unique())
-            
-            # Create x-axis labels (query_type/use_reasoning combinations)
-            # Use shorter, more readable labels
-            x_labels = []
-            label_mapping = {}  # Store mapping for hover tooltips
-            for query_type in query_types:
-                for use_reasoning in reasoning_types:
-                    # Create short label: abbreviate query_type and use R/NR for reasoning
-                    reasoning_abbr = "R" if use_reasoning else "NR"
-                    # Shorten query_type if needed (take first few chars or use abbreviation)
-                    query_abbr = query_type[:8] if len(query_type) > 8 else query_type
-                    short_label = f"{query_abbr}\n{reasoning_abbr}"
-                    x_labels.append(short_label)
-                    # Store full info for reference
-                    label_mapping[short_label] = (query_type, use_reasoning)
-            
-            # Color palette for variants
-            colors = px.colors.qualitative.Set3
-            
-            # Create bars for each variant
-            for variant_idx, variant in enumerate(variants):
-                # Create y values for each query_type/use_reasoning combination
-                y_values = []
-                custom_data_list = []
-                for query_type in query_types:
-                    for use_reasoning in reasoning_types:
-                        # Filter data for this combination and variant
-                        variant_data = failure_stats[
-                            (failure_stats['query_type'] == query_type) &
-                            (failure_stats['use_reasoning'] == use_reasoning) &
-                            (failure_stats['variant'] == variant)
-                        ]
-                        if len(variant_data) > 0:
-                            y_values.append(variant_data['failure_rate'].iloc[0])
-                            custom_data_list.append([
-                                variant_data['failures'].iloc[0],
-                                variant_data['total'].iloc[0],
-                                query_type,
-                                use_reasoning
-                            ])
-                        else:
-                            y_values.append(None)
-                            custom_data_list.append([None, None, query_type, use_reasoning])
-                
-                fig.add_trace(go.Bar(
-                    name=variant,
-                    x=x_labels,
-                    y=y_values,
-                    marker=dict(
-                        color=colors[variant_idx % len(colors)],
-                        opacity=0.8
-                    ),
-                    hovertemplate='<b>Variant:</b> ' + variant + '<br>' +
-                                '<b>Query Type:</b> %{customdata[2]}<br>' +
-                                '<b>Use Reasoning:</b> %{customdata[3]}<br>' +
-                                '<b>Failure Rate:</b> %{y:.2%}<br>' +
-                                '<b>Failures:</b> %{customdata[0]}/%{customdata[1]}<extra></extra>',
-                    customdata=custom_data_list,
-                    showlegend=False  # Hide from legend
-                ))
-            
-            # Set plot background colors based on dark mode
-            if st.session_state.dark_mode:
-                plot_bgcolor = '#0e1117'
-                paper_bgcolor = '#0e1117'
-                gridcolor = '#3a3b4a'
-                tickfont_color = '#fafafa'
-            else:
-                # Match Streamlit sidebar background color in light mode
-                plot_bgcolor = '#f0f2f6'
-                paper_bgcolor = '#f0f2f6'
-                gridcolor = '#e0e0e0'
-                tickfont_color = '#1f1f1f'
-            
-            fig.update_layout(
-                xaxis=dict(
-                    title='',
-                    tickangle=0,  # Horizontal labels
-                    tickfont=dict(size=8, color=tickfont_color),
-                    tickmode='linear',
-                    gridcolor=gridcolor,
-                    linecolor=gridcolor
-                ),
-                yaxis=dict(
-                    title='',
-                    range=[0, 1],
-                    tickformat='.0%',
-                    tickfont=dict(size=9, color=tickfont_color),
-                    gridcolor=gridcolor,
-                    linecolor=gridcolor
-                ),
-                barmode='group',  # Grouped bars
-                height=280,  # Increased height for better bar visibility
-                hovermode='closest',  # Show only the bar being hovered
-                showlegend=False,  # Hide overall legend
-                margin=dict(t=10, b=80, l=0, r=10),  # Minimal left margin, reduced right margin
-                plot_bgcolor=plot_bgcolor,
-                paper_bgcolor=paper_bgcolor
-            )
-            
-            st.plotly_chart(fig, use_container_width=True)
+        st.markdown(f"**{model} - Success Rate Distribution**")
+        render_success_rate_chart(df, model)
     
-    # Overall Statistics - Show this after Failure Distribution
-    st.markdown("**Overall Statistics**")
-    
-    col1, col2, col3 = st.columns(3)
-    
-    with col1:
-        if 'hit_box_accuracy' in metrics:
-            hit_box_mean = filtered_df_agg['hit_box_accuracy_numeric'].mean() if 'hit_box_accuracy_numeric' in filtered_df_agg.columns else 0
-            st.markdown(f"**Accuracy**")
-            st.markdown(f"<span style='font-size: 1.1em;'>{hit_box_mean:.4f}</span>", unsafe_allow_html=True)
-            hit_box_count = filtered_df_agg['hit_box_accuracy_numeric'].sum() if 'hit_box_accuracy_numeric' in filtered_df_agg.columns else 0
-            st.caption(f"{int(hit_box_count)}/{len(filtered_df_agg)}")
-    
-    with col2:
-        if 'normalized_mse' in metrics:
-            mse_mean = filtered_df_agg['normalized_mse'].mean() if pd.notna(filtered_df_agg['normalized_mse']).any() else None
-            if mse_mean is not None:
-                st.markdown(f"**NMSE**")
-                st.markdown(f"<span style='font-size: 1.1em;'>{mse_mean:.4f}</span>", unsafe_allow_html=True)
-                mse_std = filtered_df_agg['normalized_mse'].std()
-                st.caption(f"σ: {mse_std:.4f}")
-            else:
-                st.markdown(f"**NMSE**")
-                st.markdown(f"<span style='font-size: 1.1em;'>N/A</span>", unsafe_allow_html=True)
-    
-    with col3:
-        if 'ngiou' in metrics:
-            ngiou_mean = filtered_df_agg['ngiou'].mean() if pd.notna(filtered_df_agg['ngiou']).any() else None
-            if ngiou_mean is not None:
-                st.markdown(f"**NGIoU**")
-                st.markdown(f"<span style='font-size: 1.1em;'>{ngiou_mean:.4f}</span>", unsafe_allow_html=True)
-                ngiou_std = filtered_df_agg['ngiou'].std()
-                st.caption(f"σ: {ngiou_std:.4f}")
-            else:
-                st.markdown(f"**NGIoU**")
-                st.markdown(f"<span style='font-size: 1.1em;'>N/A</span>", unsafe_allow_html=True)
+    render_overall_statistics(filtered_df_agg, metrics, model, query_type_flag, use_reasoning_flag, variant_flag)
 
-
-def render_navigation_buttons(filtered_df, variants):
+def render_navigation_buttons(filtered_df, variants, current_row=None):
     """Render navigation buttons"""
     if len(filtered_df) == 0:
         return
     
-    # Navigation buttons
     has_variants = len(variants) > 1
     cols = st.columns(3 if has_variants else 2)
     
     with cols[0]:
-        if st.button("◀ Prev", use_container_width=True, key="prev_sample"):
-            st.session_state.current_index = max(0, st.session_state.current_index - 1)
+        if st.button("Prev", icon=":material/arrow_back:", width='stretch', key="prev_sample"):
+            new_index = max(0, st.session_state.current_index - 1)
+            update_current_row_state(filtered_df, new_index)
+            # Clear variant navigation state on normal navigation
+            st.session_state.is_variant_change = False
+            st.rerun()
     
     if has_variants:
         with cols[1]:
-            if st.button("Perturb", use_container_width=True, key="perturb"):
+            if st.button("Perturb", icon=":material/shuffle:", width='stretch', key="perturb"):
                 new_variant = cycle_variant(variants, st.session_state.selected_variant)
                 if new_variant:
-                    # Use preserved target values (last_task_id/last_step_index) if available,
-                    # otherwise fall back to current row
-                    target_task_id = st.session_state.last_task_id
-                    target_step_index = st.session_state.last_step_index
-                    
-                    # If we don't have preserved values, get from current row
-                    if target_task_id is None or target_step_index is None:
-                        if st.session_state.current_index < len(filtered_df):
-                            current_row = filtered_df.iloc[st.session_state.current_index]
+                    # Strategy: If we have a preserved target AND we're in variant navigation mode,
+                    # use the preserved target. Otherwise, use current row to set a new target.
+                    # This ensures target stays constant during variant navigation sequence.
+                    if (st.session_state.is_variant_change and 
+                        st.session_state.last_task_id is not None and 
+                        st.session_state.last_step_index is not None):
+                        # Continuing variant navigation - use preserved target
+                        target_task_id = st.session_state.last_task_id
+                        target_step_index = st.session_state.last_step_index
+                        debug_log(f"Perturb: Continuing variant nav, using preserved target=({target_task_id}, {target_step_index})")
+                    else:
+                        # New variant navigation - set target from current row
+                        if current_row is not None:
                             target_task_id = current_row.get('task_id')
                             target_step_index = current_row.get('step_index')
+                        else:
+                            target_task_id = st.session_state.last_task_id
+                            target_step_index = st.session_state.last_step_index
+                            
+                            if target_task_id is None or target_step_index is None:
+                                if st.session_state.current_index < len(filtered_df):
+                                    current_row_fallback = filtered_df.iloc[st.session_state.current_index]
+                                    target_task_id = current_row_fallback.get('task_id')
+                                    target_step_index = current_row_fallback.get('step_index')
+                        debug_log(f"Perturb: New variant nav, setting target from current_row=({target_task_id}, {target_step_index})")
                     
-                    # Store target values for variant navigation
+                    debug_log(f"Perturb: final target=({target_task_id}, {target_step_index}), new_variant={new_variant}")
+                    
                     if target_task_id is not None and target_step_index is not None:
                         st.session_state.pending_variant_navigation = {
                             'task_id': target_task_id,
                             'step_index': target_step_index
                         }
-                        # Preserve these as the target for this and future variant changes
                         st.session_state.last_task_id = target_task_id
                         st.session_state.last_step_index = target_step_index
-                    
-                    # Mark this as a variant change
-                    st.session_state.is_variant_change = True
-                    st.session_state.selected_variant = new_variant
-                    st.rerun()
+                        st.session_state.is_variant_change = True
+                        st.session_state.selected_variant = new_variant
+                        st.rerun()
         with cols[2]:
-            if st.button("Next ▶", use_container_width=True, key="next_sample"):
-                st.session_state.current_index = min(len(filtered_df) - 1, st.session_state.current_index + 1)
+            if st.button("Next", icon=":material/arrow_forward:", width='stretch', key="next_sample"):
+                new_index = min(len(filtered_df) - 1, st.session_state.current_index + 1)
+                update_current_row_state(filtered_df, new_index)
+                # Clear variant navigation state on normal navigation
+                st.session_state.is_variant_change = False
+                st.rerun()
     else:
         with cols[1]:
-            if st.button("Next ▶", use_container_width=True, key="next_sample"):
-                st.session_state.current_index = min(len(filtered_df) - 1, st.session_state.current_index + 1)
+            if st.button("Next", icon=":material/arrow_forward:", width='stretch', key="next_sample"):
+                new_index = min(len(filtered_df) - 1, st.session_state.current_index + 1)
+                update_current_row_state(filtered_df, new_index)
+                st.rerun()
     
-    # Direct index input
     new_index = st.number_input("Go to index:", min_value=0, max_value=len(filtered_df) - 1,
                                value=st.session_state.current_index, step=1)
     if new_index != st.session_state.current_index:
-        st.session_state.current_index = int(new_index)
-    
-    st.session_state.current_index = max(0, min(st.session_state.current_index, len(filtered_df) - 1))
+        update_current_row_state(filtered_df, int(new_index))
+        st.rerun()
 
 def render_sidebar(df):
     """Render sidebar with filters, stats, and navigation"""
     with st.sidebar:
-        # Dark/Light mode toggle at the very top
         dark_mode = st.toggle("🌙 Dark Mode", value=st.session_state.dark_mode, key="dark_mode_toggle")
         if dark_mode != st.session_state.dark_mode:
             st.session_state.dark_mode = dark_mode
             st.rerun()
         
-        st.divider()
+        st.session_state.debug_mode = st.toggle("🐛 Debug Mode", value=st.session_state.get('debug_mode', False), key="debug_toggle")
         
+        st.divider()
         st.header("Evaluation Config")
         
-        # Get previous row info if available (for variant changes)
+        # Get pending variant navigation info
         previous_task_id = None
         previous_step_index = None
-        if 'pending_variant_navigation' in st.session_state and st.session_state.pending_variant_navigation:
+        has_pending_navigation = ('pending_variant_navigation' in st.session_state and 
+                                  st.session_state.pending_variant_navigation is not None)
+        
+        if has_pending_navigation:
             nav_info = st.session_state.pending_variant_navigation
             previous_task_id = nav_info.get('task_id')
             previous_step_index = nav_info.get('step_index')
-            # Preserve these as last_task_id/last_step_index for variant navigation
-            # This ensures subsequent Perturb clicks use the correct target
             st.session_state.last_task_id = previous_task_id
             st.session_state.last_step_index = previous_step_index
-            # Clear it after use
+        
+        model, query_type, use_reasoning, variant, hit_box_filter, interesting_cases_filter = render_filters(df)
+        variants = get_sorted_variants(df)
+        
+        # Determine if we're in variant navigation mode
+        is_variant_navigation = (st.session_state.is_variant_change or has_pending_navigation)
+        
+        # Clear pending navigation AFTER we've used it
+        if has_pending_navigation:
             st.session_state.pending_variant_navigation = None
         
-        # Filters
-        model, query_type, use_reasoning, variant, hit_box_filter = render_filters(df)
+        # Bypass hit_box_accuracy filter during variant navigation
+        effective_hit_box_filter = None if is_variant_navigation else hit_box_filter
         
-        # Get variants list for perturb button
-        variants = sorted([x for x in df['variant'].unique().tolist() if pd.notna(x)])
+        debug_log(f"Filtering: variant_nav={is_variant_navigation}, effective_hit_box={effective_hit_box_filter}")
         
-        # For variant changes, temporarily bypass hit_box_accuracy filter to allow cross-variant comparison
-        # This lets you see all variants for the same task/step, even if they have different hit_box_accuracy values
-        effective_hit_box_filter = hit_box_filter
-        if st.session_state.is_variant_change and previous_task_id is not None and previous_step_index is not None:
-            # Temporarily remove hit_box_accuracy filter for variant navigation
-            effective_hit_box_filter = None
-            # st.info("ℹ️ **Variant navigation mode**: Showing all variants for this task/step (hit_box_accuracy filter temporarily disabled)")
+        filtered_df = apply_filters(df, model, query_type, use_reasoning, test_split=None, 
+                                   variant=variant, hit_box_filter=effective_hit_box_filter,
+                                   interesting_cases_filter=interesting_cases_filter)
         
-        # Apply filters (test_split=None to include all test splits)
-        filtered_df = apply_filters(df, model, query_type, use_reasoning, test_split=None, variant=variant, hit_box_filter=effective_hit_box_filter)
-        
-        # Handle filter changes
-        filters = (model, query_type, use_reasoning, variant, effective_hit_box_filter)
+        filters = (model, query_type, use_reasoning, variant, hit_box_filter, interesting_cases_filter)
         handle_filter_change(filters, filtered_df, previous_task_id, previous_step_index)
         
+        if not st.session_state.is_variant_change and len(filtered_df) > 0:
+            if (st.session_state.last_task_id is None or 
+                st.session_state.last_step_index is None or
+                st.session_state.current_index < len(filtered_df)):
+                update_current_row_state(filtered_df, st.session_state.current_index)
+        
         st.divider()
-        render_statistics(df, filtered_df, model=model)
+        render_statistics(df, filtered_df, model=model, query_type_flag=query_type, 
+                         use_reasoning_flag=use_reasoning, variant_flag=variant)
         st.divider()
         
-        # Navigation buttons moved to below the image
         if len(filtered_df) == 0:
             st.warning("No samples match the filters!")
     
     return filtered_df
 
-def render_header(filtered_df, current_row):
-    """Render header with model/reasoning/variant info"""
-    col1, col2, col3 = st.columns([1, 1, 1])
-    
-    with col1:
-        st.markdown("**Model**")
-        st.markdown(f"<span style='font-size: 1.5em;'>{current_row['model']}</span>", unsafe_allow_html=True)
-    with col2:
-        use_reasoning = current_row.get('use_reasoning', 'N/A')
-        reasoning_text = "Yes" if use_reasoning == True else "No" if use_reasoning == False else str(use_reasoning)
-        st.markdown("**Use Reasoning**")
-        st.markdown(f"<span style='font-size: 1.5em;'>{reasoning_text}</span>", unsafe_allow_html=True)
-    with col3:
-        st.markdown("**Variant**")
-        st.markdown(f"<span style='font-size: 1.5em;'>{current_row.get('variant', 'N/A')}</span>", unsafe_allow_html=True)
-
 def render_screenshot(row, filtered_df, variants=None):
     """Render screenshot with optional annotations"""
-    # Episode and Step information
     episode_id = row.get('task_id', 'N/A')
     step_idx = row.get('step_index', 'N/A')
     
-    # Episode position
     unique_episodes = sorted(filtered_df['task_id'].unique().tolist())
     episode_pos = unique_episodes.index(episode_id) + 1 if episode_id in unique_episodes else 1
     
-    # Step position within episode
     episode_steps = filtered_df[filtered_df['task_id'] == episode_id]
     step_pos_in_episode = None
     for pos, idx in enumerate(episode_steps.index):
@@ -768,7 +945,6 @@ def render_screenshot(row, filtered_df, variants=None):
     if step_pos_in_episode is None:
         step_pos_in_episode = step_idx + 1
     
-    # Compact Episode/Step info on one line
     st.markdown(
         f"<span style='font-size: 0.9em;'>"
         f"<strong>Episode:</strong> {episode_id} ({episode_pos}/{len(unique_episodes)}) | "
@@ -784,127 +960,75 @@ def render_screenshot(row, filtered_df, variants=None):
                                   key="show_annotations_checkbox")
     st.session_state.show_annotations = show_annotations
     
-    image_path = row.get('image_path', '')
-    if not image_path:
-        st.error("Image path not found in data")
-        return
-    
-    # Strip /mnt/ prefix if present
-    if image_path.startswith('/mnt/'):
-        image_path = image_path[5:]  # Remove '/mnt/' prefix
-    
-    # Get step_index from row to construct robust file path
-    step_index = row.get('step_index', None)
-    if step_index is None:
-        st.error("Step index not found in data")
-        return
-    
-    # Extract directory from image_path and find matching file
-    image_path_obj = Path(image_path)
-    if image_path_obj.is_absolute():
-        image_dir = image_path_obj.parent
-    else:
-        # Try relative to project root first
-        image_dir = Path(__file__).parent / image_path_obj.parent
-        if not image_dir.exists():
-            # Try relative to current directory
-            image_dir = Path(image_path_obj.parent)
-    
-    # Search for file matching step_<step_index>_*.png pattern
-    pattern = f"step_{step_index}_*.png"
-    matching_files = list(image_dir.glob(pattern))
-    
-    if len(matching_files) == 0:
-        st.error(f"No image file found matching pattern '{pattern}' in {image_dir}")
-        return
-    elif len(matching_files) > 1:
-        st.warning(f"Multiple files found matching pattern '{pattern}' in {image_dir}. Using first match: {matching_files[0].name}")
-        image_path_obj = matching_files[0]
-    else:
-        image_path_obj = matching_files[0]
-    
-    if not image_path_obj.exists():
-        st.error(f"Image not found: {image_path_obj}")
+    image_path_to_load = resolve_image_path(row)
+    if image_path_to_load is None:
+        st.error(f"Image not found for step {row.get('step_index')}")
         return
     
     try:
-        img = Image.open(image_path_obj)
+        img = Image.open(image_path_to_load)
         if show_annotations:
             img = annotate_image(img, row)
-        # Display image slightly bigger while maintaining original resolution
-        # Scale up by 1.2x for better visibility
         original_width, original_height = img.size
         scaled_width = int(original_width * 1.2)
         scaled_height = int(original_height * 1.2)
         img_scaled = img.resize((scaled_width, scaled_height), Image.Resampling.LANCZOS)
         st.image(img_scaled, use_container_width=False)
         
-        # Navigation buttons below the image
         if variants is not None:
-            render_navigation_buttons(filtered_df, variants)
+            st.markdown('<div class="navigation-buttons-container">', unsafe_allow_html=True)
+            render_navigation_buttons(filtered_df, variants, current_row=row)
+            st.markdown('</div>', unsafe_allow_html=True)
     except Exception as e:
         st.error(f"Error loading image: {e}")
 
 def render_sample_details(row, filtered_df):
     """Render sample details and metrics"""
+    
+    st.subheader("Variant")
+    st.info(row.get('variant'))
+    
     st.subheader("Instruction")
     st.info(row['instruction'])
     
     st.subheader("Raw Prediction")
-    st.markdown(f"<span style='font-size: 0.9em;'>{row.get('raw_prediction', 'N/A')}</span>", unsafe_allow_html=True)
-
+    st.info(row.get('raw_prediction', 'N/A'))
+    
     st.subheader("Step Metrics")
     
-    # Raw Prediction and Hit Box Accuracy in the same row
     pred_col1, pred_col2 = st.columns(2)
     
     with pred_col1:
         hit_box = row.get('hit_box_accuracy', 'N/A')
-        if isinstance(hit_box, bool):
-            display_value = "True" if hit_box else "False"
-        elif isinstance(hit_box, (int, float)) and not pd.isna(hit_box):
-            display_value = f"{hit_box:.2f}"
-        else:
-            display_value = str(hit_box)
+        display_value = format_hit_box_accuracy(hit_box)
         st.markdown("**Success**")
-        st.markdown(f"<span style='font-size: 0.9em;'>{display_value}</span>", unsafe_allow_html=True)
+        st.info(display_value)
     
-    # Helper function to get metric value
-    def get_metric_value(col_name, metric_name):
-        value = row.get(col_name)
-        exists = col_name in row.index
-        if exists and value is not None and not pd.isna(value):
-            if isinstance(value, (int, float)):
-                return f"{value:.4f}" if abs(value) < 1 else f"{value:.2f}"
-            else:
-                return str(value)
-        return "N/A"
-    
-    # MSEs in one row
     mse_col1, mse_col2 = st.columns(2)
     with mse_col1:
         st.markdown("**Bbox Center MSE**")
-        mse_val = get_metric_value('bbox_center_mse', 'Bbox Center MSE')
-        st.markdown(f"<span style='font-size: 0.9em;'>{mse_val}</span>", unsafe_allow_html=True)
+        mse_val = format_metric_value(row, 'bbox_center_mse')
+        st.info(mse_val)
     with mse_col2:
         st.markdown("**Normalized MSE**")
-        nmse_val = get_metric_value('normalized_mse', 'Normalized MSE')
-        st.markdown(f"<span style='font-size: 0.9em;'>{nmse_val}</span>", unsafe_allow_html=True)
+        nmse_val = format_metric_value(row, 'normalized_mse')
+        st.info(nmse_val)
     
-    # GIoUs in one row
     giou_col1, giou_col2 = st.columns(2)
     with giou_col1:
         st.markdown("**GIoU**")
-        giou_val = get_metric_value('giou', 'GIoU')
-        st.markdown(f"<span style='font-size: 0.9em;'>{giou_val}</span>", unsafe_allow_html=True)
+        giou_val = format_metric_value(row, 'giou')
+        st.info(giou_val)
     with giou_col2:
         st.markdown("**NGIoU**")
-        ngiou_val = get_metric_value('ngiou', 'NGIoU')
-        st.markdown(f"<span style='font-size: 0.9em;'>{ngiou_val}</span>", unsafe_allow_html=True)
+        ngiou_val = format_metric_value(row, 'ngiou')
+        st.info(ngiou_val)
     
     st.subheader("Coordinates")
-    st.markdown(f"**Prediction**: {[round(i) for i in ast.literal_eval(row.get('coordinates'))]}")
-    st.markdown(f"**Ground Truth Bbox**: {[round(i) for i in ast.literal_eval(row.get('ground_truth_bbox'))]}")
+    st.markdown(f"**Prediction**:")
+    st.info([round(i) for i in ast.literal_eval(row.get('coordinates'))])
+    st.markdown(f"**Ground Truth Bbox**:")
+    st.info([round(i) for i in ast.literal_eval(row.get('ground_truth_bbox'))])
     
     with st.expander("View All Data Fields"):
         st.json(row.to_dict())
@@ -915,61 +1039,31 @@ def render_main_content(filtered_df, df=None):
         st.warning("No samples available. Please adjust your filters.")
         return
     
-    # Ensure current_index is within bounds
-    st.session_state.current_index = max(0, min(st.session_state.current_index, len(filtered_df) - 1))
+    if not st.session_state.is_variant_change:
+        update_current_row_state(filtered_df, st.session_state.current_index)
+    else:
+        st.session_state.current_index = max(0, min(st.session_state.current_index, len(filtered_df) - 1))
     
-    # Get the current row - using iloc ensures we get by position, not by index label
-    # Since apply_filters resets index with drop=True, iloc position matches the sequential index
     current_row = filtered_df.iloc[st.session_state.current_index].copy()
     
-    # Store current task_id and step_index for filter change preservation
-    # BUT: If we just did a variant change, only update if the current row matches the target
-    current_task_id = current_row.get('task_id')
-    current_step_index = current_row.get('step_index')
-    
-    # Only update last_task_id/last_step_index if:
-    # 1. Not a variant change, OR
-    # 2. It's a variant change AND the current row matches what we were looking for
-    if not st.session_state.is_variant_change:
-        # Normal case: update with current row
-        st.session_state.last_task_id = current_task_id
-        st.session_state.last_step_index = current_step_index
-    else:
-        # Variant change case: check if current row matches the target
-        # The target is stored in last_task_id/last_step_index (set in render_sidebar)
+    if st.session_state.is_variant_change:
+        current_task_id = current_row.get('task_id')
+        current_step_index = current_row.get('step_index')
         target_task_id = st.session_state.last_task_id
         target_step_index = st.session_state.last_step_index
         
-        if target_task_id is not None and target_step_index is not None:
-            if current_task_id == target_task_id and current_step_index == target_step_index:
-                # Current row matches target - this is correct, values already set in render_sidebar
-                pass
-            else:
-                # Current row doesn't match target - preserve the target values
-                # Don't update last_task_id/last_step_index, keep the original target
-                pass
-        else:
-            # No target set, use current row
-            st.session_state.last_task_id = current_task_id
-            st.session_state.last_step_index = current_step_index
+        debug_log(f"Main content: current=({current_task_id}, {current_step_index}), target=({target_task_id}, {target_step_index})")
+        
+        if current_task_id != target_task_id or current_step_index != target_step_index:
+            debug_log(f"⚠️ MISMATCH: Current row doesn't match target!")
     
-    # Reset variant change flag after processing in render_main_content
     st.session_state.is_variant_change = False
     
-    # Verify we're using the same row for all components
-    # Store row identifier for debugging
-    row_id = f"{current_row.get('task_id', 'N/A')}_step_{current_row.get('step_index', 'N/A')}_variant_{current_row.get('variant', 'N/A')}"
-    
-    render_header(filtered_df, current_row)
-    st.divider()
-    
-    # Get variants list for navigation buttons
     if df is not None:
-        variants = sorted([x for x in df['variant'].unique().tolist() if pd.notna(x)])
+        variants = get_sorted_variants(df)
     else:
-        variants = sorted([x for x in filtered_df['variant'].unique().tolist() if pd.notna(x)])
+        variants = get_sorted_variants(filtered_df)
     
-    # Use gap parameter to add spacing between columns
     col1, col2 = st.columns([4, 0.8], gap="large")
     with col1:
         render_screenshot(current_row, filtered_df, variants=variants)
@@ -979,6 +1073,8 @@ def render_main_content(filtered_df, df=None):
 # ============================================================================
 # Main Execution
 # ============================================================================
+
+apply_theme()
 
 df = load_data()
 filtered_df = render_sidebar(df)
