@@ -1,0 +1,14 @@
+2025-12-14 21:10:25 | INFO     | __main__:main:650 | Logging to file: /mnt/baseline_results/evaluation_20251214_211025.log
+2025-12-14 21:10:25 | INFO     | __main__:main:651 | Starting evaluation with config_id: gta1_no_reasoning_relational_query
+2025-12-14 21:10:25 | INFO     | __main__:run:347 | Starting evaluation on 1 rows
+2025-12-14 21:10:25 | INFO     | __main__:_process_row:376 | ================================================================================
+2025-12-14 21:10:25 | INFO     | __main__:_process_row:377 | Step 1/1 (100.0%)
+2025-12-14 21:10:25 | INFO     | __main__:_process_row:378 | ================================================================================
+2025-12-14 21:10:42 | INFO     | __main__:_process_row:391 | Instruction: Type 'Retail sales associate' in the textbox above 'Enter ZIP Code or City, State'
+2025-12-14 21:10:42 | INFO     | __main__:_process_row:392 | Image path: /mnt/test_splits/run_20251112_005125_test_website_original/f5b9e5b9-1992-4444-b389-680912e50fe6/screenshots/step_1_type.png
+2025-12-14 21:10:42 | INFO     | __main__:_process_row:399 | Raw prediction: 
+(238,239)
+2025-12-14 21:10:42 | INFO     | __main__:_process_row:401 | Ground truth bbox: [31, 213.09375, 440.5, 48]
+2025-12-14 21:10:42 | INFO     | __main__:_process_row:402 | ================================================================================
+2025-12-14 21:10:42 | INFO     | __main__:run:370 | Evaluation completed. Processed 1 rows in 17.68 seconds
+2025-12-14 21:10:42 | INFO     | __main__:main:656 | Evaluation completed. Logs saved to: /mnt/baseline_results/evaluation_20251214_211025.log

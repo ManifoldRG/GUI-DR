@@ -1,0 +1,6 @@
+2025-12-14 06:40:38 | INFO     | __main__:main:650 | Logging to file: /mnt/baseline_results/evaluation_20251214_064038.log
+2025-12-14 06:40:38 | INFO     | __main__:main:651 | Starting evaluation with config_id: qwen25vl_no_reasoning_relational_query
+2025-12-14 06:40:39 | INFO     | __main__:run:347 | Starting evaluation on 1 rows
+2025-12-14 06:40:39 | INFO     | __main__:_process_row:376 | ================================================================================
+2025-12-14 06:40:39 | INFO     | __main__:_process_row:377 | Step 1/1 (100.0%)
+2025-12-14 06:40:39 | INFO     | __main__:_process_row:378 | ================================================================================

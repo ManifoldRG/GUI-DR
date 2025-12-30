@@ -1,0 +1,7 @@
+2025-12-24 05:00:26 | INFO     | __main__:main:651 | Logging to file: /mnt/finetuned_results/evaluation_20251224_050026.log
+2025-12-24 05:00:26 | INFO     | __main__:main:652 | Starting evaluation with config_id: uitars15_no_reasoning_direct_query
+2025-12-24 05:00:26 | INFO     | __main__:run:347 | Starting evaluation on 92 rows
+2025-12-24 05:00:26 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-24 05:00:26 | INFO     | __main__:_process_row:378 | Step 1625/92 (1766.3%)
+2025-12-24 05:00:26 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-24 05:00:27 | ERROR    | __main__:run:367 | Error processing row 1: Error code: 404 - {'error': {'message': 'The model `ByteDance-Seed/UI-TARS-1.5-7B` does not exist.', 'type': 'NotFoundError', 'param': None, 'code': 404}}

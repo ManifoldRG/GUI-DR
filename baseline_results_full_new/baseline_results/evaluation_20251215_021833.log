@@ -1,0 +1,1091 @@
+2025-12-15 02:18:33 | INFO     | __main__:main:651 | Logging to file: /mnt/baseline_results/evaluation_20251215_021833.log
+2025-12-15 02:18:33 | INFO     | __main__:main:652 | Starting evaluation with config_id: qwen25vl_no_reasoning_relational_query
+2025-12-15 02:18:33 | INFO     | __main__:run:347 | Starting evaluation on 92 rows
+2025-12-15 02:18:33 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:18:33 | INFO     | __main__:_process_row:378 | Step 1625/92 (1766.3%)
+2025-12-15 02:18:33 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:18:48 | INFO     | __main__:_process_row:392 | Instruction: Type 'Retail sales associate' in the textbox above 'Enter ZIP Code or City, State'
+2025-12-15 02:18:48 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005125_test_website_original/f5b9e5b9-1992-4444-b389-680912e50fe6/screenshots/step_1_type.png
+2025-12-15 02:18:48 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [252, 304]}}
+</tool_call>
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "type", "text": "Retail sales associate"}}
+</tool_call>
+2025-12-15 02:18:48 | INFO     | __main__:_process_row:402 | Ground truth bbox: [31, 213.09375, 440.5, 48]
+2025-12-15 02:18:48 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:18:48 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:18:48 | INFO     | __main__:_process_row:378 | Step 1626/92 (1767.4%)
+2025-12-15 02:18:48 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:18:52 | INFO     | __main__:_process_row:392 | Instruction: Type 'Retail sales associate' in the textbox above 'Enter ZIP Code or City, State'
+2025-12-15 02:18:52 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005233_test_website_precision/f5b9e5b9-1992-4444-b389-680912e50fe6/screenshots/step_1_type.png
+2025-12-15 02:18:52 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [445, 212]}}
+</tool_call>
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "type", "text": "Retail sales associate"}}
+</tool_call>
+2025-12-15 02:18:52 | INFO     | __main__:_process_row:402 | Ground truth bbox: [281.6953125, 149.16561889648438, 322.3499755859375, 33.600006103515625]
+2025-12-15 02:18:52 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:18:52 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:18:52 | INFO     | __main__:_process_row:378 | Step 1627/92 (1768.5%)
+2025-12-15 02:18:52 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:18:55 | INFO     | __main__:_process_row:392 | Instruction: Type 'Retail sales associate' in the textbox above 'Enter ZIP Code or City, State'
+2025-12-15 02:18:55 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005341_test_website_style/f5b9e5b9-1992-4444-b389-680912e50fe6/screenshots/step_1_type.png
+2025-12-15 02:18:55 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [254, 308]}}
+</tool_call>
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "type", "text": "retail sales"}}
+</tool_call>
+2025-12-15 02:18:55 | INFO     | __main__:_process_row:402 | Ground truth bbox: [31, 220.09375, 440.5, 48]
+2025-12-15 02:18:55 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:18:55 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:18:55 | INFO     | __main__:_process_row:378 | Step 1628/92 (1769.6%)
+2025-12-15 02:18:55 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:18:59 | INFO     | __main__:_process_row:392 | Instruction: Type 'Retail sales associate' in the textbox above 'Enter ZIP Code or City, State'
+2025-12-15 02:18:59 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251113_005230_test_website_text_shrink/f5b9e5b9-1992-4444-b389-680912e50fe6/screenshots/step_1_type.png
+2025-12-15 02:18:59 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [252, 304]}}
+</tool_call>
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "type", "text": "Retail sales associate"}}
+</tool_call>
+2025-12-15 02:18:59 | INFO     | __main__:_process_row:402 | Ground truth bbox: [31, 213.09375, 440.5, 48]
+2025-12-15 02:18:59 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:18:59 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:18:59 | INFO     | __main__:_process_row:378 | Step 1629/92 (1770.7%)
+2025-12-15 02:18:59 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:19:02 | INFO     | __main__:_process_row:392 | Instruction: Type 'hamburger' in the textbox above ‘low carb’
+2025-12-15 02:19:02 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_004959_test_domain_original/f5da4b14-026d-4a10-ab89-f5720418f2b4/screenshots/step_1_type.png
+2025-12-15 02:19:02 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [864, 195]}}
+</tool_call>
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "type", "text": "hamburger"}}
+</tool_call>
+2025-12-15 02:19:02 | INFO     | __main__:_process_row:402 | Ground truth bbox: [736, 181.15625, 373.375, 24]
+2025-12-15 02:19:02 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:19:02 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:19:02 | INFO     | __main__:_process_row:378 | Step 1630/92 (1771.7%)
+2025-12-15 02:19:02 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:19:06 | INFO     | __main__:_process_row:392 | Instruction: Type 'hamburger' in the textbox above ‘low carb’
+2025-12-15 02:19:06 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005144_test_domain_precision/f5da4b14-026d-4a10-ab89-f5720418f2b4/screenshots/step_1_type.png
+2025-12-15 02:19:06 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [856, 137]}}
+</tool_call>
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "type", "text": "hamburger"}}
+</tool_call>
+2025-12-15 02:19:06 | INFO     | __main__:_process_row:402 | Ground truth bbox: [803.1953125, 126.80937194824219, 261.3624267578125, 16.800003051757812]
+2025-12-15 02:19:06 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:19:06 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:19:06 | INFO     | __main__:_process_row:378 | Step 1631/92 (1772.8%)
+2025-12-15 02:19:06 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:19:10 | INFO     | __main__:_process_row:392 | Instruction: Type 'hamburger' in the textbox above ‘low carb’
+2025-12-15 02:19:10 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005301_test_domain_style/f5da4b14-026d-4a10-ab89-f5720418f2b4/screenshots/step_1_type.png
+2025-12-15 02:19:10 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [949, 201]}}
+</tool_call>
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "type", "text": "hamburger"}}
+</tool_call>
+2025-12-15 02:19:10 | INFO     | __main__:_process_row:402 | Ground truth bbox: [741.84375, 175.734375, 374.5625, 45.0625]
+2025-12-15 02:19:10 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:19:10 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:19:10 | INFO     | __main__:_process_row:378 | Step 1632/92 (1773.9%)
+2025-12-15 02:19:10 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:19:13 | INFO     | __main__:_process_row:392 | Instruction: Type 'hamburger' in the textbox above ‘low carb’
+2025-12-15 02:19:13 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251113_005132_test_domain_text_shrink/f5da4b14-026d-4a10-ab89-f5720418f2b4/screenshots/step_1_type.png
+2025-12-15 02:19:13 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [876, 195]}}
+</tool_call>
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "type", "text": "hamburger"}}
+</tool_call>
+2025-12-15 02:19:13 | INFO     | __main__:_process_row:402 | Ground truth bbox: [736, 181.15625, 373.375, 24]
+2025-12-15 02:19:13 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:19:13 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:19:13 | INFO     | __main__:_process_row:378 | Step 1633/92 (1775.0%)
+2025-12-15 02:19:13 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:19:16 | INFO     | __main__:_process_row:392 | Instruction: Click on the link below 'View Other Highway Safety Related Data'
+2025-12-15 02:19:16 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_004959_test_domain_original/f670ae67-e875-4fb5-aa51-070dff354aa6/screenshots/step_1_click.png
+2025-12-15 02:19:16 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [1135, 520]}}
+</tool_call>
+2025-12-15 02:19:16 | INFO     | __main__:_process_row:402 | Ground truth bbox: [995.390625, 527.6484375, 314.828125, 24.703125]
+2025-12-15 02:19:16 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:19:16 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:19:16 | INFO     | __main__:_process_row:378 | Step 1634/92 (1776.1%)
+2025-12-15 02:19:16 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:19:19 | INFO     | __main__:_process_row:392 | Instruction: Click on the link below 'View Other Highway Safety Related Data'
+2025-12-15 02:19:19 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005144_test_domain_precision/f670ae67-e875-4fb5-aa51-070dff354aa6/screenshots/step_1_click.png
+2025-12-15 02:19:19 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [1154, 367]}}
+</tool_call>
+2025-12-15 02:19:19 | INFO     | __main__:_process_row:402 | Ground truth bbox: [987.3937377929688, 356.5078125, 323.43280029296875, 17.29217529296875]
+2025-12-15 02:19:19 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:19:19 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:19:19 | INFO     | __main__:_process_row:378 | Step 1635/92 (1777.2%)
+2025-12-15 02:19:19 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:19:22 | INFO     | __main__:_process_row:392 | Instruction: Click on the link below 'View Other Highway Safety Related Data'
+2025-12-15 02:19:22 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005301_test_domain_style/f670ae67-e875-4fb5-aa51-070dff354aa6/screenshots/step_1_click.png
+2025-12-15 02:19:22 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [1186, 554]}}
+</tool_call>
+2025-12-15 02:19:22 | INFO     | __main__:_process_row:402 | Ground truth bbox: [994.296875, 527.1484375, 312.890625, 25.703125]
+2025-12-15 02:19:22 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:19:22 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:19:22 | INFO     | __main__:_process_row:378 | Step 1636/92 (1778.3%)
+2025-12-15 02:19:22 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:19:25 | INFO     | __main__:_process_row:392 | Instruction: Click on the link below 'View Other Highway Safety Related Data'
+2025-12-15 02:19:25 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251113_005132_test_domain_text_shrink/f670ae67-e875-4fb5-aa51-070dff354aa6/screenshots/step_1_click.png
+2025-12-15 02:19:25 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [1156, 478]}}
+</tool_call>
+2025-12-15 02:19:25 | INFO     | __main__:_process_row:402 | Ground truth bbox: [991.578125, 461.546875, 318.640625, 20.875]
+2025-12-15 02:19:25 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:19:25 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:19:25 | INFO     | __main__:_process_row:378 | Step 1637/92 (1779.3%)
+2025-12-15 02:19:25 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:19:28 | INFO     | __main__:_process_row:392 | Instruction: Click on the button above 'FOURMIDABLE' img
+2025-12-15 02:19:28 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_004959_test_domain_original/f6d10418-08fc-4aff-bfb8-97ff708f7e6a/screenshots/step_2_click.png
+2025-12-15 02:19:28 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [1846, 137]}}
+</tool_call>
+2025-12-15 02:19:28 | INFO     | __main__:_process_row:402 | Ground truth bbox: [1697.984375, 57, 80, 40]
+2025-12-15 02:19:28 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:19:28 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:19:28 | INFO     | __main__:_process_row:378 | Step 1638/92 (1780.4%)
+2025-12-15 02:19:28 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:19:31 | INFO     | __main__:_process_row:392 | Instruction: Click on the button above 'FOURMIDABLE' img
+2025-12-15 02:19:31 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005144_test_domain_precision/f6d10418-08fc-4aff-bfb8-97ff708f7e6a/screenshots/step_2_click.png
+2025-12-15 02:19:31 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [1748, 96]}}
+</tool_call>
+2025-12-15 02:19:31 | INFO     | __main__:_process_row:402 | Ground truth bbox: [1636.5889892578125, 39.89999771118164, 56, 28.000003814697266]
+2025-12-15 02:19:31 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:19:31 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:19:31 | INFO     | __main__:_process_row:378 | Step 1639/92 (1781.5%)
+2025-12-15 02:19:31 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:19:34 | INFO     | __main__:_process_row:392 | Instruction: Click on the button to the left of 'Save Search'
+2025-12-15 02:19:34 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005301_test_domain_style/f6d10418-08fc-4aff-bfb8-97ff708f7e6a/screenshots/step_2_click.png
+2025-12-15 02:19:34 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [1846, 125]}}
+</tool_call>
+2025-12-15 02:19:34 | INFO     | __main__:_process_row:402 | Ground truth bbox: [1715.046875, 102, 53.34375, 40]
+2025-12-15 02:19:34 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:19:34 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:19:34 | INFO     | __main__:_process_row:378 | Step 1640/92 (1782.6%)
+2025-12-15 02:19:34 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:19:38 | INFO     | __main__:_process_row:392 | Instruction: Click on the button above 'FOURMIDABLE' img
+2025-12-15 02:19:38 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251113_005132_test_domain_text_shrink/f6d10418-08fc-4aff-bfb8-97ff708f7e6a/screenshots/step_2_click.png
+2025-12-15 02:19:38 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [1846, 137]}}
+</tool_call>
+2025-12-15 02:19:38 | INFO     | __main__:_process_row:402 | Ground truth bbox: [1715.609375, 57, 80, 40]
+2025-12-15 02:19:38 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:19:38 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:19:38 | INFO     | __main__:_process_row:378 | Step 1641/92 (1783.7%)
+2025-12-15 02:19:38 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:19:40 | INFO     | __main__:_process_row:392 | Instruction: Click on the span above ‘Clear All Filters’
+2025-12-15 02:19:40 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_004959_test_domain_original/f7635bd8-161b-40a8-a5d5-8d76f2ba4810/screenshots/step_3_click.png
+2025-12-15 02:19:40 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [849, 560]}}
+</tool_call>
+2025-12-15 02:19:40 | INFO     | __main__:_process_row:402 | Ground truth bbox: [800.796875, 546.796875, 88.28125, 16.796875]
+2025-12-15 02:19:40 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:19:40 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:19:40 | INFO     | __main__:_process_row:378 | Step 1642/92 (1784.8%)
+2025-12-15 02:19:40 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:19:47 | INFO     | __main__:_process_row:392 | Instruction: Click on the span above ‘Clear All Filters’
+2025-12-15 02:19:47 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005144_test_domain_precision/f7635bd8-161b-40a8-a5d5-8d76f2ba4810/screenshots/step_3_click.png
+2025-12-15 02:19:47 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: To achieve the goal of applying filters, I need to ensure that the filters are applied correctly. The 'Display Results' button is likely the next step after selecting the desired filters.
+Action: Click on the 'Display Results' button to apply the selected filters.
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [594, 546]}}
+</tool_call>
+2025-12-15 02:19:47 | INFO     | __main__:_process_row:402 | Ground truth bbox: [560.5578002929688, 534.12109375, 61.796875, 11.7578125]
+2025-12-15 02:19:47 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:19:47 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:19:47 | INFO     | __main__:_process_row:378 | Step 1643/92 (1785.9%)
+2025-12-15 02:19:47 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:19:49 | INFO     | __main__:_process_row:392 | Instruction: Click on the span above ‘Clear All Filters’
+2025-12-15 02:19:49 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005301_test_domain_style/f7635bd8-161b-40a8-a5d5-8d76f2ba4810/screenshots/step_3_click.png
+2025-12-15 02:19:49 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [849, 546]}}
+</tool_call>
+2025-12-15 02:19:49 | INFO     | __main__:_process_row:402 | Ground truth bbox: [796.6875, 531.6015625, 96.484375, 16.796875]
+2025-12-15 02:19:49 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:19:49 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:19:49 | INFO     | __main__:_process_row:378 | Step 1644/92 (1787.0%)
+2025-12-15 02:19:49 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:19:52 | INFO     | __main__:_process_row:392 | Instruction: Click on the span above ‘Clear All Filters’
+2025-12-15 02:19:52 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251113_005132_test_domain_text_shrink/f7635bd8-161b-40a8-a5d5-8d76f2ba4810/screenshots/step_3_click.png
+2025-12-15 02:19:52 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [849, 576]}}
+</tool_call>
+2025-12-15 02:19:52 | INFO     | __main__:_process_row:402 | Ground truth bbox: [810.25, 533.40625, 69.375, 13.1875]
+2025-12-15 02:19:52 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:19:52 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:19:52 | INFO     | __main__:_process_row:378 | Step 1645/92 (1788.0%)
+2025-12-15 02:19:52 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:19:55 | INFO     | __main__:_process_row:392 | Instruction: Click on the link above ‘Save to My Profile’
+2025-12-15 02:19:55 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_004959_test_domain_original/f7635bd8-161b-40a8-a5d5-8d76f2ba4810/screenshots/step_10_click.png
+2025-12-15 02:19:55 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [1045, 692]}}
+</tool_call>
+2025-12-15 02:19:55 | INFO     | __main__:_process_row:402 | Ground truth bbox: [882.140625, 645.234375, 35.03125, 16]
+2025-12-15 02:19:55 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:19:55 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:19:55 | INFO     | __main__:_process_row:378 | Step 1646/92 (1789.1%)
+2025-12-15 02:19:55 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:19:58 | INFO     | __main__:_process_row:392 | Instruction: Click on the link above ‘Save to My Profile’
+2025-12-15 02:19:58 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005144_test_domain_precision/f7635bd8-161b-40a8-a5d5-8d76f2ba4810/screenshots/step_10_click.png
+2025-12-15 02:19:58 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [714, 483]}}
+</tool_call>
+2025-12-15 02:19:58 | INFO     | __main__:_process_row:402 | Ground truth bbox: [617.4984130859375, 451.6640625, 24.52191162109375, 11.199981689453125]
+2025-12-15 02:19:58 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:19:58 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:19:58 | INFO     | __main__:_process_row:378 | Step 1647/92 (1790.2%)
+2025-12-15 02:19:58 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:20:01 | INFO     | __main__:_process_row:392 | Instruction: Click on the link above ‘Save to My Profile’
+2025-12-15 02:20:01 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005301_test_domain_style/f7635bd8-161b-40a8-a5d5-8d76f2ba4810/screenshots/step_10_click.png
+2025-12-15 02:20:01 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [1041, 675]}}
+</tool_call>
+2025-12-15 02:20:01 | INFO     | __main__:_process_row:402 | Ground truth bbox: [882.140625, 630.234375, 35.03125, 17]
+2025-12-15 02:20:01 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:20:01 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:20:01 | INFO     | __main__:_process_row:378 | Step 1648/92 (1791.3%)
+2025-12-15 02:20:01 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:20:04 | INFO     | __main__:_process_row:392 | Instruction: Click on the link above ‘Save to My Profile’
+2025-12-15 02:20:04 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251113_005132_test_domain_text_shrink/f7635bd8-161b-40a8-a5d5-8d76f2ba4810/screenshots/step_10_click.png
+2025-12-15 02:20:04 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [1046, 685]}}
+</tool_call>
+2025-12-15 02:20:04 | INFO     | __main__:_process_row:402 | Ground truth bbox: [882.140625, 641.8125, 27.53125, 12]
+2025-12-15 02:20:04 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:20:04 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:20:04 | INFO     | __main__:_process_row:378 | Step 1649/92 (1792.4%)
+2025-12-15 02:20:04 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:20:07 | INFO     | __main__:_process_row:392 | Instruction: Click on the link above ‘Mainly cloudy currently remaining partly cloudy this evening.’
+2025-12-15 02:20:07 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_004959_test_domain_original/f7f87ceb-0e39-4d83-8c4e-8b708c82adc5/screenshots/step_1_click.png
+2025-12-15 02:20:07 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [1424, 265]}}
+</tool_call>
+2025-12-15 02:20:07 | INFO     | __main__:_process_row:402 | Ground truth bbox: [921.625, 532.5, 175.375, 15]
+2025-12-15 02:20:07 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:20:07 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:20:07 | INFO     | __main__:_process_row:378 | Step 1650/92 (1793.5%)
+2025-12-15 02:20:07 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:20:11 | INFO     | __main__:_process_row:392 | Instruction: Click on the link above ‘Mainly cloudy currently remaining partly cloudy this evening.’
+2025-12-15 02:20:11 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005144_test_domain_precision/f7f87ceb-0e39-4d83-8c4e-8b708c82adc5/screenshots/step_1_click.png
+2025-12-15 02:20:11 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [1285, 267]}}
+</tool_call>
+2025-12-15 02:20:11 | INFO     | __main__:_process_row:402 | Ground truth bbox: [933.1328125, 457.1000061035156, 122.762451171875, 10.5]
+2025-12-15 02:20:11 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:20:11 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:20:11 | INFO     | __main__:_process_row:378 | Step 1651/92 (1794.6%)
+2025-12-15 02:20:11 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:20:14 | INFO     | __main__:_process_row:392 | Instruction: Click on the link above ‘Mainly cloudy currently remaining partly cloudy this evening.’
+2025-12-15 02:20:14 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005301_test_domain_style/f7f87ceb-0e39-4d83-8c4e-8b708c82adc5/screenshots/step_1_click.png
+2025-12-15 02:20:14 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [1423, 256]}}
+</tool_call>
+2025-12-15 02:20:14 | INFO     | __main__:_process_row:402 | Ground truth bbox: [921.625, 531.5, 175.375, 17]
+2025-12-15 02:20:14 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:20:14 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:20:14 | INFO     | __main__:_process_row:378 | Step 1652/92 (1795.7%)
+2025-12-15 02:20:14 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:20:18 | INFO     | __main__:_process_row:392 | Instruction: Click on the link above ‘Mainly cloudy currently remaining partly cloudy this evening.’
+2025-12-15 02:20:18 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251113_005132_test_domain_text_shrink/f7f87ceb-0e39-4d83-8c4e-8b708c82adc5/screenshots/step_1_click.png
+2025-12-15 02:20:18 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [1428, 270]}}
+</tool_call>
+2025-12-15 02:20:18 | INFO     | __main__:_process_row:402 | Ground truth bbox: [946.28125, 534.0, 150.71875, 12]
+2025-12-15 02:20:18 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:20:18 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:20:18 | INFO     | __main__:_process_row:378 | Step 1653/92 (1796.7%)
+2025-12-15 02:20:18 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:20:24 | INFO     | __main__:_process_row:392 | Instruction: Type '90028' in the textbox above ‘GET STARTED’
+2025-12-15 02:20:24 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_004959_test_domain_original/f82b4d57-ab82-4c49-bc47-e3566496a068/screenshots/step_0_type.png
+2025-12-15 02:20:24 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [554, 484]}}
+</tool_call>
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "type", "text": "90028"}}
+</tool_call>
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "key", "keys": ["enter"]}}
+</tool_call>
+2025-12-15 02:20:24 | INFO     | __main__:_process_row:402 | Ground truth bbox: [409.984375, 470.328125, 321.015625, 18]
+2025-12-15 02:20:24 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:20:24 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:20:24 | INFO     | __main__:_process_row:378 | Step 1654/92 (1797.8%)
+2025-12-15 02:20:24 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:20:29 | INFO     | __main__:_process_row:392 | Instruction: Type '90028' in the textbox above ‘GET STARTED’
+2025-12-15 02:20:29 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005144_test_domain_precision/f82b4d57-ab82-4c49-bc47-e3566496a068/screenshots/step_0_type.png
+2025-12-15 02:20:29 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [676, 338]}}
+</tool_call>
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "type", "text": "90028"}}
+</tool_call>
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "key", "keys": ["enter"]}}
+</tool_call>
+2025-12-15 02:20:29 | INFO     | __main__:_process_row:402 | Ground truth bbox: [574.984375, 329.22967529296875, 224.7109375, 12.600006103515625]
+2025-12-15 02:20:29 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:20:29 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:20:29 | INFO     | __main__:_process_row:378 | Step 1655/92 (1798.9%)
+2025-12-15 02:20:29 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:20:37 | INFO     | __main__:_process_row:392 | Instruction: Type '90028' in the textbox above ‘GET STARTED’
+2025-12-15 02:20:37 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005301_test_domain_style/f82b4d57-ab82-4c49-bc47-e3566496a068/screenshots/step_0_type.png
+2025-12-15 02:20:37 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [560, 600]}}
+</tool_call>
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "type", "text": "90028"}}
+</tool_call>
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [451, 664]}}
+</tool_call>
+2025-12-15 02:20:37 | INFO     | __main__:_process_row:402 | Ground truth bbox: [409, 518.109375, 323, 43.78125]
+2025-12-15 02:20:37 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:20:37 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:20:37 | INFO     | __main__:_process_row:378 | Step 1656/92 (1800.0%)
+2025-12-15 02:20:37 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:20:44 | INFO     | __main__:_process_row:392 | Instruction: Type '90028' in the textbox above ‘GET STARTED’
+2025-12-15 02:20:44 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251113_005132_test_domain_text_shrink/f82b4d57-ab82-4c49-bc47-e3566496a068/screenshots/step_0_type.png
+2025-12-15 02:20:44 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [554, 476]}}
+</tool_call>
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "type", "text": "90028"}}
+</tool_call>
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "key", "keys": ["enter"]}}
+</tool_call>
+2025-12-15 02:20:44 | INFO     | __main__:_process_row:402 | Ground truth bbox: [404.0625, 462.328125, 326.9375, 18]
+2025-12-15 02:20:44 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:20:44 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:20:44 | INFO     | __main__:_process_row:378 | Step 1657/92 (1801.1%)
+2025-12-15 02:20:44 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:20:46 | INFO     | __main__:_process_row:392 | Instruction: Click the checkbox below 'adidas'
+2025-12-15 02:20:46 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005125_test_website_original/f8df8406-073e-4d70-bdee-beef9b9f4f88/screenshots/step_6_click.png
+2025-12-15 02:20:46 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [134, 521]}}
+</tool_call>
+2025-12-15 02:20:46 | INFO     | __main__:_process_row:402 | Ground truth bbox: [37, 530.0, 190, 20]
+2025-12-15 02:20:46 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:20:46 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:20:46 | INFO     | __main__:_process_row:378 | Step 1658/92 (1802.2%)
+2025-12-15 02:20:46 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:20:51 | INFO     | __main__:_process_row:392 | Instruction: Click the checkbox below 'adidas'
+2025-12-15 02:20:51 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005233_test_website_precision/f8df8406-073e-4d70-bdee-beef9b9f4f88/screenshots/step_6_click.png
+2025-12-15 02:20:51 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [84, 527]}}
+</tool_call>
+2025-12-15 02:20:51 | INFO     | __main__:_process_row:402 | Ground truth bbox: [25.899999618530273, 533.0, 132.9999942779541, 14]
+2025-12-15 02:20:51 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:20:51 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:20:51 | INFO     | __main__:_process_row:378 | Step 1659/92 (1803.3%)
+2025-12-15 02:20:51 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:20:54 | INFO     | __main__:_process_row:392 | Instruction: Click the checkbox below 'adidas'
+2025-12-15 02:20:54 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005341_test_website_style/f8df8406-073e-4d70-bdee-beef9b9f4f88/screenshots/step_6_click.png
+2025-12-15 02:20:54 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [145, 518]}}
+</tool_call>
+2025-12-15 02:20:54 | INFO     | __main__:_process_row:402 | Ground truth bbox: [37, 529.0, 190, 22]
+2025-12-15 02:20:54 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:20:54 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:20:54 | INFO     | __main__:_process_row:378 | Step 1660/92 (1804.3%)
+2025-12-15 02:20:54 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:20:58 | INFO     | __main__:_process_row:392 | Instruction: Click the checkbox below 'adidas'
+2025-12-15 02:20:58 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251113_005230_test_website_text_shrink/f8df8406-073e-4d70-bdee-beef9b9f4f88/screenshots/step_6_click.png
+2025-12-15 02:20:58 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [147, 521]}}
+</tool_call>
+2025-12-15 02:20:58 | INFO     | __main__:_process_row:402 | Ground truth bbox: [37, 530.0, 190, 20]
+2025-12-15 02:20:58 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:20:58 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:20:58 | INFO     | __main__:_process_row:378 | Step 1661/92 (1805.4%)
+2025-12-15 02:20:58 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:21:02 | INFO     | __main__:_process_row:392 | Instruction: Click on the button to the left of 'Views'
+2025-12-15 02:21:02 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005055_test_task_original/f9c80513-c1c2-42ef-b768-9a6d0bb5a9a5/screenshots/step_0_click.png
+2025-12-15 02:21:02 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [1374, 338]}}
+</tool_call>
+2025-12-15 02:21:02 | INFO     | __main__:_process_row:402 | Ground truth bbox: [1280, 306.796875, 75, 54.5]
+2025-12-15 02:21:02 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:21:02 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:21:02 | INFO     | __main__:_process_row:378 | Step 1662/92 (1806.5%)
+2025-12-15 02:21:02 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:21:05 | INFO     | __main__:_process_row:392 | Instruction: Click on the button to the left of 'Views'
+2025-12-15 02:21:05 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005206_test_task_precision/f9c80513-c1c2-42ef-b768-9a6d0bb5a9a5/screenshots/step_0_click.png
+2025-12-15 02:21:05 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [1268, 235]}}
+</tool_call>
+2025-12-15 02:21:05 | INFO     | __main__:_process_row:402 | Ground truth bbox: [1183.9952392578125, 214.7578125, 52.5, 38.149993896484375]
+2025-12-15 02:21:05 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:21:05 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:21:05 | INFO     | __main__:_process_row:378 | Step 1663/92 (1807.6%)
+2025-12-15 02:21:05 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:21:08 | INFO     | __main__:_process_row:392 | Instruction: Click on the button to the left of 'Views'
+2025-12-15 02:21:08 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005316_test_task_style/f9c80513-c1c2-42ef-b768-9a6d0bb5a9a5/screenshots/step_0_click.png
+2025-12-15 02:21:08 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [1405, 494]}}
+</tool_call>
+2025-12-15 02:21:08 | INFO     | __main__:_process_row:402 | Ground truth bbox: [1312.484375, 462.625, 65, 46.515625]
+2025-12-15 02:21:08 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:21:08 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:21:08 | INFO     | __main__:_process_row:378 | Step 1664/92 (1808.7%)
+2025-12-15 02:21:08 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:21:12 | INFO     | __main__:_process_row:392 | Instruction: Click on the button to the left of 'Views'
+2025-12-15 02:21:12 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251113_005227_test_task_text_shrink/f9c80513-c1c2-42ef-b768-9a6d0bb5a9a5/screenshots/step_0_click.png
+2025-12-15 02:21:12 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [1384, 333]}}
+</tool_call>
+2025-12-15 02:21:12 | INFO     | __main__:_process_row:402 | Ground truth bbox: [1280, 302.796875, 75, 54.5]
+2025-12-15 02:21:12 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:21:12 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:21:12 | INFO     | __main__:_process_row:378 | Step 1665/92 (1809.8%)
+2025-12-15 02:21:12 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:21:15 | INFO     | __main__:_process_row:392 | Instruction: Click on the link above ‘E-Learning Providers’
+2025-12-15 02:21:15 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_004959_test_domain_original/f9e3d54d-b9e3-44a3-b992-803494aa95d1/screenshots/step_1_click.png
+2025-12-15 02:21:15 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [941, 305]}}
+</tool_call>
+2025-12-15 02:21:15 | INFO     | __main__:_process_row:402 | Ground truth bbox: [761, 286.96875, 192.953125, 28]
+2025-12-15 02:21:15 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:21:15 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:21:15 | INFO     | __main__:_process_row:378 | Step 1666/92 (1810.9%)
+2025-12-15 02:21:15 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:21:18 | INFO     | __main__:_process_row:392 | Instruction: Click on the link above ‘E-Learning Providers’
+2025-12-15 02:21:18 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005144_test_domain_precision/f9e3d54d-b9e3-44a3-b992-803494aa95d1/screenshots/step_1_click.png
+2025-12-15 02:21:18 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [894, 212]}}
+</tool_call>
+2025-12-15 02:21:18 | INFO     | __main__:_process_row:402 | Ground truth bbox: [820.6953125, 200.8781280517578, 135.06719970703125, 19.599990844726562]
+2025-12-15 02:21:18 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:21:18 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:21:18 | INFO     | __main__:_process_row:378 | Step 1667/92 (1812.0%)
+2025-12-15 02:21:18 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:21:21 | INFO     | __main__:_process_row:392 | Instruction: Click on the link above ‘E-Learning Providers’
+2025-12-15 02:21:21 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005301_test_domain_style/f9e3d54d-b9e3-44a3-b992-803494aa95d1/screenshots/step_1_click.png
+2025-12-15 02:21:21 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [504, 528]}}
+</tool_call>
+2025-12-15 02:21:21 | INFO     | __main__:_process_row:402 | Ground truth bbox: [360, 510.96875, 244.84375, 29]
+2025-12-15 02:21:21 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:21:21 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:21:21 | INFO     | __main__:_process_row:378 | Step 1668/92 (1813.0%)
+2025-12-15 02:21:21 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:21:25 | INFO     | __main__:_process_row:392 | Instruction: Click on the link above ‘E-Learning Providers’
+2025-12-15 02:21:25 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251113_005132_test_domain_text_shrink/f9e3d54d-b9e3-44a3-b992-803494aa95d1/screenshots/step_1_click.png
+2025-12-15 02:21:25 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [945, 276]}}
+</tool_call>
+2025-12-15 02:21:25 | INFO     | __main__:_process_row:402 | Ground truth bbox: [761, 261.203125, 156.578125, 22]
+2025-12-15 02:21:25 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:21:25 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:21:25 | INFO     | __main__:_process_row:378 | Step 1669/92 (1814.1%)
+2025-12-15 02:21:25 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:21:29 | INFO     | __main__:_process_row:392 | Instruction: Click on the button to the right of 'Overview'
+2025-12-15 02:21:29 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_004959_test_domain_original/fb29f0cf-2b86-4dd4-b3c4-1290bf280a0a/screenshots/step_0_click.png
+2025-12-15 02:21:29 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [402, 279]}}
+</tool_call>
+2025-12-15 02:21:29 | INFO     | __main__:_process_row:402 | Ground truth bbox: [362.15625, 261, 77.890625, 32]
+2025-12-15 02:21:29 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:21:29 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:21:29 | INFO     | __main__:_process_row:378 | Step 1670/92 (1815.2%)
+2025-12-15 02:21:29 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:21:32 | INFO     | __main__:_process_row:392 | Instruction: Click on the button to the right of 'Overview'
+2025-12-15 02:21:32 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005144_test_domain_precision/fb29f0cf-2b86-4dd4-b3c4-1290bf280a0a/screenshots/step_0_click.png
+2025-12-15 02:21:32 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [570, 196]}}
+</tool_call>
+2025-12-15 02:21:32 | INFO     | __main__:_process_row:402 | Ground truth bbox: [541.5046997070312, 182.6999969482422, 54.5234375, 22.399993896484375]
+2025-12-15 02:21:32 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:21:32 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:21:32 | INFO     | __main__:_process_row:378 | Step 1671/92 (1816.3%)
+2025-12-15 02:21:32 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:21:36 | INFO     | __main__:_process_row:392 | Instruction: Click on the button to the right of 'Overview'
+2025-12-15 02:21:36 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005301_test_domain_style/fb29f0cf-2b86-4dd4-b3c4-1290bf280a0a/screenshots/step_0_click.png
+2025-12-15 02:21:36 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [501, 298]}}
+</tool_call>
+2025-12-15 02:21:36 | INFO     | __main__:_process_row:402 | Ground truth bbox: [457.046875, 279.8125, 85.328125, 32]
+2025-12-15 02:21:36 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:21:36 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:21:36 | INFO     | __main__:_process_row:378 | Step 1672/92 (1817.4%)
+2025-12-15 02:21:36 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:21:38 | INFO     | __main__:_process_row:392 | Instruction: Click on the button to the right of 'Overview'
+2025-12-15 02:21:38 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251113_005132_test_domain_text_shrink/fb29f0cf-2b86-4dd4-b3c4-1290bf280a0a/screenshots/step_0_click.png
+2025-12-15 02:21:38 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [408, 272]}}
+</tool_call>
+2025-12-15 02:21:38 | INFO     | __main__:_process_row:402 | Ground truth bbox: [358.078125, 254, 74.1875, 32]
+2025-12-15 02:21:38 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:21:38 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:21:38 | INFO     | __main__:_process_row:378 | Step 1673/92 (1818.5%)
+2025-12-15 02:21:38 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:21:41 | INFO     | __main__:_process_row:392 | Instruction: Click on the img above ‘BACKLIT POSTER’
+2025-12-15 02:21:41 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_004959_test_domain_original/fb498b54-59a3-40a6-ae27-af464ab49860/screenshots/step_4_click.png
+2025-12-15 02:21:41 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [1345, 768]}}
+</tool_call>
+2025-12-15 02:21:41 | INFO     | __main__:_process_row:402 | Ground truth bbox: [1225, 469.9453125, 220, 140.109375]
+2025-12-15 02:21:41 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:21:41 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:21:41 | INFO     | __main__:_process_row:378 | Step 1674/92 (1819.6%)
+2025-12-15 02:21:41 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:21:44 | INFO     | __main__:_process_row:392 | Instruction: Click on the img above ‘BACKLIT POSTER’
+2025-12-15 02:21:44 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005144_test_domain_precision/fb498b54-59a3-40a6-ae27-af464ab49860/screenshots/step_4_click.png
+2025-12-15 02:21:44 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [1245, 467]}}
+</tool_call>
+2025-12-15 02:21:44 | INFO     | __main__:_process_row:402 | Ground truth bbox: [1145.4952392578125, 396.29998779296875, 154, 98.07656860351562]
+2025-12-15 02:21:44 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:21:44 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:21:44 | INFO     | __main__:_process_row:378 | Step 1675/92 (1820.7%)
+2025-12-15 02:21:44 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:21:48 | INFO     | __main__:_process_row:392 | Instruction: Click on the img above ‘BACKLIT POSTER’
+2025-12-15 02:21:48 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005301_test_domain_style/fb498b54-59a3-40a6-ae27-af464ab49860/screenshots/step_4_click.png
+2025-12-15 02:21:48 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [1347, 546]}}
+</tool_call>
+2025-12-15 02:21:48 | INFO     | __main__:_process_row:402 | Ground truth bbox: [1225, 469, 220, 140.109375]
+2025-12-15 02:21:48 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:21:48 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:21:48 | INFO     | __main__:_process_row:378 | Step 1676/92 (1821.7%)
+2025-12-15 02:21:48 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:21:50 | INFO     | __main__:_process_row:392 | Instruction: Click on the img above ‘BACKLIT POSTER’
+2025-12-15 02:21:50 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251113_005132_test_domain_text_shrink/fb498b54-59a3-40a6-ae27-af464ab49860/screenshots/step_4_click.png
+2025-12-15 02:21:50 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [1345, 567]}}
+</tool_call>
+2025-12-15 02:21:50 | INFO     | __main__:_process_row:402 | Ground truth bbox: [1225, 469.9453125, 220, 140.109375]
+2025-12-15 02:21:50 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:21:50 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:21:50 | INFO     | __main__:_process_row:378 | Step 1677/92 (1822.8%)
+2025-12-15 02:21:50 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:21:57 | INFO     | __main__:_process_row:392 | Instruction: Select the select below 'Car or truck'
+2025-12-15 02:21:57 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_004959_test_domain_original/fd4a3605-d037-4786-955e-d949697b7b62/screenshots/step_5_select.png
+2025-12-15 02:21:57 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: To proceed with selecting a towing vehicle, I need to choose the appropriate option from the dropdown menu labeled 'Car or truck'. This will allow me to specify the type of vehicle I am using for towing.
+Action: Click on the 'Choose...' dropdown under 'Car or truck' to select the appropriate vehicle type.
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [456, 448]}}
+</tool_call>
+2025-12-15 02:21:57 | INFO     | __main__:_process_row:402 | Ground truth bbox: [396, 425.96875, 92, 38.25]
+2025-12-15 02:21:57 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:21:57 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:21:57 | INFO     | __main__:_process_row:378 | Step 1678/92 (1823.9%)
+2025-12-15 02:21:57 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:21:58 | INFO     | __main__:_process_row:392 | Instruction: Select the select below 'Car or truck'
+2025-12-15 02:21:58 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005144_test_domain_precision/fd4a3605-d037-4786-955e-d949697b7b62/screenshots/step_5_select.png
+2025-12-15 02:21:58 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [598, 257]}}
+</tool_call>
+2025-12-15 02:21:58 | INFO     | __main__:_process_row:402 | Ground truth bbox: [565.1953125, 298.1781311035156, 64.39996337890625, 26.774993896484375]
+2025-12-15 02:21:58 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:21:58 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:21:58 | INFO     | __main__:_process_row:378 | Step 1679/92 (1825.0%)
+2025-12-15 02:21:58 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:22:07 | INFO     | __main__:_process_row:392 | Instruction: Select the select below 'Car or truck'
+2025-12-15 02:22:07 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005301_test_domain_style/fd4a3605-d037-4786-955e-d949697b7b62/screenshots/step_5_select.png
+2025-12-15 02:22:07 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: To proceed with selecting a towing vehicle, I need to choose the option that corresponds to the type of vehicle being used for towing. The 'Car or truck' option is already selected, which aligns with the goal of specifying the towing vehicle.
+Action: Click on the 'Car or truck' option to confirm the selection.
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [407, 465]}}
+</tool_call>
+2025-12-15 02:22:07 | INFO     | __main__:_process_row:402 | Ground truth bbox: [396, 517.25, 97.953125, 45.5]
+2025-12-15 02:22:07 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:22:07 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:22:07 | INFO     | __main__:_process_row:378 | Step 1680/92 (1826.1%)
+2025-12-15 02:22:07 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:22:10 | INFO     | __main__:_process_row:392 | Instruction: Select the select below 'Car or truck'
+2025-12-15 02:22:10 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251113_005132_test_domain_text_shrink/fd4a3605-d037-4786-955e-d949697b7b62/screenshots/step_5_select.png
+2025-12-15 02:22:10 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [440, 435]}}
+</tool_call>
+2025-12-15 02:22:10 | INFO     | __main__:_process_row:402 | Ground truth bbox: [396, 413.78125, 84, 35.75]
+2025-12-15 02:22:10 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:22:10 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:22:10 | INFO     | __main__:_process_row:378 | Step 1681/92 (1827.2%)
+2025-12-15 02:22:10 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:22:14 | INFO     | __main__:_process_row:392 | Instruction: Click on the button above 'April 23rd 2023' button
+2025-12-15 02:22:14 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005055_test_task_original/fe471e16-d33f-4f87-accf-dcf7e91617cb/screenshots/step_0_click.png
+2025-12-15 02:22:14 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [456, 374]}}
+</tool_call>
+2025-12-15 02:22:14 | INFO     | __main__:_process_row:402 | Ground truth bbox: [488.671875, 523.0, 33.46875, 34]
+2025-12-15 02:22:14 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:22:14 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:22:14 | INFO     | __main__:_process_row:378 | Step 1682/92 (1828.3%)
+2025-12-15 02:22:14 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:22:18 | INFO     | __main__:_process_row:392 | Instruction: Click on the button above 'April 23rd 2023' button
+2025-12-15 02:22:18 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005206_test_task_precision/fe471e16-d33f-4f87-accf-dcf7e91617cb/screenshots/step_0_click.png
+2025-12-15 02:22:18 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [478, 353]}}
+</tool_call>
+2025-12-15 02:22:18 | INFO     | __main__:_process_row:402 | Ground truth bbox: [342.0703125, 412.78125, 23.428131103515625, 23.79998779296875]
+2025-12-15 02:22:18 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:22:18 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:22:18 | INFO     | __main__:_process_row:378 | Step 1683/92 (1829.3%)
+2025-12-15 02:22:18 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:22:21 | INFO     | __main__:_process_row:392 | Instruction: Click on the button above 'April 23rd 2023' button
+2025-12-15 02:22:21 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005316_test_task_style/fe471e16-d33f-4f87-accf-dcf7e91617cb/screenshots/step_0_click.png
+2025-12-15 02:22:21 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [628, 475]}}
+</tool_call>
+2025-12-15 02:22:21 | INFO     | __main__:_process_row:402 | Ground truth bbox: [488.671875, 523.0, 33.46875, 34]
+2025-12-15 02:22:21 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:22:21 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:22:21 | INFO     | __main__:_process_row:378 | Step 1684/92 (1830.4%)
+2025-12-15 02:22:21 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:22:25 | INFO     | __main__:_process_row:392 | Instruction: Click on the button above 'April 23rd 2023' button
+2025-12-15 02:22:25 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251113_005227_test_task_text_shrink/fe471e16-d33f-4f87-accf-dcf7e91617cb/screenshots/step_0_click.png
+2025-12-15 02:22:25 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [487, 356]}}
+</tool_call>
+2025-12-15 02:22:25 | INFO     | __main__:_process_row:402 | Ground truth bbox: [488.671875, 523.0, 33.40625, 34]
+2025-12-15 02:22:25 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:22:25 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:22:25 | INFO     | __main__:_process_row:378 | Step 1685/92 (1831.5%)
+2025-12-15 02:22:25 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:22:28 | INFO     | __main__:_process_row:392 | Instruction: Click on the span above ‘Clear All Filters’
+2025-12-15 02:22:28 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_004959_test_domain_original/fe788604-16a6-4aab-9a67-19c417b5ae18/screenshots/step_1_click.png
+2025-12-15 02:22:28 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [849, 546]}}
+</tool_call>
+2025-12-15 02:22:28 | INFO     | __main__:_process_row:402 | Ground truth bbox: [800.796875, 531.6015625, 88.28125, 16.796875]
+2025-12-15 02:22:28 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:22:28 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:22:28 | INFO     | __main__:_process_row:378 | Step 1686/92 (1832.6%)
+2025-12-15 02:22:28 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:22:31 | INFO     | __main__:_process_row:392 | Instruction: Click on the span above ‘Clear All Filters’
+2025-12-15 02:22:31 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005144_test_domain_precision/fe788604-16a6-4aab-9a67-19c417b5ae18/screenshots/step_1_click.png
+2025-12-15 02:22:31 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [584, 576]}}
+</tool_call>
+2025-12-15 02:22:31 | INFO     | __main__:_process_row:402 | Ground truth bbox: [560.5578002929688, 534.12109375, 61.796875, 11.7578125]
+2025-12-15 02:22:31 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:22:31 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:22:31 | INFO     | __main__:_process_row:378 | Step 1687/92 (1833.7%)
+2025-12-15 02:22:31 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:22:35 | INFO     | __main__:_process_row:392 | Instruction: Click on the span above ‘Clear All Filters’
+2025-12-15 02:22:35 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005301_test_domain_style/fe788604-16a6-4aab-9a67-19c417b5ae18/screenshots/step_1_click.png
+2025-12-15 02:22:35 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [849, 546]}}
+</tool_call>
+2025-12-15 02:22:35 | INFO     | __main__:_process_row:402 | Ground truth bbox: [796.6875, 531.6015625, 96.484375, 16.796875]
+2025-12-15 02:22:35 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:22:35 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:22:35 | INFO     | __main__:_process_row:378 | Step 1688/92 (1834.8%)
+2025-12-15 02:22:35 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:22:38 | INFO     | __main__:_process_row:392 | Instruction: Click on the span above ‘Clear All Filters’
+2025-12-15 02:22:38 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251113_005132_test_domain_text_shrink/fe788604-16a6-4aab-9a67-19c417b5ae18/screenshots/step_1_click.png
+2025-12-15 02:22:38 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [849, 546]}}
+</tool_call>
+2025-12-15 02:22:38 | INFO     | __main__:_process_row:402 | Ground truth bbox: [810.25, 533.40625, 69.375, 13.1875]
+2025-12-15 02:22:38 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:22:38 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:22:38 | INFO     | __main__:_process_row:378 | Step 1689/92 (1835.9%)
+2025-12-15 02:22:38 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:22:41 | INFO     | __main__:_process_row:392 | Instruction: Click on the button below 'Mileage Choice Program'
+2025-12-15 02:22:41 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_004959_test_domain_original/feacf6a1-8671-45ad-8b96-6510d61bbfe4/screenshots/step_0_click.png
+2025-12-15 02:22:41 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [174, 915]}}
+</tool_call>
+2025-12-15 02:22:41 | INFO     | __main__:_process_row:402 | Ground truth bbox: [30, 886.1875, 285, 38]
+2025-12-15 02:22:41 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:22:41 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:22:41 | INFO     | __main__:_process_row:378 | Step 1690/92 (1837.0%)
+2025-12-15 02:22:41 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:22:44 | INFO     | __main__:_process_row:392 | Instruction: Click on the button below 'Mileage Choice Program'
+2025-12-15 02:22:44 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005144_test_domain_precision/feacf6a1-8671-45ad-8b96-6510d61bbfe4/screenshots/step_0_click.png
+2025-12-15 02:22:44 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [169, 589]}}
+</tool_call>
+2025-12-15 02:22:44 | INFO     | __main__:_process_row:402 | Ground truth bbox: [21, 569.9312133789062, 295.4984436035156, 26.60003662109375]
+2025-12-15 02:22:44 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:22:44 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:22:44 | INFO     | __main__:_process_row:378 | Step 1691/92 (1838.0%)
+2025-12-15 02:22:44 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:22:46 | INFO     | __main__:_process_row:392 | Instruction: Click on the button below 'Mileage Choice Program'
+2025-12-15 02:22:46 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005301_test_domain_style/feacf6a1-8671-45ad-8b96-6510d61bbfe4/screenshots/step_0_click.png
+2025-12-15 02:22:46 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [80, 922]}}
+</tool_call>
+2025-12-15 02:22:46 | INFO     | __main__:_process_row:402 | Ground truth bbox: [33.578125, 888.96875, 95.390625, 48.71875]
+2025-12-15 02:22:46 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:22:46 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:22:46 | INFO     | __main__:_process_row:378 | Step 1692/92 (1839.1%)
+2025-12-15 02:22:46 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:22:49 | INFO     | __main__:_process_row:392 | Instruction: Click on the button below 'Mileage Choice Program'
+2025-12-15 02:22:49 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251113_005132_test_domain_text_shrink/feacf6a1-8671-45ad-8b96-6510d61bbfe4/screenshots/step_0_click.png
+2025-12-15 02:22:49 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [174, 841]}}
+</tool_call>
+2025-12-15 02:22:49 | INFO     | __main__:_process_row:402 | Ground truth bbox: [30, 812.6875, 285, 38]
+2025-12-15 02:22:49 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:22:49 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:22:49 | INFO     | __main__:_process_row:378 | Step 1693/92 (1840.2%)
+2025-12-15 02:22:49 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:22:59 | INFO     | __main__:_process_row:392 | Instruction: Click on the link above ‘Address Change’
+2025-12-15 02:22:59 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_004959_test_domain_original/feacf6a1-8671-45ad-8b96-6510d61bbfe4/screenshots/step_1_click.png
+2025-12-15 02:22:59 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: To find the link above 'Address Change', I'll first locate the 'Address Change' item in the list under 'Online Services'. Once identified, I'll look directly above it to find the desired link.
+Action: Locate the 'Address Change' link under 'Online Services' and identify the link immediately above it.
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [418, 424]}}
+</tool_call>
+2025-12-15 02:22:59 | INFO     | __main__:_process_row:402 | Ground truth bbox: [273.421875, 385.78125, 325.9375, 19.5]
+2025-12-15 02:22:59 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:22:59 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:22:59 | INFO     | __main__:_process_row:378 | Step 1694/92 (1841.3%)
+2025-12-15 02:22:59 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:23:08 | INFO     | __main__:_process_row:392 | Instruction: Click on the link above ‘Address Change’
+2025-12-15 02:23:08 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005144_test_domain_precision/feacf6a1-8671-45ad-8b96-6510d61bbfe4/screenshots/step_1_click.png
+2025-12-15 02:23:08 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: To find the link above 'Address Change', I need to locate the 'Address Change' option in the list under the 'Online Services' section. It appears to be the second item in this list.
+Action: Click on the link labeled 'Address Change'.
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [435, 297]}}
+</tool_call>
+2025-12-15 02:23:08 | INFO     | __main__:_process_row:402 | Ground truth bbox: [265.40936279296875, 270.046875, 327.0859375, 13.649993896484375]
+2025-12-15 02:23:08 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:23:08 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:23:08 | INFO     | __main__:_process_row:378 | Step 1695/92 (1842.4%)
+2025-12-15 02:23:08 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:23:16 | INFO     | __main__:_process_row:392 | Instruction: Click on the link above ‘Address Change’
+2025-12-15 02:23:16 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005301_test_domain_style/feacf6a1-8671-45ad-8b96-6510d61bbfe4/screenshots/step_1_click.png
+2025-12-15 02:23:16 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: To find the link above 'Address Change', I need to locate the section where 'Address Change' is listed. It appears under the 'Online Services' category.
+Action: Click on the 'Vehicle Registration Renewal' link located above 'Address Change' in the 'Online Services' section.
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [421, 385]}}
+</tool_call>
+2025-12-15 02:23:16 | INFO     | __main__:_process_row:402 | Ground truth bbox: [274.421875, 370.046875, 326.9375, 20.5]
+2025-12-15 02:23:16 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:23:16 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:23:16 | INFO     | __main__:_process_row:378 | Step 1696/92 (1843.5%)
+2025-12-15 02:23:16 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:23:25 | INFO     | __main__:_process_row:392 | Instruction: Click on the link above ‘Address Change’
+2025-12-15 02:23:25 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251113_005132_test_domain_text_shrink/feacf6a1-8671-45ad-8b96-6510d61bbfe4/screenshots/step_1_click.png
+2025-12-15 02:23:25 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: To find the link above 'Address Change', I need to locate the section where 'Address Change' is listed. It appears under the 'Online Services' category.
+Action: Click on the 'Vehicle Registration Renewal' link located above 'Address Change'.
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [433, 368]}}
+</tool_call>
+2025-12-15 02:23:25 | INFO     | __main__:_process_row:402 | Ground truth bbox: [269.609375, 357.15625, 325.9375, 16.46875]
+2025-12-15 02:23:25 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:23:25 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:23:25 | INFO     | __main__:_process_row:378 | Step 1697/92 (1844.6%)
+2025-12-15 02:23:25 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:23:29 | INFO     | __main__:_process_row:392 | Instruction: Click on the link above 'Employment Development Department'
+2025-12-15 02:23:29 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_004959_test_domain_original/ff1de5de-7801-4187-a064-8e3bef382eda/screenshots/step_3_click.png
+2025-12-15 02:23:29 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [631, 457]}}
+</tool_call>
+2025-12-15 02:23:29 | INFO     | __main__:_process_row:402 | Ground truth bbox: [513, 381.34375, 230.15625, 26]
+2025-12-15 02:23:29 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:23:29 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:23:29 | INFO     | __main__:_process_row:378 | Step 1698/92 (1845.7%)
+2025-12-15 02:23:29 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:23:33 | INFO     | __main__:_process_row:392 | Instruction: Click on the link above 'Employment Development Department'
+2025-12-15 02:23:33 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005144_test_domain_precision/ff1de5de-7801-4187-a064-8e3bef382eda/screenshots/step_3_click.png
+2025-12-15 02:23:33 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [730, 278]}}
+</tool_call>
+2025-12-15 02:23:33 | INFO     | __main__:_process_row:402 | Ground truth bbox: [647.0952758789062, 266.94061279296875, 161.109375, 18.20001220703125]
+2025-12-15 02:23:33 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:23:33 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:23:33 | INFO     | __main__:_process_row:378 | Step 1699/92 (1846.7%)
+2025-12-15 02:23:33 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:23:38 | INFO     | __main__:_process_row:392 | Instruction: Click on the link above 'Employment Development Department'
+2025-12-15 02:23:38 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005301_test_domain_style/ff1de5de-7801-4187-a064-8e3bef382eda/screenshots/step_3_click.png
+2025-12-15 02:23:38 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [645, 417]}}
+</tool_call>
+2025-12-15 02:23:38 | INFO     | __main__:_process_row:402 | Ground truth bbox: [512.5, 398.5625, 230.15625, 27]
+2025-12-15 02:23:38 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:23:38 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:23:38 | INFO     | __main__:_process_row:378 | Step 1700/92 (1847.8%)
+2025-12-15 02:23:38 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:23:42 | INFO     | __main__:_process_row:392 | Instruction: Click on the link above 'Employment Development Department'
+2025-12-15 02:23:42 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251113_005132_test_domain_text_shrink/ff1de5de-7801-4187-a064-8e3bef382eda/screenshots/step_3_click.png
+2025-12-15 02:23:42 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [631, 427]}}
+</tool_call>
+2025-12-15 02:23:42 | INFO     | __main__:_process_row:402 | Ground truth bbox: [513, 381.34375, 230.15625, 26]
+2025-12-15 02:23:42 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:23:42 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:23:42 | INFO     | __main__:_process_row:378 | Step 1701/92 (1848.9%)
+2025-12-15 02:23:42 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:23:46 | INFO     | __main__:_process_row:392 | Instruction: Click on the arrow to the left of 'newest'
+2025-12-15 02:23:46 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_004959_test_domain_original/ff8f6003-6068-4567-b1ef-61e3222d3bce/screenshots/step_0_click.png
+2025-12-15 02:23:46 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [278, 125]}}
+</tool_call>
+2025-12-15 02:23:46 | INFO     | __main__:_process_row:402 | Ground truth bbox: [296.140625, 109, 25.140625, 32]
+2025-12-15 02:23:46 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:23:46 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:23:46 | INFO     | __main__:_process_row:378 | Step 1702/92 (1850.0%)
+2025-12-15 02:23:46 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:23:50 | INFO     | __main__:_process_row:392 | Instruction: Click on the arrow to the left of 'newest'
+2025-12-15 02:23:50 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005144_test_domain_precision/ff8f6003-6068-4567-b1ef-61e3222d3bce/screenshots/step_0_click.png
+2025-12-15 02:23:50 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [284, 86]}}
+</tool_call>
+2025-12-15 02:23:50 | INFO     | __main__:_process_row:402 | Ground truth bbox: [207.29843139648438, 76.29999542236328, 17.598434448242188, 22.400001525878906]
+2025-12-15 02:23:50 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:23:50 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:23:50 | INFO     | __main__:_process_row:378 | Step 1703/92 (1851.1%)
+2025-12-15 02:23:50 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:23:54 | INFO     | __main__:_process_row:392 | Instruction: Click on the arrow to the left of 'newest'
+2025-12-15 02:23:54 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005301_test_domain_style/ff8f6003-6068-4567-b1ef-61e3222d3bce/screenshots/step_0_click.png
+2025-12-15 02:23:54 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [438, 130]}}
+</tool_call>
+2025-12-15 02:23:54 | INFO     | __main__:_process_row:402 | Ground truth bbox: [303.328125, 110, 25.140625, 36.09375]
+2025-12-15 02:23:54 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:23:54 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:23:54 | INFO     | __main__:_process_row:378 | Step 1704/92 (1852.2%)
+2025-12-15 02:23:54 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:23:59 | INFO     | __main__:_process_row:392 | Instruction: Click on the arrow to the left of 'newest'
+2025-12-15 02:23:59 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251113_005132_test_domain_text_shrink/ff8f6003-6068-4567-b1ef-61e3222d3bce/screenshots/step_0_click.png
+2025-12-15 02:23:59 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [405, 124]}}
+</tool_call>
+2025-12-15 02:23:59 | INFO     | __main__:_process_row:402 | Ground truth bbox: [294.375, 109, 23.4375, 29]
+2025-12-15 02:23:59 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:23:59 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:23:59 | INFO     | __main__:_process_row:378 | Step 1705/92 (1853.3%)
+2025-12-15 02:23:59 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:24:02 | INFO     | __main__:_process_row:392 | Instruction: Click on the 'View Deal' button above the flight '8:48 AM - 10:28 AM'
+2025-12-15 02:24:02 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005125_test_website_original/ffc01d9d-bf28-4787-a42c-b92b44db3285/screenshots/step_5_click.png
+2025-12-15 02:24:02 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [1163, 692]}}
+</tool_call>
+2025-12-15 02:24:02 | INFO     | __main__:_process_row:402 | Ground truth bbox: [1085, 522.0, 140, 36]
+2025-12-15 02:24:02 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:24:02 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:24:02 | INFO     | __main__:_process_row:378 | Step 1706/92 (1854.3%)
+2025-12-15 02:24:02 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:24:06 | INFO     | __main__:_process_row:392 | Instruction: Click on the 'View Deal' button above the flight '8:48 AM - 10:28 AM'
+2025-12-15 02:24:06 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005233_test_website_precision/ffc01d9d-bf28-4787-a42c-b92b44db3285/screenshots/step_5_click.png
+2025-12-15 02:24:06 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [1105, 647]}}
+</tool_call>
+2025-12-15 02:24:06 | INFO     | __main__:_process_row:402 | Ground truth bbox: [1047.4952392578125, 527.3999938964844, 98, 25.20001220703125]
+2025-12-15 02:24:06 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:24:06 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:24:06 | INFO     | __main__:_process_row:378 | Step 1707/92 (1855.4%)
+2025-12-15 02:24:06 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:24:09 | INFO     | __main__:_process_row:392 | Instruction: Click on the 'View Deal' button above the flight '8:48 AM - 10:28 AM'
+2025-12-15 02:24:09 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005341_test_website_style/ffc01d9d-bf28-4787-a42c-b92b44db3285/screenshots/step_5_click.png
+2025-12-15 02:24:09 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [1195, 690]}}
+</tool_call>
+2025-12-15 02:24:09 | INFO     | __main__:_process_row:402 | Ground truth bbox: [1126.1875, 522.0, 119.125, 36]
+2025-12-15 02:24:09 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:24:09 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:24:09 | INFO     | __main__:_process_row:378 | Step 1708/92 (1856.5%)
+2025-12-15 02:24:09 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:24:12 | INFO     | __main__:_process_row:392 | Instruction: Click on the 'View Deal' button above the flight '8:48 AM - 10:28 AM'
+2025-12-15 02:24:12 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251113_005230_test_website_text_shrink/ffc01d9d-bf28-4787-a42c-b92b44db3285/screenshots/step_5_click.png
+2025-12-15 02:24:12 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [1175, 692]}}
+</tool_call>
+2025-12-15 02:24:12 | INFO     | __main__:_process_row:402 | Ground truth bbox: [1105.875, 522.0, 119.125, 36]
+2025-12-15 02:24:12 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:24:12 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:24:12 | INFO     | __main__:_process_row:378 | Step 1709/92 (1857.6%)
+2025-12-15 02:24:12 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:24:16 | INFO     | __main__:_process_row:392 | Instruction: Click on the button below 'Select all'
+2025-12-15 02:24:16 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005125_test_website_original/ffc01d9d-bf28-4787-a42c-b92b44db3285/screenshots/step_16_click.png
+2025-12-15 02:24:16 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [572, 546]}}
+</tool_call>
+2025-12-15 02:24:16 | INFO     | __main__:_process_row:402 | Ground truth bbox: [344, 519.0, 452, 42]
+2025-12-15 02:24:16 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:24:16 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:24:16 | INFO     | __main__:_process_row:378 | Step 1710/92 (1858.7%)
+2025-12-15 02:24:16 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:24:21 | INFO     | __main__:_process_row:392 | Instruction: Click on the button below 'Select all'
+2025-12-15 02:24:21 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005233_test_website_precision/ffc01d9d-bf28-4787-a42c-b92b44db3285/screenshots/step_16_click.png
+2025-12-15 02:24:21 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [674, 545]}}
+</tool_call>
+2025-12-15 02:24:21 | INFO     | __main__:_process_row:402 | Ground truth bbox: [528.7952880859375, 525.3000183105469, 316.4000244140625, 29.39996337890625]
+2025-12-15 02:24:21 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:24:21 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:24:21 | INFO     | __main__:_process_row:378 | Step 1711/92 (1859.8%)
+2025-12-15 02:24:21 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:24:24 | INFO     | __main__:_process_row:392 | Instruction: Click on the button below 'Select all'
+2025-12-15 02:24:24 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005341_test_website_style/ffc01d9d-bf28-4787-a42c-b92b44db3285/screenshots/step_16_click.png
+2025-12-15 02:24:24 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [453, 548]}}
+</tool_call>
+2025-12-15 02:24:24 | INFO     | __main__:_process_row:402 | Ground truth bbox: [371.953125, 517.0, 153.59375, 46]
+2025-12-15 02:24:24 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:24:24 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:24:24 | INFO     | __main__:_process_row:378 | Step 1712/92 (1860.9%)
+2025-12-15 02:24:24 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:24:29 | INFO     | __main__:_process_row:392 | Instruction: Click on the button below 'Select all'
+2025-12-15 02:24:29 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251113_005230_test_website_text_shrink/ffc01d9d-bf28-4787-a42c-b92b44db3285/screenshots/step_16_click.png
+2025-12-15 02:24:29 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [572, 544]}}
+</tool_call>
+2025-12-15 02:24:29 | INFO     | __main__:_process_row:402 | Ground truth bbox: [344, 519.0, 452, 42]
+2025-12-15 02:24:29 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:24:29 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:24:29 | INFO     | __main__:_process_row:378 | Step 1713/92 (1862.0%)
+2025-12-15 02:24:29 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:24:33 | INFO     | __main__:_process_row:392 | Instruction: Type 'SAN FRANCISCO' in the textbox above 'Depart Thu 6/15'
+2025-12-15 02:24:33 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005125_test_website_original/ffc01d9d-bf28-4787-a42c-b92b44db3285/screenshots/step_18_type.png
+2025-12-15 02:24:33 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [687, 466]}}
+</tool_call>
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "type", "text": "SAN FRANCISCO"}}
+</tool_call>
+2025-12-15 02:24:33 | INFO     | __main__:_process_row:402 | Ground truth bbox: [344, 435, 223, 42]
+2025-12-15 02:24:33 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:24:33 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:24:33 | INFO     | __main__:_process_row:378 | Step 1714/92 (1863.0%)
+2025-12-15 02:24:33 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:24:38 | INFO     | __main__:_process_row:392 | Instruction: Type 'SAN FRANCISCO' in the textbox above 'Depart Thu 6/15'
+2025-12-15 02:24:38 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005233_test_website_precision/ffc01d9d-bf28-4787-a42c-b92b44db3285/screenshots/step_18_type.png
+2025-12-15 02:24:38 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [784, 357]}}
+</tool_call>
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "type", "text": "SAN FRANCISCO"}}
+</tool_call>
+2025-12-15 02:24:38 | INFO     | __main__:_process_row:402 | Ground truth bbox: [528.7952880859375, 304.5, 156.10003662109375, 29.399993896484375]
+2025-12-15 02:24:38 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:24:38 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:24:38 | INFO     | __main__:_process_row:378 | Step 1715/92 (1864.1%)
+2025-12-15 02:24:38 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:24:42 | INFO     | __main__:_process_row:392 | Instruction: Type 'SAN FRANCISCO' in the textbox above 'Depart Thu 6/15'
+2025-12-15 02:24:42 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005341_test_website_style/ffc01d9d-bf28-4787-a42c-b92b44db3285/screenshots/step_18_type.png
+2025-12-15 02:24:42 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [482, 479]}}
+</tool_call>
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "type", "text": "SAN FRANCISCO"}}
+</tool_call>
+2025-12-15 02:24:42 | INFO     | __main__:_process_row:402 | Ground truth bbox: [368, 454, 223, 45.78125]
+2025-12-15 02:24:42 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:24:42 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:24:42 | INFO     | __main__:_process_row:378 | Step 1716/92 (1865.2%)
+2025-12-15 02:24:42 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:24:47 | INFO     | __main__:_process_row:392 | Instruction: Type 'SAN FRANCISCO' in the textbox above 'Depart Thu 6/15'
+2025-12-15 02:24:47 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251113_005230_test_website_text_shrink/ffc01d9d-bf28-4787-a42c-b92b44db3285/screenshots/step_18_type.png
+2025-12-15 02:24:47 | INFO     | __main__:_process_row:400 | Raw prediction: 
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [687, 467]}}
+</tool_call>
+<tool_call>
+{"name": "computer_use", "arguments": {"action": "type", "text": "SAN FRANCISCO"}}
+</tool_call>
+2025-12-15 02:24:47 | INFO     | __main__:_process_row:402 | Ground truth bbox: [344, 435, 223, 42]
+2025-12-15 02:24:47 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:24:47 | INFO     | __main__:run:371 | Evaluation completed. Processed 92 rows in 373.84 seconds
+2025-12-15 02:24:47 | INFO     | __main__:main:657 | Evaluation completed. Logs saved to: /mnt/baseline_results/evaluation_20251215_021833.log

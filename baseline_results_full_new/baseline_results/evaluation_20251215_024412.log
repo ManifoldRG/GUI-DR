@@ -1,0 +1,925 @@
+2025-12-15 02:44:12 | INFO     | __main__:main:651 | Logging to file: /mnt/baseline_results/evaluation_20251215_024412.log
+2025-12-15 02:44:12 | INFO     | __main__:main:652 | Starting evaluation with config_id: uitars15_reasoning_relational_query
+2025-12-15 02:44:12 | INFO     | __main__:run:347 | Starting evaluation on 92 rows
+2025-12-15 02:44:12 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:44:12 | INFO     | __main__:_process_row:378 | Step 1625/92 (1766.3%)
+2025-12-15 02:44:12 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:44:38 | INFO     | __main__:_process_row:392 | Instruction: Type 'Retail sales associate' in the textbox above 'Enter ZIP Code or City, State'
+2025-12-15 02:44:38 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005125_test_website_original/f5b9e5b9-1992-4444-b389-680912e50fe6/screenshots/step_1_type.png
+2025-12-15 02:44:38 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a search box on the page that says "Enter ZIP Code or City, State." To complete the task, I need to click on this input field first in order to enter the job title "Retail Sales Associate." This input box is located just below the search box that says "Search by title, skill, or other keyword."
+Action: click(start_box='(233,303)')
+2025-12-15 02:44:38 | INFO     | __main__:_process_row:402 | Ground truth bbox: [31, 213.09375, 440.5, 48]
+2025-12-15 02:44:38 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:44:38 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:44:38 | INFO     | __main__:_process_row:378 | Step 1626/92 (1767.4%)
+2025-12-15 02:44:38 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:44:47 | INFO     | __main__:_process_row:392 | Instruction: Type 'Retail sales associate' in the textbox above 'Enter ZIP Code or City, State'
+2025-12-15 02:44:47 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005233_test_website_precision/f5b9e5b9-1992-4444-b389-680912e50fe6/screenshots/step_1_type.png
+2025-12-15 02:44:47 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a search box at the top of the page, which is perfect for entering job titles. The task requires me to input "Retail sales associate," so I need to click on this search box first to activate it. This way, I can start typing the job title.
+Action: click(start_box='(376,167)')
+2025-12-15 02:44:47 | INFO     | __main__:_process_row:402 | Ground truth bbox: [281.6953125, 149.16561889648438, 322.3499755859375, 33.600006103515625]
+2025-12-15 02:44:47 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:44:47 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:44:47 | INFO     | __main__:_process_row:378 | Step 1627/92 (1768.5%)
+2025-12-15 02:44:47 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:44:53 | INFO     | __main__:_process_row:392 | Instruction: Type 'Retail sales associate' in the textbox above 'Enter ZIP Code or City, State'
+2025-12-15 02:44:53 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005341_test_website_style/f5b9e5b9-1992-4444-b389-680912e50fe6/screenshots/step_1_type.png
+2025-12-15 02:44:53 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there are two input fields on the page, and the one I need to focus on is the one that says "Enter ZIP Code or City, State." I need to click on it first to make it active for input. This input box is located just below the search box, and it's a white rectangular area.
+Action: click(start_box='(233,310)')
+2025-12-15 02:44:53 | INFO     | __main__:_process_row:402 | Ground truth bbox: [31, 220.09375, 440.5, 48]
+2025-12-15 02:44:53 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:44:53 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:44:53 | INFO     | __main__:_process_row:378 | Step 1628/92 (1769.6%)
+2025-12-15 02:44:53 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:45:03 | INFO     | __main__:_process_row:392 | Instruction: Type 'Retail sales associate' in the textbox above 'Enter ZIP Code or City, State'
+2025-12-15 02:45:03 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251113_005230_test_website_text_shrink/f5b9e5b9-1992-4444-b389-680912e50fe6/screenshots/step_1_type.png
+2025-12-15 02:45:03 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a search box on the page that says "Enter ZIP Code or City, State." To complete the task, I need to click on this input field first in order to enter the job title "Retail Sales Associate." This input box is located just below the search box, and it's quite easy to find.
+Action: click(start_box='(233,303)')
+2025-12-15 02:45:03 | INFO     | __main__:_process_row:402 | Ground truth bbox: [31, 213.09375, 440.5, 48]
+2025-12-15 02:45:03 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:45:03 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:45:03 | INFO     | __main__:_process_row:378 | Step 1629/92 (1770.7%)
+2025-12-15 02:45:03 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:45:10 | INFO     | __main__:_process_row:392 | Instruction: Type 'hamburger' in the textbox above ‘low carb’
+2025-12-15 02:45:10 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_004959_test_domain_original/f5da4b14-026d-4a10-ab89-f5720418f2b4/screenshots/step_1_type.png
+2025-12-15 02:45:10 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a search box at the top of the page, which is perfect for entering the keyword "hamburger." Let me click on this search box first to activate it, so I can start typing.
+Action: click(start_box='(782,196)')
+2025-12-15 02:45:10 | INFO     | __main__:_process_row:402 | Ground truth bbox: [736, 181.15625, 373.375, 24]
+2025-12-15 02:45:10 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:45:10 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:45:10 | INFO     | __main__:_process_row:378 | Step 1630/92 (1771.7%)
+2025-12-15 02:45:10 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:45:17 | INFO     | __main__:_process_row:392 | Instruction: Type 'hamburger' in the textbox above ‘low carb’
+2025-12-15 02:45:17 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005144_test_domain_precision/f5da4b14-026d-4a10-ab89-f5720418f2b4/screenshots/step_1_type.png
+2025-12-15 02:45:17 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a search box at the top of the page, which is perfect for entering the keyword "hamburger." Let me click on this search box first to activate it, so I can start typing.
+Action: click(start_box='(906,137)')
+2025-12-15 02:45:17 | INFO     | __main__:_process_row:402 | Ground truth bbox: [803.1953125, 126.80937194824219, 261.3624267578125, 16.800003051757812]
+2025-12-15 02:45:17 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:45:17 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:45:17 | INFO     | __main__:_process_row:378 | Step 1631/92 (1772.8%)
+2025-12-15 02:45:17 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:45:25 | INFO     | __main__:_process_row:392 | Instruction: Type 'hamburger' in the textbox above ‘low carb’
+2025-12-15 02:45:25 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005301_test_domain_style/f5da4b14-026d-4a10-ab89-f5720418f2b4/screenshots/step_1_type.png
+2025-12-15 02:45:25 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a search box at the top of the page, which is perfect for entering the keyword "hamburger." Let me click on this search box first to activate it, so I can start typing.
+Action: click(start_box='(927,200)')
+2025-12-15 02:45:25 | INFO     | __main__:_process_row:402 | Ground truth bbox: [741.84375, 175.734375, 374.5625, 45.0625]
+2025-12-15 02:45:25 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:45:25 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:45:25 | INFO     | __main__:_process_row:378 | Step 1632/92 (1773.9%)
+2025-12-15 02:45:25 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:45:33 | INFO     | __main__:_process_row:392 | Instruction: Type 'hamburger' in the textbox above ‘low carb’
+2025-12-15 02:45:33 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251113_005132_test_domain_text_shrink/f5da4b14-026d-4a10-ab89-f5720418f2b4/screenshots/step_1_type.png
+2025-12-15 02:45:33 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a search box at the top of the page, which is perfect for entering the keyword "hamburger." Let me click on this search box first to activate it, so I can start typing.
+Action: click(start_box='(786,195)')
+2025-12-15 02:45:33 | INFO     | __main__:_process_row:402 | Ground truth bbox: [736, 181.15625, 373.375, 24]
+2025-12-15 02:45:33 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:45:33 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:45:33 | INFO     | __main__:_process_row:378 | Step 1633/92 (1775.0%)
+2025-12-15 02:45:33 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:45:41 | INFO     | __main__:_process_row:392 | Instruction: Click on the link below 'View Other Highway Safety Related Data'
+2025-12-15 02:45:41 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_004959_test_domain_original/f670ae67-e875-4fb5-aa51-070dff354aa6/screenshots/step_1_click.png
+2025-12-15 02:45:41 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a link labeled "View Other Highway Safety Related Data" in the Traffic Crash Data section. This is exactly what I was looking for, and I can simply click on it to access the relevant data page.
+Action: click(start_box='(1081,521)')
+2025-12-15 02:45:41 | INFO     | __main__:_process_row:402 | Ground truth bbox: [995.390625, 527.6484375, 314.828125, 24.703125]
+2025-12-15 02:45:41 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:45:41 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:45:41 | INFO     | __main__:_process_row:378 | Step 1634/92 (1776.1%)
+2025-12-15 02:45:41 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:45:50 | INFO     | __main__:_process_row:392 | Instruction: Click on the link below 'View Other Highway Safety Related Data'
+2025-12-15 02:45:50 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005144_test_domain_precision/f670ae67-e875-4fb5-aa51-070dff354aa6/screenshots/step_1_click.png
+2025-12-15 02:45:50 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a link labeled "View Other Highway Safety Related Data" located just below the "Traffic Crash Data" section. This link is positioned towards the middle right of the page, and I need to click on it to access the relevant data.
+Action: click(start_box='(1060,352)')
+2025-12-15 02:45:50 | INFO     | __main__:_process_row:402 | Ground truth bbox: [987.3937377929688, 356.5078125, 323.43280029296875, 17.29217529296875]
+2025-12-15 02:45:50 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:45:50 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:45:50 | INFO     | __main__:_process_row:378 | Step 1635/92 (1777.2%)
+2025-12-15 02:45:50 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:45:57 | INFO     | __main__:_process_row:392 | Instruction: Click on the link below 'View Other Highway Safety Related Data'
+2025-12-15 02:45:57 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005301_test_domain_style/f670ae67-e875-4fb5-aa51-070dff354aa6/screenshots/step_1_click.png
+2025-12-15 02:45:57 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a link labeled "View Other Highway Safety Related Data" located just below the "Traffic Crash Data" section. This link is positioned towards the middle right of the page, and I need to click on it to access the relevant safety data.
+Action: click(start_box='(1081,530)')
+2025-12-15 02:45:57 | INFO     | __main__:_process_row:402 | Ground truth bbox: [994.296875, 527.1484375, 312.890625, 25.703125]
+2025-12-15 02:45:57 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:45:57 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:45:57 | INFO     | __main__:_process_row:378 | Step 1636/92 (1778.3%)
+2025-12-15 02:45:57 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:46:06 | INFO     | __main__:_process_row:392 | Instruction: Click on the link below 'View Other Highway Safety Related Data'
+2025-12-15 02:46:06 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251113_005132_test_domain_text_shrink/f670ae67-e875-4fb5-aa51-070dff354aa6/screenshots/step_1_click.png
+2025-12-15 02:46:06 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a link labeled "View Other Highway Safety Related Data" located just below the "Traffic Crash Data" section. This is exactly the target I need to click on. Let me move my mouse over and click on it.
+Action: click(start_box='(1081,455)')
+2025-12-15 02:46:06 | INFO     | __main__:_process_row:402 | Ground truth bbox: [991.578125, 461.546875, 318.640625, 20.875]
+2025-12-15 02:46:06 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:46:06 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:46:06 | INFO     | __main__:_process_row:378 | Step 1637/92 (1779.3%)
+2025-12-15 02:46:06 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:46:15 | INFO     | __main__:_process_row:392 | Instruction: Click on the button above 'FOURMIDABLE' img
+2025-12-15 02:46:15 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_004959_test_domain_original/f6d10418-08fc-4aff-bfb8-97ff708f7e6a/screenshots/step_2_click.png
+2025-12-15 02:46:15 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a green heart icon located above the "FOURMIDABLE" logo. According to the task requirements, I need to click on this heart icon. It's positioned right next to the logo, and clicking on it should allow me to complete the task.
+Action: click(start_box='(1899,138)')
+2025-12-15 02:46:15 | INFO     | __main__:_process_row:402 | Ground truth bbox: [1697.984375, 57, 80, 40]
+2025-12-15 02:46:15 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:46:15 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:46:15 | INFO     | __main__:_process_row:378 | Step 1638/92 (1780.4%)
+2025-12-15 02:46:15 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:46:24 | INFO     | __main__:_process_row:392 | Instruction: Click on the button above 'FOURMIDABLE' img
+2025-12-15 02:46:24 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005144_test_domain_precision/f6d10418-08fc-4aff-bfb8-97ff708f7e6a/screenshots/step_2_click.png
+2025-12-15 02:46:24 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a green heart-shaped button located above the "FOURMIDABLE" image. This button is positioned right next to the property listing for The Griswold. To complete the task, I need to click on this green heart button.
+Action: click(start_box='(1777,97)')
+2025-12-15 02:46:24 | INFO     | __main__:_process_row:402 | Ground truth bbox: [1636.5889892578125, 39.89999771118164, 56, 28.000003814697266]
+2025-12-15 02:46:24 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:46:24 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:46:24 | INFO     | __main__:_process_row:378 | Step 1639/92 (1781.5%)
+2025-12-15 02:46:24 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:46:33 | INFO     | __main__:_process_row:392 | Instruction: Click on the button to the left of 'Save Search'
+2025-12-15 02:46:33 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005301_test_domain_style/f6d10418-08fc-4aff-bfb8-97ff708f7e6a/screenshots/step_2_click.png
+2025-12-15 02:46:33 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed a button labeled "Back to Search" on the left side of the page, which is exactly what I need to click on. This button is located in the upper left corner of the page, and clicking it will take me back to the search page.
+Action: click(start_box='(117,77)')
+2025-12-15 02:46:33 | INFO     | __main__:_process_row:402 | Ground truth bbox: [1715.046875, 102, 53.34375, 40]
+2025-12-15 02:46:33 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:46:33 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:46:33 | INFO     | __main__:_process_row:378 | Step 1640/92 (1782.6%)
+2025-12-15 02:46:33 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:46:42 | INFO     | __main__:_process_row:392 | Instruction: Click on the button above 'FOURMIDABLE' img
+2025-12-15 02:46:42 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251113_005132_test_domain_text_shrink/f6d10418-08fc-4aff-bfb8-97ff708f7e6a/screenshots/step_2_click.png
+2025-12-15 02:46:42 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a small black icon above the "FOURMIDABLE" image, which seems to be a button. According to the task requirements, I need to click on this button, so I will move my mouse over it and then click the left mouse button.
+Action: click(start_box='(1723,139)')
+2025-12-15 02:46:42 | INFO     | __main__:_process_row:402 | Ground truth bbox: [1715.609375, 57, 80, 40]
+2025-12-15 02:46:42 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:46:42 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:46:42 | INFO     | __main__:_process_row:378 | Step 1641/92 (1783.7%)
+2025-12-15 02:46:42 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:46:51 | INFO     | __main__:_process_row:392 | Instruction: Click on the span above ‘Clear All Filters’
+2025-12-15 02:46:51 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_004959_test_domain_original/f7635bd8-161b-40a8-a5d5-8d76f2ba4810/screenshots/step_3_click.png
+2025-12-15 02:46:51 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a "Display Results" button located just above the "Clear All Filters" button. According to the task requirements, I need to click on this "Display Results" button. This action will allow me to view the job search results that meet the current filter criteria.
+Action: click(start_box='(846,559)')
+2025-12-15 02:46:51 | INFO     | __main__:_process_row:402 | Ground truth bbox: [800.796875, 546.796875, 88.28125, 16.796875]
+2025-12-15 02:46:51 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:46:51 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:46:51 | INFO     | __main__:_process_row:378 | Step 1642/92 (1784.8%)
+2025-12-15 02:46:51 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:47:00 | INFO     | __main__:_process_row:392 | Instruction: Click on the span above ‘Clear All Filters’
+2025-12-15 02:47:00 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005144_test_domain_precision/f7635bd8-161b-40a8-a5d5-8d76f2ba4810/screenshots/step_3_click.png
+2025-12-15 02:47:00 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a "Date" option located above the "Clear All Filters" button. According to the task requirements, I need to click on this "Date" option. This will allow me to complete the task of clicking on the element positioned above "Clear All Filters."
+Action: click(start_box='(1410,77)')
+2025-12-15 02:47:00 | INFO     | __main__:_process_row:402 | Ground truth bbox: [560.5578002929688, 534.12109375, 61.796875, 11.7578125]
+2025-12-15 02:47:00 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:47:00 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:47:00 | INFO     | __main__:_process_row:378 | Step 1643/92 (1785.9%)
+2025-12-15 02:47:00 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:47:09 | INFO     | __main__:_process_row:392 | Instruction: Click on the span above ‘Clear All Filters’
+2025-12-15 02:47:09 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005301_test_domain_style/f7635bd8-161b-40a8-a5d5-8d76f2ba4810/screenshots/step_3_click.png
+2025-12-15 02:47:09 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a "Display Results" button located just above the "Clear All Filters" button. According to the task requirements, I need to click on this "Display Results" button. This button is positioned slightly above the center of the page, and it has a blue background with white text.
+Action: click(start_box='(840,541)')
+2025-12-15 02:47:09 | INFO     | __main__:_process_row:402 | Ground truth bbox: [796.6875, 531.6015625, 96.484375, 16.796875]
+2025-12-15 02:47:09 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:47:09 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:47:09 | INFO     | __main__:_process_row:378 | Step 1644/92 (1787.0%)
+2025-12-15 02:47:09 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:47:18 | INFO     | __main__:_process_row:392 | Instruction: Click on the span above ‘Clear All Filters’
+2025-12-15 02:47:18 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251113_005132_test_domain_text_shrink/f7635bd8-161b-40a8-a5d5-8d76f2ba4810/screenshots/step_3_click.png
+2025-12-15 02:47:18 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a "Display Results" button located above the "Clear All Filters" button. According to the task requirements, I need to click on this "Display Results" button. This button is positioned slightly above the center of the page, and clicking it should allow me to complete the task.
+Action: click(start_box='(848,541)')
+2025-12-15 02:47:18 | INFO     | __main__:_process_row:402 | Ground truth bbox: [810.25, 533.40625, 69.375, 13.1875]
+2025-12-15 02:47:18 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:47:18 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:47:18 | INFO     | __main__:_process_row:378 | Step 1645/92 (1788.0%)
+2025-12-15 02:47:18 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:47:28 | INFO     | __main__:_process_row:392 | Instruction: Click on the link above ‘Save to My Profile’
+2025-12-15 02:47:28 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_004959_test_domain_original/f7635bd8-161b-40a8-a5d5-8d76f2ba4810/screenshots/step_10_click.png
+2025-12-15 02:47:28 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is an "Apply" button located above the "Save to My Profile" option. According to the task requirements, I need to click on this "Apply" button. This button is positioned slightly above the "Save to My Profile" option, and clicking on it should allow me to complete the task.
+Action: click(start_box='(904,662)')
+2025-12-15 02:47:28 | INFO     | __main__:_process_row:402 | Ground truth bbox: [882.140625, 645.234375, 35.03125, 16]
+2025-12-15 02:47:28 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:47:28 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:47:28 | INFO     | __main__:_process_row:378 | Step 1646/92 (1789.1%)
+2025-12-15 02:47:28 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:47:38 | INFO     | __main__:_process_row:392 | Instruction: Click on the link above ‘Save to My Profile’
+2025-12-15 02:47:38 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005144_test_domain_precision/f7635bd8-161b-40a8-a5d5-8d76f2ba4810/screenshots/step_10_click.png
+2025-12-15 02:47:38 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a link labeled "Apply" located just above the "Save to My Profile" option. According to the task requirements, I need to click on this "Apply" link. This link is positioned slightly to the left of the center of the page, and clicking on it will allow me to complete the task.
+Action: click(start_box='(618,460)')
+2025-12-15 02:47:38 | INFO     | __main__:_process_row:402 | Ground truth bbox: [617.4984130859375, 451.6640625, 24.52191162109375, 11.199981689453125]
+2025-12-15 02:47:38 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:47:38 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:47:38 | INFO     | __main__:_process_row:378 | Step 1647/92 (1790.2%)
+2025-12-15 02:47:38 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:47:48 | INFO     | __main__:_process_row:392 | Instruction: Click on the link above ‘Save to My Profile’
+2025-12-15 02:47:48 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005301_test_domain_style/f7635bd8-161b-40a8-a5d5-8d76f2ba4810/screenshots/step_10_click.png
+2025-12-15 02:47:48 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a "Site Search" button located at the top right corner of the page, right next to the "My Profile" button. This is exactly the target I need to click on. The button is positioned in the upper right area of the page, and I can easily click on it with my mouse.
+Action: click(start_box='(1485,129)')
+2025-12-15 02:47:48 | INFO     | __main__:_process_row:402 | Ground truth bbox: [882.140625, 630.234375, 35.03125, 17]
+2025-12-15 02:47:48 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:47:48 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:47:48 | INFO     | __main__:_process_row:378 | Step 1648/92 (1791.3%)
+2025-12-15 02:47:48 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:47:58 | INFO     | __main__:_process_row:392 | Instruction: Click on the link above ‘Save to My Profile’
+2025-12-15 02:47:58 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251113_005132_test_domain_text_shrink/f7635bd8-161b-40a8-a5d5-8d76f2ba4810/screenshots/step_10_click.png
+2025-12-15 02:47:58 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a link labeled "Save to My Profile" on the page, and right above it is the "Actions" link. According to the task requirements, I need to click on the "Actions" link, which is located in the upper right corner of the page. This will allow me to complete the task of clicking on the link above "Save to My Profile."
+Action: click(start_box='(1597,551)')
+2025-12-15 02:47:58 | INFO     | __main__:_process_row:402 | Ground truth bbox: [882.140625, 641.8125, 27.53125, 12]
+2025-12-15 02:47:58 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:47:58 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:47:58 | INFO     | __main__:_process_row:378 | Step 1649/92 (1792.4%)
+2025-12-15 02:47:58 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:48:08 | INFO     | __main__:_process_row:392 | Instruction: Click on the link above ‘Mainly cloudy currently remaining partly cloudy this evening.’
+2025-12-15 02:48:08 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_004959_test_domain_original/f7f87ceb-0e39-4d83-8c4e-8b708c82adc5/screenshots/step_1_click.png
+2025-12-15 02:48:08 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed a pop-up advertisement for Hertz car rental appearing in the center of the page, which is blocking the content I need to interact with. In order to continue viewing the weather forecast, I first need to close this pop-up. I see a "Close" button in the upper right corner, so I'll click on it to dismiss the ad.
+Action: click(start_box='(1421,250)')
+2025-12-15 02:48:08 | INFO     | __main__:_process_row:402 | Ground truth bbox: [921.625, 532.5, 175.375, 15]
+2025-12-15 02:48:08 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:48:08 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:48:08 | INFO     | __main__:_process_row:378 | Step 1650/92 (1793.5%)
+2025-12-15 02:48:08 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:48:17 | INFO     | __main__:_process_row:392 | Instruction: Click on the link above ‘Mainly cloudy currently remaining partly cloudy this evening.’
+2025-12-15 02:48:17 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005144_test_domain_precision/f7f87ceb-0e39-4d83-8c4e-8b708c82adc5/screenshots/step_1_click.png
+2025-12-15 02:48:17 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a weather forecast section on the page, and I need to click on the link above the text that says "Mainly cloudy currently remaining partly cloudy this evening." This link is located just above the weather information, and clicking on it should provide me with more detailed weather information.
+Action: click(start_box='(753,516)')
+2025-12-15 02:48:17 | INFO     | __main__:_process_row:402 | Ground truth bbox: [933.1328125, 457.1000061035156, 122.762451171875, 10.5]
+2025-12-15 02:48:17 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:48:17 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:48:17 | INFO     | __main__:_process_row:378 | Step 1651/92 (1794.6%)
+2025-12-15 02:48:17 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:48:27 | INFO     | __main__:_process_row:392 | Instruction: Click on the link above ‘Mainly cloudy currently remaining partly cloudy this evening.’
+2025-12-15 02:48:27 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005301_test_domain_style/f7f87ceb-0e39-4d83-8c4e-8b708c82adc5/screenshots/step_1_click.png
+2025-12-15 02:48:27 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a weather forecast section on the page, and I need to click on the link above the text that says "Mainly cloudy currently remaining partly cloudy this evening." This link is located just above the weather information, and clicking on it should take me to the detailed weather forecast page.
+Action: click(start_box='(709,137)')
+2025-12-15 02:48:27 | INFO     | __main__:_process_row:402 | Ground truth bbox: [921.625, 531.5, 175.375, 17]
+2025-12-15 02:48:27 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:48:27 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:48:27 | INFO     | __main__:_process_row:378 | Step 1652/92 (1795.7%)
+2025-12-15 02:48:27 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:48:34 | INFO     | __main__:_process_row:392 | Instruction: Click on the link above ‘Mainly cloudy currently remaining partly cloudy this evening.’
+2025-12-15 02:48:34 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251113_005132_test_domain_text_shrink/f7f87ceb-0e39-4d83-8c4e-8b708c82adc5/screenshots/step_1_click.png
+2025-12-15 02:48:34 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a weather forecast section on the page, and I need to click on the link above the text that says "Mainly cloudy currently remaining partly cloudy this evening." This link is located just above the weather information, and clicking on it should take me to the detailed weather forecast page.
+Action: click(start_box='(906,591)')
+2025-12-15 02:48:34 | INFO     | __main__:_process_row:402 | Ground truth bbox: [946.28125, 534.0, 150.71875, 12]
+2025-12-15 02:48:34 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:48:34 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:48:34 | INFO     | __main__:_process_row:378 | Step 1653/92 (1796.7%)
+2025-12-15 02:48:34 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:48:43 | INFO     | __main__:_process_row:392 | Instruction: Type '90028' in the textbox above ‘GET STARTED’
+2025-12-15 02:48:43 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_004959_test_domain_original/f82b4d57-ab82-4c49-bc47-e3566496a068/screenshots/step_0_type.png
+2025-12-15 02:48:43 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a search box located just above the "GET STARTED" button, which is perfect for entering the zip code. I need to click on this search box first to make it active and ready for input.
+Action: click(start_box='(500,489)')
+2025-12-15 02:48:43 | INFO     | __main__:_process_row:402 | Ground truth bbox: [409.984375, 470.328125, 321.015625, 18]
+2025-12-15 02:48:43 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:48:43 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:48:43 | INFO     | __main__:_process_row:378 | Step 1654/92 (1797.8%)
+2025-12-15 02:48:43 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:48:49 | INFO     | __main__:_process_row:392 | Instruction: Type '90028' in the textbox above ‘GET STARTED’
+2025-12-15 02:48:49 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005144_test_domain_precision/f82b4d57-ab82-4c49-bc47-e3566496a068/screenshots/step_0_type.png
+2025-12-15 02:48:49 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a search box located just above the "GET STARTED" button, which is perfect for entering the zip code. I need to click on this search box first to make it active and ready for input.
+Action: click(start_box='(581,338)')
+2025-12-15 02:48:49 | INFO     | __main__:_process_row:402 | Ground truth bbox: [574.984375, 329.22967529296875, 224.7109375, 12.600006103515625]
+2025-12-15 02:48:49 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:48:49 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:48:49 | INFO     | __main__:_process_row:378 | Step 1655/92 (1798.9%)
+2025-12-15 02:48:49 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:48:59 | INFO     | __main__:_process_row:392 | Instruction: Type '90028' in the textbox above ‘GET STARTED’
+2025-12-15 02:48:59 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005301_test_domain_style/f82b4d57-ab82-4c49-bc47-e3566496a068/screenshots/step_0_type.png
+2025-12-15 02:48:59 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed a blue "Get Started" button in the center of the page, and right above it, there was a search box that displayed "atlanta." To enter the zip code 90028, I first needed to click on the search box to activate it. This search box is located just above the blue button, and once I clicked on it, I would be able to start typing.
+Action: click(start_box='(537,542)')
+2025-12-15 02:48:59 | INFO     | __main__:_process_row:402 | Ground truth bbox: [409, 518.109375, 323, 43.78125]
+2025-12-15 02:48:59 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:48:59 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:48:59 | INFO     | __main__:_process_row:378 | Step 1656/92 (1800.0%)
+2025-12-15 02:48:59 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:49:06 | INFO     | __main__:_process_row:392 | Instruction: Type '90028' in the textbox above ‘GET STARTED’
+2025-12-15 02:49:06 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251113_005132_test_domain_text_shrink/f82b4d57-ab82-4c49-bc47-e3566496a068/screenshots/step_0_type.png
+2025-12-15 02:49:06 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a search box located just above the "GET STARTED" button, which is perfect for entering the zip code. I need to click on this search box first to make it active and ready for input.
+Action: click(start_box='(500,477)')
+2025-12-15 02:49:06 | INFO     | __main__:_process_row:402 | Ground truth bbox: [404.0625, 462.328125, 326.9375, 18]
+2025-12-15 02:49:06 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:49:06 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:49:06 | INFO     | __main__:_process_row:378 | Step 1657/92 (1801.1%)
+2025-12-15 02:49:06 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:49:12 | INFO     | __main__:_process_row:392 | Instruction: Click the checkbox below 'adidas'
+2025-12-15 02:49:12 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005125_test_website_original/f8df8406-073e-4d70-bdee-beef9b9f4f88/screenshots/step_6_click.png
+2025-12-15 02:49:12 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a checkbox for the brand "adidas" in the filter options on the left side of the page. To complete the task, I need to click on this checkbox to select the Adidas brand. This will allow me to filter the products that meet my requirements.
+Action: click(start_box='(44,520)')
+2025-12-15 02:49:12 | INFO     | __main__:_process_row:402 | Ground truth bbox: [37, 530.0, 190, 20]
+2025-12-15 02:49:12 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:49:12 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:49:12 | INFO     | __main__:_process_row:378 | Step 1658/92 (1802.2%)
+2025-12-15 02:49:12 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:49:16 | INFO     | __main__:_process_row:392 | Instruction: Click the checkbox below 'adidas'
+2025-12-15 02:49:16 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005233_test_website_precision/f8df8406-073e-4d70-bdee-beef9b9f4f88/screenshots/step_6_click.png
+2025-12-15 02:49:16 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a brand filter section on the left side of the page, and I need to locate the option for Adidas. Ah, I found it! It's the checkbox labeled "adidas." By clicking on it, I can filter the products to show only those from Adidas.
+Action: click(start_box='(38,532)')
+2025-12-15 02:49:16 | INFO     | __main__:_process_row:402 | Ground truth bbox: [25.899999618530273, 533.0, 132.9999942779541, 14]
+2025-12-15 02:49:16 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:49:16 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:49:16 | INFO     | __main__:_process_row:378 | Step 1659/92 (1803.3%)
+2025-12-15 02:49:16 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:49:20 | INFO     | __main__:_process_row:392 | Instruction: Click the checkbox below 'adidas'
+2025-12-15 02:49:20 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005341_test_website_style/f8df8406-073e-4d70-bdee-beef9b9f4f88/screenshots/step_6_click.png
+2025-12-15 02:49:20 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a checkbox for the brand "adidas" in the filter options on the left side. To narrow down the search results to only show Adidas products, I need to click on this checkbox. This will help me find the items I'm looking for more accurately.
+Action: click(start_box='(44,517)')
+2025-12-15 02:49:20 | INFO     | __main__:_process_row:402 | Ground truth bbox: [37, 529.0, 190, 22]
+2025-12-15 02:49:20 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:49:20 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:49:20 | INFO     | __main__:_process_row:378 | Step 1660/92 (1804.3%)
+2025-12-15 02:49:20 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:49:25 | INFO     | __main__:_process_row:392 | Instruction: Click the checkbox below 'adidas'
+2025-12-15 02:49:25 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251113_005230_test_website_text_shrink/f8df8406-073e-4d70-bdee-beef9b9f4f88/screenshots/step_6_click.png
+2025-12-15 02:49:25 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a checkbox for the brand "adidas" in the left sidebar. To filter the products by the Adidas brand, I need to click on this checkbox. This will help me find the items I'm looking for more accurately.
+Action: click(start_box='(44,526)')
+2025-12-15 02:49:25 | INFO     | __main__:_process_row:402 | Ground truth bbox: [37, 530.0, 190, 20]
+2025-12-15 02:49:25 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:49:25 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:49:25 | INFO     | __main__:_process_row:378 | Step 1661/92 (1805.4%)
+2025-12-15 02:49:25 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:49:29 | INFO     | __main__:_process_row:392 | Instruction: Click on the button to the left of 'Views'
+2025-12-15 02:49:29 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005055_test_task_original/f9c80513-c1c2-42ef-b768-9a6d0bb5a9a5/screenshots/step_0_click.png
+2025-12-15 02:49:29 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a "Replies" button located to the left of the "Views" button on the page. According to the task requirements, I need to click on this "Replies" button. This will allow me to switch to the view that displays the number of replies for each topic.
+Action: click(start_box='(1335,340)')
+2025-12-15 02:49:29 | INFO     | __main__:_process_row:402 | Ground truth bbox: [1280, 306.796875, 75, 54.5]
+2025-12-15 02:49:29 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:49:29 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:49:29 | INFO     | __main__:_process_row:378 | Step 1662/92 (1806.5%)
+2025-12-15 02:49:29 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:49:34 | INFO     | __main__:_process_row:392 | Instruction: Click on the button to the left of 'Views'
+2025-12-15 02:49:34 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005206_test_task_precision/f9c80513-c1c2-42ef-b768-9a6d0bb5a9a5/screenshots/step_0_click.png
+2025-12-15 02:49:34 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a "Replies" button on the right side of the page, and it's located right next to the "Views" button. According to the task requirements, I need to click on the "Replies" button, which is positioned to the left of the "Views" button.
+Action: click(start_box='(1221,238)')
+2025-12-15 02:49:34 | INFO     | __main__:_process_row:402 | Ground truth bbox: [1183.9952392578125, 214.7578125, 52.5, 38.149993896484375]
+2025-12-15 02:49:34 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:49:34 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:49:34 | INFO     | __main__:_process_row:378 | Step 1663/92 (1807.6%)
+2025-12-15 02:49:34 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:49:38 | INFO     | __main__:_process_row:392 | Instruction: Click on the button to the left of 'Views'
+2025-12-15 02:49:38 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005316_test_task_style/f9c80513-c1c2-42ef-b768-9a6d0bb5a9a5/screenshots/step_0_click.png
+2025-12-15 02:49:38 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a "Replies" button located to the left of the "Views" button on the page. According to the task requirements, I need to click on this "Replies" button. This will allow me to switch to the view that displays the number of replies for each topic.
+Action: click(start_box='(1358,497)')
+2025-12-15 02:49:38 | INFO     | __main__:_process_row:402 | Ground truth bbox: [1312.484375, 462.625, 65, 46.515625]
+2025-12-15 02:49:38 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:49:38 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:49:38 | INFO     | __main__:_process_row:378 | Step 1664/92 (1808.7%)
+2025-12-15 02:49:38 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:49:43 | INFO     | __main__:_process_row:392 | Instruction: Click on the button to the left of 'Views'
+2025-12-15 02:49:43 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251113_005227_test_task_text_shrink/f9c80513-c1c2-42ef-b768-9a6d0bb5a9a5/screenshots/step_0_click.png
+2025-12-15 02:49:43 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a "Replies" button located to the left of the "Views" button on the page. According to the task requirements, I need to click on this "Replies" button. This will allow me to switch to the view that displays the number of replies for each topic.
+Action: click(start_box='(1329,335)')
+2025-12-15 02:49:43 | INFO     | __main__:_process_row:402 | Ground truth bbox: [1280, 302.796875, 75, 54.5]
+2025-12-15 02:49:43 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:49:43 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:49:43 | INFO     | __main__:_process_row:378 | Step 1665/92 (1809.8%)
+2025-12-15 02:49:43 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:49:47 | INFO     | __main__:_process_row:392 | Instruction: Click on the link above ‘E-Learning Providers’
+2025-12-15 02:49:47 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_004959_test_domain_original/f9e3d54d-b9e3-44a3-b992-803494aa95d1/screenshots/step_1_click.png
+2025-12-15 02:49:47 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a "Learn more" button located just above the "E-Learning Providers" section. This button is blue and stands out quite well. According to the task requirements, I need to click on this button to access more information. So, I will go ahead and click it now.
+Action: click(start_box='(734,235)')
+2025-12-15 02:49:47 | INFO     | __main__:_process_row:402 | Ground truth bbox: [761, 286.96875, 192.953125, 28]
+2025-12-15 02:49:47 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:49:47 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:49:47 | INFO     | __main__:_process_row:378 | Step 1666/92 (1810.9%)
+2025-12-15 02:49:47 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:49:52 | INFO     | __main__:_process_row:392 | Instruction: Click on the link above ‘E-Learning Providers’
+2025-12-15 02:49:52 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005144_test_domain_precision/f9e3d54d-b9e3-44a3-b992-803494aa95d1/screenshots/step_1_click.png
+2025-12-15 02:49:52 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a link labeled "E-Learning Providers" on the page, and right above it, there is a link that says "Learn more." According to the task requirements, I need to click on this "Learn more" link. It's located just above the "E-Learning Providers" section, and clicking on it should take me to the relevant page.
+Action: click(start_box='(797,165)')
+2025-12-15 02:49:52 | INFO     | __main__:_process_row:402 | Ground truth bbox: [820.6953125, 200.8781280517578, 135.06719970703125, 19.599990844726562]
+2025-12-15 02:49:52 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:49:52 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:49:52 | INFO     | __main__:_process_row:378 | Step 1667/92 (1812.0%)
+2025-12-15 02:49:52 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:49:57 | INFO     | __main__:_process_row:392 | Instruction: Click on the link above ‘E-Learning Providers’
+2025-12-15 02:49:57 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005301_test_domain_style/f9e3d54d-b9e3-44a3-b992-803494aa95d1/screenshots/step_1_click.png
+2025-12-15 02:49:57 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a "Learn more" button located just above the "E-Learning Providers" section. This button is positioned right in the center of the page, and it seems to be the target I need to click on. I'm going to move my mouse over and click it now.
+Action: click(start_box='(341,455)')
+2025-12-15 02:49:57 | INFO     | __main__:_process_row:402 | Ground truth bbox: [360, 510.96875, 244.84375, 29]
+2025-12-15 02:49:57 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:49:57 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:49:57 | INFO     | __main__:_process_row:378 | Step 1668/92 (1813.0%)
+2025-12-15 02:49:57 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:50:01 | INFO     | __main__:_process_row:392 | Instruction: Click on the link above ‘E-Learning Providers’
+2025-12-15 02:50:01 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251113_005132_test_domain_text_shrink/f9e3d54d-b9e3-44a3-b992-803494aa95d1/screenshots/step_1_click.png
+2025-12-15 02:50:01 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a "View page" button located just below the "E-Learning Providers" section. This button is positioned right in the center of the page, and clicking on it will take you to the corresponding page. I'm going to click this button now to proceed with the next step.
+Action: click(start_box='(906,406)')
+2025-12-15 02:50:01 | INFO     | __main__:_process_row:402 | Ground truth bbox: [761, 261.203125, 156.578125, 22]
+2025-12-15 02:50:01 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:50:01 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:50:01 | INFO     | __main__:_process_row:378 | Step 1669/92 (1814.1%)
+2025-12-15 02:50:01 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:50:06 | INFO     | __main__:_process_row:392 | Instruction: Click on the button to the right of 'Overview'
+2025-12-15 02:50:06 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_004959_test_domain_original/fb29f0cf-2b86-4dd4-b3c4-1290bf280a0a/screenshots/step_0_click.png
+2025-12-15 02:50:06 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there are several navigation tabs at the top of the page, and the "Overview" tab is currently selected. To complete the task, I need to click on the "Ongoing" tab to the right of it. This tab is located in the navigation bar at the top of the page, and clicking on it will switch me to the ongoing airdrop information page.
+Action: click(start_box='(392,279)')
+2025-12-15 02:50:06 | INFO     | __main__:_process_row:402 | Ground truth bbox: [362.15625, 261, 77.890625, 32]
+2025-12-15 02:50:06 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:50:06 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:50:06 | INFO     | __main__:_process_row:378 | Step 1670/92 (1815.2%)
+2025-12-15 02:50:06 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:50:12 | INFO     | __main__:_process_row:392 | Instruction: Click on the button to the right of 'Overview'
+2025-12-15 02:50:12 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005144_test_domain_precision/fb29f0cf-2b86-4dd4-b3c4-1290bf280a0a/screenshots/step_0_click.png
+2025-12-15 02:50:12 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a navigation bar at the top of the page, and the "Overview" button is located on the left side. To complete the task, I need to click on the button to its right, which is labeled "Exchanges." This button is positioned slightly to the right of the center of the page.
+Action: click(start_box='(566,196)')
+2025-12-15 02:50:12 | INFO     | __main__:_process_row:402 | Ground truth bbox: [541.5046997070312, 182.6999969482422, 54.5234375, 22.399993896484375]
+2025-12-15 02:50:12 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:50:12 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:50:12 | INFO     | __main__:_process_row:378 | Step 1671/92 (1816.3%)
+2025-12-15 02:50:12 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:50:15 | INFO     | __main__:_process_row:392 | Instruction: Click on the button to the right of 'Overview'
+2025-12-15 02:50:15 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005301_test_domain_style/fb29f0cf-2b86-4dd4-b3c4-1290bf280a0a/screenshots/step_0_click.png
+2025-12-15 02:50:15 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a green button labeled "Ongoing" located to the right of the "Overview" button. According to the task requirements, I need to click on this button. It's positioned slightly to the right of the center of the page, and the button is green with white text.
+Action: click(start_box='(506,303)')
+2025-12-15 02:50:15 | INFO     | __main__:_process_row:402 | Ground truth bbox: [457.046875, 279.8125, 85.328125, 32]
+2025-12-15 02:50:15 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:50:15 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:50:15 | INFO     | __main__:_process_row:378 | Step 1672/92 (1817.4%)
+2025-12-15 02:50:15 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:50:20 | INFO     | __main__:_process_row:392 | Instruction: Click on the button to the right of 'Overview'
+2025-12-15 02:50:20 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251113_005132_test_domain_text_shrink/fb29f0cf-2b86-4dd4-b3c4-1290bf280a0a/screenshots/step_0_click.png
+2025-12-15 02:50:20 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there are several tabs on the page, and the "Overview" tab is located on the left side. To complete the task, I need to click on the "Ongoing" tab to the right of it. This tab is positioned slightly to the left of the center of the page, and clicking on it will allow me to switch to the ongoing airdrop information.
+Action: click(start_box='(388,273)')
+2025-12-15 02:50:20 | INFO     | __main__:_process_row:402 | Ground truth bbox: [358.078125, 254, 74.1875, 32]
+2025-12-15 02:50:20 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:50:20 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:50:20 | INFO     | __main__:_process_row:378 | Step 1673/92 (1818.5%)
+2025-12-15 02:50:20 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:50:24 | INFO     | __main__:_process_row:392 | Instruction: Click on the img above ‘BACKLIT POSTER’
+2025-12-15 02:50:24 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_004959_test_domain_original/fb498b54-59a3-40a6-ae27-af464ab49860/screenshots/step_4_click.png
+2025-12-15 02:50:24 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a product called "BACKLIT POSTER" on the page, and right above it, there is a thumbnail image. According to the task requirements, I need to click on this image. So, I will move my mouse over to the thumbnail and click on it.
+Action: click(start_box='(1350,554)')
+2025-12-15 02:50:24 | INFO     | __main__:_process_row:402 | Ground truth bbox: [1225, 469.9453125, 220, 140.109375]
+2025-12-15 02:50:24 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:50:24 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:50:24 | INFO     | __main__:_process_row:378 | Step 1674/92 (1819.6%)
+2025-12-15 02:50:24 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:50:29 | INFO     | __main__:_process_row:392 | Instruction: Click on the img above ‘BACKLIT POSTER’
+2025-12-15 02:50:29 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005144_test_domain_precision/fb498b54-59a3-40a6-ae27-af464ab49860/screenshots/step_4_click.png
+2025-12-15 02:50:29 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a product category labeled "BACKLIT POSTER" on the page, and right above it, there is a thumbnail image. According to the task requirements, I need to click on this image. So, I will move my mouse over to the thumbnail and click on it.
+Action: click(start_box='(1246,455)')
+2025-12-15 02:50:29 | INFO     | __main__:_process_row:402 | Ground truth bbox: [1145.4952392578125, 396.29998779296875, 154, 98.07656860351562]
+2025-12-15 02:50:29 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:50:29 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:50:29 | INFO     | __main__:_process_row:378 | Step 1675/92 (1820.7%)
+2025-12-15 02:50:29 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:50:34 | INFO     | __main__:_process_row:392 | Instruction: Click on the img above ‘BACKLIT POSTER’
+2025-12-15 02:50:34 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005301_test_domain_style/fb498b54-59a3-40a6-ae27-af464ab49860/screenshots/step_4_click.png
+2025-12-15 02:50:34 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a product category labeled "BACKLIT POSTER" on the page, and right above it, there is a product image. According to the task requirements, I need to click on this image. So, I will move my mouse over to the image and then click on it.
+Action: click(start_box='(1340,554)')
+2025-12-15 02:50:34 | INFO     | __main__:_process_row:402 | Ground truth bbox: [1225, 469, 220, 140.109375]
+2025-12-15 02:50:34 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:50:34 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:50:34 | INFO     | __main__:_process_row:378 | Step 1676/92 (1821.7%)
+2025-12-15 02:50:34 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:50:38 | INFO     | __main__:_process_row:392 | Instruction: Click on the img above ‘BACKLIT POSTER’
+2025-12-15 02:50:38 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251113_005132_test_domain_text_shrink/fb498b54-59a3-40a6-ae27-af464ab49860/screenshots/step_4_click.png
+2025-12-15 02:50:38 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a product called "BACKLIT POSTER" on the page, and right above it, there is a thumbnail image. According to the task requirements, I need to click on this image. So, I will move my mouse over to the thumbnail and click on it.
+Action: click(start_box='(1340,554)')
+2025-12-15 02:50:38 | INFO     | __main__:_process_row:402 | Ground truth bbox: [1225, 469.9453125, 220, 140.109375]
+2025-12-15 02:50:38 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:50:38 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:50:38 | INFO     | __main__:_process_row:378 | Step 1677/92 (1822.8%)
+2025-12-15 02:50:38 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:50:42 | INFO     | __main__:_process_row:392 | Instruction: Select the select below 'Car or truck'
+2025-12-15 02:50:42 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_004959_test_domain_original/fd4a3605-d037-4786-955e-d949697b7b62/screenshots/step_5_select.png
+2025-12-15 02:50:42 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there are three options in the "What are you towing with?" section. The first option is "Car or truck," which is exactly what I need to select. I will click on this option to proceed with the next step.
+Action: click(start_box='(426,370)')
+2025-12-15 02:50:42 | INFO     | __main__:_process_row:402 | Ground truth bbox: [396, 425.96875, 92, 38.25]
+2025-12-15 02:50:42 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:50:42 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:50:42 | INFO     | __main__:_process_row:378 | Step 1678/92 (1823.9%)
+2025-12-15 02:50:42 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:50:47 | INFO     | __main__:_process_row:392 | Instruction: Select the select below 'Car or truck'
+2025-12-15 02:50:47 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005144_test_domain_precision/fd4a3605-d037-4786-955e-d949697b7b62/screenshots/step_5_select.png
+2025-12-15 02:50:47 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a "Car or truck" option in the upper left corner of the page, and it is currently selected. To proceed with the next step, I need to click on the "Choose..." button located to the right of it. This will allow me to see more detailed options.
+Action: click(start_box='(579,258)')
+2025-12-15 02:50:47 | INFO     | __main__:_process_row:402 | Ground truth bbox: [565.1953125, 298.1781311035156, 64.39996337890625, 26.774993896484375]
+2025-12-15 02:50:47 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:50:47 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:50:47 | INFO     | __main__:_process_row:378 | Step 1679/92 (1825.0%)
+2025-12-15 02:50:47 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:50:51 | INFO     | __main__:_process_row:392 | Instruction: Select the select below 'Car or truck'
+2025-12-15 02:50:51 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005301_test_domain_style/fd4a3605-d037-4786-955e-d949697b7b62/screenshots/step_5_select.png
+2025-12-15 02:50:51 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there are three radio buttons under the "What are you towing with?" section, and I need to select the "Car or truck" option. This option is located in the first row, and to the left of it, there's a small circle that I can click to make my selection.
+Action: click(start_box='(409,468)')
+2025-12-15 02:50:51 | INFO     | __main__:_process_row:402 | Ground truth bbox: [396, 517.25, 97.953125, 45.5]
+2025-12-15 02:50:51 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:50:51 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:50:51 | INFO     | __main__:_process_row:378 | Step 1680/92 (1826.1%)
+2025-12-15 02:50:51 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:50:56 | INFO     | __main__:_process_row:392 | Instruction: Select the select below 'Car or truck'
+2025-12-15 02:50:56 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251113_005132_test_domain_text_shrink/fd4a3605-d037-4786-955e-d949697b7b62/screenshots/step_5_select.png
+2025-12-15 02:50:56 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a "Car or truck" option in the "What are you towing with?" section. To complete the task, I need to click on the circular radio button next to it. This will allow me to select the vehicle type I want to use for towing.
+Action: click(start_box='(406,361)')
+2025-12-15 02:50:56 | INFO     | __main__:_process_row:402 | Ground truth bbox: [396, 413.78125, 84, 35.75]
+2025-12-15 02:50:56 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:50:56 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:50:56 | INFO     | __main__:_process_row:378 | Step 1681/92 (1827.2%)
+2025-12-15 02:50:56 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:51:01 | INFO     | __main__:_process_row:392 | Instruction: Click on the button above 'April 23rd 2023' button
+2025-12-15 02:51:01 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005055_test_task_original/fe471e16-d33f-4f87-accf-dcf7e91617cb/screenshots/step_0_click.png
+2025-12-15 02:51:01 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that the calendar interface is currently displaying the month of April. To find the date of April 23rd, I need to click on the left arrow button located in the top left corner of the calendar. This will allow me to switch to the calendar view for March, making it easier for me to locate the target date.
+Action: click(start_box='(428,331)')
+2025-12-15 02:51:01 | INFO     | __main__:_process_row:402 | Ground truth bbox: [488.671875, 523.0, 33.46875, 34]
+2025-12-15 02:51:01 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:51:01 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:51:01 | INFO     | __main__:_process_row:378 | Step 1682/92 (1828.3%)
+2025-12-15 02:51:01 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:51:05 | INFO     | __main__:_process_row:392 | Instruction: Click on the button above 'April 23rd 2023' button
+2025-12-15 02:51:05 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005206_test_task_precision/fe471e16-d33f-4f87-accf-dcf7e91617cb/screenshots/step_0_click.png
+2025-12-15 02:51:05 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that the calendar interface is currently displaying the month of April 2023. To find the button for the 22nd, I need to click on the arrow in the top left corner to switch to the calendar for March 2023. This will allow me to see the date I'm looking for.
+Action: click(start_box='(569,275)')
+2025-12-15 02:51:05 | INFO     | __main__:_process_row:402 | Ground truth bbox: [342.0703125, 412.78125, 23.428131103515625, 23.79998779296875]
+2025-12-15 02:51:05 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:51:05 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:51:05 | INFO     | __main__:_process_row:378 | Step 1683/92 (1829.3%)
+2025-12-15 02:51:05 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:51:09 | INFO     | __main__:_process_row:392 | Instruction: Click on the button above 'April 23rd 2023' button
+2025-12-15 02:51:09 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005316_test_task_style/fe471e16-d33f-4f87-accf-dcf7e91617cb/screenshots/step_0_click.png
+2025-12-15 02:51:09 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that the calendar interface is currently displaying the month of April. To select a date, I need to click on the "Travel Information" button located at the top of the page. This will allow me to access the date selection screen.
+Action: click(start_box='(985,81)')
+2025-12-15 02:51:09 | INFO     | __main__:_process_row:402 | Ground truth bbox: [488.671875, 523.0, 33.46875, 34]
+2025-12-15 02:51:09 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:51:09 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:51:09 | INFO     | __main__:_process_row:378 | Step 1684/92 (1830.4%)
+2025-12-15 02:51:09 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:51:14 | INFO     | __main__:_process_row:392 | Instruction: Click on the button above 'April 23rd 2023' button
+2025-12-15 02:51:14 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251113_005227_test_task_text_shrink/fe471e16-d33f-4f87-accf-dcf7e91617cb/screenshots/step_0_click.png
+2025-12-15 02:51:14 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that the calendar interface is currently displaying the month of April 2023. To find the date of April 23rd, I need to click on the "23" button located above the calendar. This will allow me to select the date I want.
+Action: click(start_box='(511,583)')
+2025-12-15 02:51:14 | INFO     | __main__:_process_row:402 | Ground truth bbox: [488.671875, 523.0, 33.40625, 34]
+2025-12-15 02:51:14 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:51:14 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:51:14 | INFO     | __main__:_process_row:378 | Step 1685/92 (1831.5%)
+2025-12-15 02:51:14 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:51:18 | INFO     | __main__:_process_row:392 | Instruction: Click on the span above ‘Clear All Filters’
+2025-12-15 02:51:18 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_004959_test_domain_original/fe788604-16a6-4aab-9a67-19c417b5ae18/screenshots/step_1_click.png
+2025-12-15 02:51:18 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a "Display Results" button located above the "Clear All Filters" button. According to the task requirements, I need to click on this "Display Results" button. This button is positioned slightly above the center of the page, and clicking it should allow me to complete the task.
+Action: click(start_box='(840,546)')
+2025-12-15 02:51:18 | INFO     | __main__:_process_row:402 | Ground truth bbox: [800.796875, 531.6015625, 88.28125, 16.796875]
+2025-12-15 02:51:18 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:51:18 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:51:18 | INFO     | __main__:_process_row:378 | Step 1686/92 (1832.6%)
+2025-12-15 02:51:18 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:51:23 | INFO     | __main__:_process_row:392 | Instruction: Click on the span above ‘Clear All Filters’
+2025-12-15 02:51:23 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005144_test_domain_precision/fe788604-16a6-4aab-9a67-19c417b5ae18/screenshots/step_1_click.png
+2025-12-15 02:51:23 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a "Display Results" button located above the "Clear All Filters" option. According to the task requirements, I need to click on this button. It's positioned slightly to the right in the middle of the page, and I can easily click on it with my mouse.
+Action: click(start_box='(581,548)')
+2025-12-15 02:51:23 | INFO     | __main__:_process_row:402 | Ground truth bbox: [560.5578002929688, 534.12109375, 61.796875, 11.7578125]
+2025-12-15 02:51:23 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:51:23 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:51:23 | INFO     | __main__:_process_row:378 | Step 1687/92 (1833.7%)
+2025-12-15 02:51:23 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:51:27 | INFO     | __main__:_process_row:392 | Instruction: Click on the span above ‘Clear All Filters’
+2025-12-15 02:51:27 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005301_test_domain_style/fe788604-16a6-4aab-9a67-19c417b5ae18/screenshots/step_1_click.png
+2025-12-15 02:51:27 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a "Display Results" button located above the "Clear All Filters" button. According to the task requirements, I need to click on this "Display Results" button. This button is positioned slightly above the center of the page, and it has a blue background with white text.
+Action: click(start_box='(840,546)')
+2025-12-15 02:51:27 | INFO     | __main__:_process_row:402 | Ground truth bbox: [796.6875, 531.6015625, 96.484375, 16.796875]
+2025-12-15 02:51:27 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:51:27 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:51:27 | INFO     | __main__:_process_row:378 | Step 1688/92 (1834.8%)
+2025-12-15 02:51:27 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:51:32 | INFO     | __main__:_process_row:392 | Instruction: Click on the span above ‘Clear All Filters’
+2025-12-15 02:51:32 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251113_005132_test_domain_text_shrink/fe788604-16a6-4aab-9a67-19c417b5ae18/screenshots/step_1_click.png
+2025-12-15 02:51:32 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a "Display Results" button located just above the "Clear All Filters" button. According to the task requirements, I need to click on this "Display Results" button. This action will allow me to complete the task of clicking on the element positioned above "Clear All Filters."
+Action: click(start_box='(840,542)')
+2025-12-15 02:51:32 | INFO     | __main__:_process_row:402 | Ground truth bbox: [810.25, 533.40625, 69.375, 13.1875]
+2025-12-15 02:51:32 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:51:32 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:51:32 | INFO     | __main__:_process_row:378 | Step 1689/92 (1835.9%)
+2025-12-15 02:51:32 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:51:36 | INFO     | __main__:_process_row:392 | Instruction: Click on the button below 'Mileage Choice Program'
+2025-12-15 02:51:36 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_004959_test_domain_original/feacf6a1-8671-45ad-8b96-6510d61bbfe4/screenshots/step_0_click.png
+2025-12-15 02:51:36 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed a prominent yellow button at the bottom of the page, and it says "Continue." This is exactly the button I need to click on. It's located right below the "Mileage Choice Program" section, and clicking it will take me to the next step.
+Action: click(start_box='(171,919)')
+2025-12-15 02:51:36 | INFO     | __main__:_process_row:402 | Ground truth bbox: [30, 886.1875, 285, 38]
+2025-12-15 02:51:36 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:51:36 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:51:36 | INFO     | __main__:_process_row:378 | Step 1690/92 (1837.0%)
+2025-12-15 02:51:36 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:51:41 | INFO     | __main__:_process_row:392 | Instruction: Click on the button below 'Mileage Choice Program'
+2025-12-15 02:51:41 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005144_test_domain_precision/feacf6a1-8671-45ad-8b96-6510d61bbfe4/screenshots/step_0_click.png
+2025-12-15 02:51:41 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed a prominent yellow button at the bottom of the page, and it seems to be the target I need to click on. It's located right below the "Mileage Choice Program" section, and it has the word "Continue" written on it. I'm going to click this button now to proceed to the next step.
+Action: click(start_box='(173,585)')
+2025-12-15 02:51:41 | INFO     | __main__:_process_row:402 | Ground truth bbox: [21, 569.9312133789062, 295.4984436035156, 26.60003662109375]
+2025-12-15 02:51:41 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:51:41 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:51:41 | INFO     | __main__:_process_row:378 | Step 1691/92 (1838.0%)
+2025-12-15 02:51:41 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:51:45 | INFO     | __main__:_process_row:392 | Instruction: Click on the button below 'Mileage Choice Program'
+2025-12-15 02:51:45 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005301_test_domain_style/feacf6a1-8671-45ad-8b96-6510d61bbfe4/screenshots/step_0_click.png
+2025-12-15 02:51:45 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a "Continue" button located just below the "Mileage Choice Program" section. This button is positioned in the lower left corner of the page, and it has a pink background with white text. To proceed with the task, I need to click on this button.
+Action: click(start_box='(88,924)')
+2025-12-15 02:51:45 | INFO     | __main__:_process_row:402 | Ground truth bbox: [33.578125, 888.96875, 95.390625, 48.71875]
+2025-12-15 02:51:45 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:51:45 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:51:45 | INFO     | __main__:_process_row:378 | Step 1692/92 (1839.1%)
+2025-12-15 02:51:45 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:51:50 | INFO     | __main__:_process_row:392 | Instruction: Click on the button below 'Mileage Choice Program'
+2025-12-15 02:51:50 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251113_005132_test_domain_text_shrink/feacf6a1-8671-45ad-8b96-6510d61bbfe4/screenshots/step_0_click.png
+2025-12-15 02:51:50 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed a prominent yellow button at the bottom of the page, and it says "Continue." This is exactly the button I need to click on. It's located right below the "Mileage Choice Program" section, and it's quite noticeable. I'm going to click on it now to proceed to the next step.
+Action: click(start_box='(171,845)')
+2025-12-15 02:51:50 | INFO     | __main__:_process_row:402 | Ground truth bbox: [30, 812.6875, 285, 38]
+2025-12-15 02:51:50 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:51:50 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:51:50 | INFO     | __main__:_process_row:378 | Step 1693/92 (1840.2%)
+2025-12-15 02:51:50 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:51:54 | INFO     | __main__:_process_row:392 | Instruction: Click on the link above ‘Address Change’
+2025-12-15 02:51:54 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_004959_test_domain_original/feacf6a1-8671-45ad-8b96-6510d61bbfe4/screenshots/step_1_click.png
+2025-12-15 02:51:54 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a "Vehicle Registration Renewal" option located just above the "Address Change" link in the left navigation bar. According to the task requirements, I need to click on this option. Let me move my mouse over and click on it.
+Action: click(start_box='(340,402)')
+2025-12-15 02:51:54 | INFO     | __main__:_process_row:402 | Ground truth bbox: [273.421875, 385.78125, 325.9375, 19.5]
+2025-12-15 02:51:54 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:51:54 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:51:54 | INFO     | __main__:_process_row:378 | Step 1694/92 (1841.3%)
+2025-12-15 02:51:54 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:51:59 | INFO     | __main__:_process_row:392 | Instruction: Click on the link above ‘Address Change’
+2025-12-15 02:51:59 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005144_test_domain_precision/feacf6a1-8671-45ad-8b96-6510d61bbfe4/screenshots/step_1_click.png
+2025-12-15 02:51:59 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is an "Address Change" option in the left navigation bar, and I need to click on it to proceed to the next step. This option is located in the first column of the navigation bar, and I can simply click on it to access the address change page.
+Action: click(start_box='(314,298)')
+2025-12-15 02:51:59 | INFO     | __main__:_process_row:402 | Ground truth bbox: [265.40936279296875, 270.046875, 327.0859375, 13.649993896484375]
+2025-12-15 02:51:59 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:51:59 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:51:59 | INFO     | __main__:_process_row:378 | Step 1695/92 (1842.4%)
+2025-12-15 02:51:59 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:52:03 | INFO     | __main__:_process_row:392 | Instruction: Click on the link above ‘Address Change’
+2025-12-15 02:52:03 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005301_test_domain_style/feacf6a1-8671-45ad-8b96-6510d61bbfe4/screenshots/step_1_click.png
+2025-12-15 02:52:03 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a link labeled "Address Change" in the left navigation bar, and it's located right above the "Driver's License Renewal" option. To complete the task, I need to click on this link. It's quite straightforward; I just have to move my mouse over it and click once.
+Action: click(start_box='(314,413)')
+2025-12-15 02:52:03 | INFO     | __main__:_process_row:402 | Ground truth bbox: [274.421875, 370.046875, 326.9375, 20.5]
+2025-12-15 02:52:03 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:52:03 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:52:03 | INFO     | __main__:_process_row:378 | Step 1696/92 (1843.5%)
+2025-12-15 02:52:03 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:52:08 | INFO     | __main__:_process_row:392 | Instruction: Click on the link above ‘Address Change’
+2025-12-15 02:52:08 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251113_005132_test_domain_text_shrink/feacf6a1-8671-45ad-8b96-6510d61bbfe4/screenshots/step_1_click.png
+2025-12-15 02:52:08 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a "REAL ID" option located just above the "Address Change" link in the left navigation bar. According to the task requirements, I need to click on this "REAL ID" link. This will allow me to complete the task of clicking on the link situated above "Address Change."
+Action: click(start_box='(651,368)')
+2025-12-15 02:52:08 | INFO     | __main__:_process_row:402 | Ground truth bbox: [269.609375, 357.15625, 325.9375, 16.46875]
+2025-12-15 02:52:08 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:52:08 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:52:08 | INFO     | __main__:_process_row:378 | Step 1697/92 (1844.6%)
+2025-12-15 02:52:08 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:52:12 | INFO     | __main__:_process_row:392 | Instruction: Click on the link above 'Employment Development Department'
+2025-12-15 02:52:12 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_004959_test_domain_original/ff1de5de-7801-4187-a064-8e3bef382eda/screenshots/step_3_click.png
+2025-12-15 02:52:12 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a link labeled "Employment Development Department" located just above the "Find a Job" section. This link is positioned slightly to the right of the center of the page. I need to click on this link to proceed with the next step of my task.
+Action: click(start_box='(1232,687)')
+2025-12-15 02:52:12 | INFO     | __main__:_process_row:402 | Ground truth bbox: [513, 381.34375, 230.15625, 26]
+2025-12-15 02:52:12 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:52:12 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:52:12 | INFO     | __main__:_process_row:378 | Step 1698/92 (1845.7%)
+2025-12-15 02:52:12 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:52:17 | INFO     | __main__:_process_row:392 | Instruction: Click on the link above 'Employment Development Department'
+2025-12-15 02:52:17 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005144_test_domain_precision/ff1de5de-7801-4187-a064-8e3bef382eda/screenshots/step_3_click.png
+2025-12-15 02:52:17 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a link labeled "Employment Development Department" located just above the "Working" section. To complete the task, I need to click on this link. It's positioned right in the center of the page, and the text is in blue, making it easy to identify.
+Action: click(start_box='(1043,72)')
+2025-12-15 02:52:17 | INFO     | __main__:_process_row:402 | Ground truth bbox: [647.0952758789062, 266.94061279296875, 161.109375, 18.20001220703125]
+2025-12-15 02:52:17 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:52:17 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:52:17 | INFO     | __main__:_process_row:378 | Step 1699/92 (1846.7%)
+2025-12-15 02:52:17 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:52:22 | INFO     | __main__:_process_row:392 | Instruction: Click on the link above 'Employment Development Department'
+2025-12-15 02:52:22 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005301_test_domain_style/ff1de5de-7801-4187-a064-8e3bef382eda/screenshots/step_3_click.png
+2025-12-15 02:52:22 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a link labeled "Employment Development Department" on the page, and right above it, there is a link that says "File for Unemployment." According to the task requirements, I need to click on this "File for Unemployment" link. It's located in the upper left area of the page, and I can simply click on it with my mouse to access the relevant page.
+Action: click(start_box='(620,421)')
+2025-12-15 02:52:22 | INFO     | __main__:_process_row:402 | Ground truth bbox: [512.5, 398.5625, 230.15625, 27]
+2025-12-15 02:52:22 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:52:22 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:52:22 | INFO     | __main__:_process_row:378 | Step 1700/92 (1847.8%)
+2025-12-15 02:52:22 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:52:26 | INFO     | __main__:_process_row:392 | Instruction: Click on the link above 'Employment Development Department'
+2025-12-15 02:52:26 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251113_005132_test_domain_text_shrink/ff1de5de-7801-4187-a064-8e3bef382eda/screenshots/step_3_click.png
+2025-12-15 02:52:26 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a link labeled "Employment Development Department" located just above the "Find a Job" section. This link is positioned right in the middle of the page, and I need to click on it to access the relevant page.
+Action: click(start_box='(1255,665)')
+2025-12-15 02:52:26 | INFO     | __main__:_process_row:402 | Ground truth bbox: [513, 381.34375, 230.15625, 26]
+2025-12-15 02:52:26 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:52:26 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:52:26 | INFO     | __main__:_process_row:378 | Step 1701/92 (1848.9%)
+2025-12-15 02:52:26 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:52:30 | INFO     | __main__:_process_row:392 | Instruction: Click on the arrow to the left of 'newest'
+2025-12-15 02:52:30 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_004959_test_domain_original/ff8f6003-6068-4567-b1ef-61e3222d3bce/screenshots/step_0_click.png
+2025-12-15 02:52:30 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed a blue arrow on the left side of the "newest" option, and that's exactly what I need to click on. This arrow is positioned right next to the "newest" text, and clicking it should allow me to switch to the previous page.
+Action: click(start_box='(191,70)')
+2025-12-15 02:52:30 | INFO     | __main__:_process_row:402 | Ground truth bbox: [296.140625, 109, 25.140625, 32]
+2025-12-15 02:52:30 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:52:30 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:52:30 | INFO     | __main__:_process_row:378 | Step 1702/92 (1850.0%)
+2025-12-15 02:52:30 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:52:36 | INFO     | __main__:_process_row:392 | Instruction: Click on the arrow to the left of 'newest'
+2025-12-15 02:52:36 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005144_test_domain_precision/ff8f6003-6068-4567-b1ef-61e3222d3bce/screenshots/step_0_click.png
+2025-12-15 02:52:36 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed a blue arrow button on the left side of the "newest" option, which is exactly what I was looking for. It's located right next to the "newest" text, and clicking on it should allow me to switch to the previous page. I'm going to click this arrow button now.
+Action: click(start_box='(931,86)')
+2025-12-15 02:52:36 | INFO     | __main__:_process_row:402 | Ground truth bbox: [207.29843139648438, 76.29999542236328, 17.598434448242188, 22.400001525878906]
+2025-12-15 02:52:36 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:52:36 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:52:36 | INFO     | __main__:_process_row:378 | Step 1703/92 (1851.1%)
+2025-12-15 02:52:36 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:52:39 | INFO     | __main__:_process_row:392 | Instruction: Click on the arrow to the left of 'newest'
+2025-12-15 02:52:39 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005301_test_domain_style/ff8f6003-6068-4567-b1ef-61e3222d3bce/screenshots/step_0_click.png
+2025-12-15 02:52:39 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed a small arrow icon on the left side of the "newest" button, and that's exactly what I need to click on. This arrow is positioned right next to the "newest" button, and clicking it should allow me to switch to the previous page of the list.
+Action: click(start_box='(17,140)')
+2025-12-15 02:52:39 | INFO     | __main__:_process_row:402 | Ground truth bbox: [303.328125, 110, 25.140625, 36.09375]
+2025-12-15 02:52:39 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:52:39 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:52:39 | INFO     | __main__:_process_row:378 | Step 1704/92 (1852.2%)
+2025-12-15 02:52:39 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:52:44 | INFO     | __main__:_process_row:392 | Instruction: Click on the arrow to the left of 'newest'
+2025-12-15 02:52:44 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251113_005132_test_domain_text_shrink/ff8f6003-6068-4567-b1ef-61e3222d3bce/screenshots/step_0_click.png
+2025-12-15 02:52:44 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed a small arrow icon on the left side of the "newest" option, and that's exactly what I was looking for. It's a black arrow pointing to the left, and clicking on it will allow me to switch to the previous page. I'm going to click on it now.
+Action: click(start_box='(191,68)')
+2025-12-15 02:52:44 | INFO     | __main__:_process_row:402 | Ground truth bbox: [294.375, 109, 23.4375, 29]
+2025-12-15 02:52:44 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:52:44 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:52:44 | INFO     | __main__:_process_row:378 | Step 1705/92 (1853.3%)
+2025-12-15 02:52:44 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:52:49 | INFO     | __main__:_process_row:392 | Instruction: Click on the 'View Deal' button above the flight '8:48 AM - 10:28 AM'
+2025-12-15 02:52:49 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005125_test_website_original/ffc01d9d-bf28-4787-a42c-b92b44db3285/screenshots/step_5_click.png
+2025-12-15 02:52:49 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I found the flight I was looking for on the page. It's the one that departs at 8:48 AM and arrives at 10:28 AM, with a price of $229. There's a yellow "View Deal" button right next to it, and I need to click on that button to check out the details of the deal.
+Action: click(start_box='(1147,692)')
+2025-12-15 02:52:49 | INFO     | __main__:_process_row:402 | Ground truth bbox: [1085, 522.0, 140, 36]
+2025-12-15 02:52:49 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:52:49 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:52:49 | INFO     | __main__:_process_row:378 | Step 1706/92 (1854.3%)
+2025-12-15 02:52:49 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:52:55 | INFO     | __main__:_process_row:392 | Instruction: Click on the 'View Deal' button above the flight '8:48 AM - 10:28 AM'
+2025-12-15 02:52:55 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005233_test_website_precision/ffc01d9d-bf28-4787-a42c-b92b44db3285/screenshots/step_5_click.png
+2025-12-15 02:52:55 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I found the flight I was looking for on the page. The flight from San Francisco to San Diego, departing at 8:48 AM and arriving at 10:28 AM, is priced at $229. There's a yellow "View Deal" button right next to it, and I need to click on that button to check out the details of the deal.
+Action: click(start_box='(1099,649)')
+2025-12-15 02:52:55 | INFO     | __main__:_process_row:402 | Ground truth bbox: [1047.4952392578125, 527.3999938964844, 98, 25.20001220703125]
+2025-12-15 02:52:55 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:52:55 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:52:55 | INFO     | __main__:_process_row:378 | Step 1707/92 (1855.4%)
+2025-12-15 02:52:55 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:53:00 | INFO     | __main__:_process_row:392 | Instruction: Click on the 'View Deal' button above the flight '8:48 AM - 10:28 AM'
+2025-12-15 02:53:00 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005341_test_website_style/ffc01d9d-bf28-4787-a42c-b92b44db3285/screenshots/step_5_click.png
+2025-12-15 02:53:00 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I found the flight I was looking for! The flight from San Francisco to San Diego that departs at 8:48 AM and arrives at 10:28 AM is right in front of me. There's a yellow "View Deal" button next to it, and I need to click on it to check out the specific details of the deal.
+Action: click(start_box='(1180,687)')
+2025-12-15 02:53:00 | INFO     | __main__:_process_row:402 | Ground truth bbox: [1126.1875, 522.0, 119.125, 36]
+2025-12-15 02:53:00 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:53:00 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:53:00 | INFO     | __main__:_process_row:378 | Step 1708/92 (1856.5%)
+2025-12-15 02:53:00 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:53:05 | INFO     | __main__:_process_row:392 | Instruction: Click on the 'View Deal' button above the flight '8:48 AM - 10:28 AM'
+2025-12-15 02:53:05 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251113_005230_test_website_text_shrink/ffc01d9d-bf28-4787-a42c-b92b44db3285/screenshots/step_5_click.png
+2025-12-15 02:53:05 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I found the flight I was looking for on the page. The flight from San Francisco to San Diego, which departs at 8:48 AM and arrives at 10:28 AM, is priced at $229. There's a yellow "View Deal" button right next to it, and I need to click on that button to check out the details of the deal.
+Action: click(start_box='(1168,692)')
+2025-12-15 02:53:05 | INFO     | __main__:_process_row:402 | Ground truth bbox: [1105.875, 522.0, 119.125, 36]
+2025-12-15 02:53:05 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:53:05 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:53:05 | INFO     | __main__:_process_row:378 | Step 1709/92 (1857.6%)
+2025-12-15 02:53:05 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:53:09 | INFO     | __main__:_process_row:392 | Instruction: Click on the button below 'Select all'
+2025-12-15 02:53:09 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005125_test_website_original/ffc01d9d-bf28-4787-a42c-b92b44db3285/screenshots/step_16_click.png
+2025-12-15 02:53:09 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a "Find flights" button located just below the "Select all" option. This button is gray and rectangular, and it seems to be the next step I need to click on. I'm going to move my mouse over and click it now.
+Action: click(start_box='(552,543)')
+2025-12-15 02:53:09 | INFO     | __main__:_process_row:402 | Ground truth bbox: [344, 519.0, 452, 42]
+2025-12-15 02:53:09 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:53:09 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:53:09 | INFO     | __main__:_process_row:378 | Step 1710/92 (1858.7%)
+2025-12-15 02:53:09 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:53:14 | INFO     | __main__:_process_row:392 | Instruction: Click on the button below 'Select all'
+2025-12-15 02:53:14 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005233_test_website_precision/ffc01d9d-bf28-4787-a42c-b92b44db3285/screenshots/step_16_click.png
+2025-12-15 02:53:14 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a "Select all" option on the page, and right below it, there is a gray "Find flights" button. This is exactly what I need to click on. I will move my mouse over and click it to proceed to the next step.
+Action: click(start_box='(562,541)')
+2025-12-15 02:53:14 | INFO     | __main__:_process_row:402 | Ground truth bbox: [528.7952880859375, 525.3000183105469, 316.4000244140625, 29.39996337890625]
+2025-12-15 02:53:14 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:53:14 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:53:14 | INFO     | __main__:_process_row:378 | Step 1711/92 (1859.8%)
+2025-12-15 02:53:14 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:53:18 | INFO     | __main__:_process_row:392 | Instruction: Click on the button below 'Select all'
+2025-12-15 02:53:18 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005341_test_website_style/ffc01d9d-bf28-4787-a42c-b92b44db3285/screenshots/step_16_click.png
+2025-12-15 02:53:18 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed a blue "Find flights" button located just below the "Select all" option. This button is positioned slightly to the left of the center of the page. To proceed with the next step, I need to click on this button.
+Action: click(start_box='(444,554)')
+2025-12-15 02:53:18 | INFO     | __main__:_process_row:402 | Ground truth bbox: [371.953125, 517.0, 153.59375, 46]
+2025-12-15 02:53:18 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:53:18 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:53:18 | INFO     | __main__:_process_row:378 | Step 1712/92 (1860.9%)
+2025-12-15 02:53:18 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:53:23 | INFO     | __main__:_process_row:392 | Instruction: Click on the button below 'Select all'
+2025-12-15 02:53:23 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251113_005230_test_website_text_shrink/ffc01d9d-bf28-4787-a42c-b92b44db3285/screenshots/step_16_click.png
+2025-12-15 02:53:23 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that there is a "Find flights" button located just below the "Select all" option. This button is gray and rectangular, and it seems to be the next step I need to click on. I'm going to move my mouse over and click it now.
+Action: click(start_box='(552,542)')
+2025-12-15 02:53:23 | INFO     | __main__:_process_row:402 | Ground truth bbox: [344, 519.0, 452, 42]
+2025-12-15 02:53:23 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:53:23 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:53:23 | INFO     | __main__:_process_row:378 | Step 1713/92 (1862.0%)
+2025-12-15 02:53:23 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:53:27 | INFO     | __main__:_process_row:392 | Instruction: Type 'SAN FRANCISCO' in the textbox above 'Depart Thu 6/15'
+2025-12-15 02:53:27 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005125_test_website_original/ffc01d9d-bf28-4787-a42c-b92b44db3285/screenshots/step_18_type.png
+2025-12-15 02:53:27 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that the "To" input box is located right next to the "From" input box, and it currently shows "Los Angeles (LAX)." To enter the destination, I need to click on this input box first to activate it.
+Action: click(start_box='(643,468)')
+2025-12-15 02:53:27 | INFO     | __main__:_process_row:402 | Ground truth bbox: [344, 435, 223, 42]
+2025-12-15 02:53:27 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:53:27 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:53:27 | INFO     | __main__:_process_row:378 | Step 1714/92 (1863.0%)
+2025-12-15 02:53:27 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:53:32 | INFO     | __main__:_process_row:392 | Instruction: Type 'SAN FRANCISCO' in the textbox above 'Depart Thu 6/15'
+2025-12-15 02:53:32 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005233_test_website_precision/ffc01d9d-bf28-4787-a42c-b92b44db3285/screenshots/step_18_type.png
+2025-12-15 02:53:32 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that the "From" input box is located in the upper left corner of the page, and it currently displays "Columbus (CMH)." To enter the destination, I first need to click on this input box to activate it, which will allow me to start typing.
+Action: click(start_box='(573,328)')
+2025-12-15 02:53:32 | INFO     | __main__:_process_row:402 | Ground truth bbox: [528.7952880859375, 304.5, 156.10003662109375, 29.399993896484375]
+2025-12-15 02:53:32 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:53:32 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:53:32 | INFO     | __main__:_process_row:378 | Step 1715/92 (1864.1%)
+2025-12-15 02:53:32 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:53:36 | INFO     | __main__:_process_row:392 | Instruction: Type 'SAN FRANCISCO' in the textbox above 'Depart Thu 6/15'
+2025-12-15 02:53:36 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251112_005341_test_website_style/ffc01d9d-bf28-4787-a42c-b92b44db3285/screenshots/step_18_type.png
+2025-12-15 02:53:36 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that the destination input box is located right next to the departure location box, and it currently shows "Los Angeles (LAX)." To enter the destination, I need to click on this input box first to activate it, which will allow me to start typing "SAN FRANCISCO."
+Action: click(start_box='(683,481)')
+2025-12-15 02:53:36 | INFO     | __main__:_process_row:402 | Ground truth bbox: [368, 454, 223, 45.78125]
+2025-12-15 02:53:36 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:53:36 | INFO     | __main__:_process_row:377 | ================================================================================
+2025-12-15 02:53:36 | INFO     | __main__:_process_row:378 | Step 1716/92 (1865.2%)
+2025-12-15 02:53:36 | INFO     | __main__:_process_row:379 | ================================================================================
+2025-12-15 02:53:40 | INFO     | __main__:_process_row:392 | Instruction: Type 'SAN FRANCISCO' in the textbox above 'Depart Thu 6/15'
+2025-12-15 02:53:40 | INFO     | __main__:_process_row:393 | Image path: /mnt/test_splits/run_20251113_005230_test_website_text_shrink/ffc01d9d-bf28-4787-a42c-b92b44db3285/screenshots/step_18_type.png
+2025-12-15 02:53:40 | INFO     | __main__:_process_row:400 | Raw prediction: 
+Thought: I noticed that the "To" input box is located right next to the "From" input box, and it currently shows "Los Angeles (LAX)." To enter the destination, I need to click on this input box first to make it editable.
+Action: click(start_box='(643,468)')
+2025-12-15 02:53:40 | INFO     | __main__:_process_row:402 | Ground truth bbox: [344, 435, 223, 42]
+2025-12-15 02:53:40 | INFO     | __main__:_process_row:403 | ================================================================================
+2025-12-15 02:53:40 | INFO     | __main__:run:371 | Evaluation completed. Processed 92 rows in 567.94 seconds
+2025-12-15 02:53:40 | INFO     | __main__:main:657 | Evaluation completed. Logs saved to: /mnt/baseline_results/evaluation_20251215_024412.log
