@@ -69,53 +69,103 @@ def format_raw_prediction(raw_pred):
         return None
     return str(raw_pred)
 
-def add_prediction_overlay(img, coordinates, color, label):
-    """Add prediction overlay to image"""
-    if not coordinates or pd.isna(coordinates):
-        return img
-
+def parse_coords(coord_str):
+    """Parse coordinate string like '[553, 86]' to tuple"""
+    if pd.isna(coord_str):
+        return None
     try:
-        if isinstance(coordinates, str):
-            coords = ast.literal_eval(coordinates)
+        coords = ast.literal_eval(coord_str)
+        if isinstance(coords, list) and len(coords) >= 2:
+            return (int(coords[0]), int(coords[1]))
+    except:
+        pass
+    return None
+
+def annotate_image(img, row, cursor_color='white'):
+    """Annotate image with GT bbox and mouse cursor at predicted coordinates"""
+    annotated_img = img.copy()
+    draw = ImageDraw.Draw(annotated_img)
+
+    # Draw GT bbox with dashed lines
+    if pd.notna(row.get('ground_truth_bbox')):
+        try:
+            gt_bbox = ast.literal_eval(row['ground_truth_bbox'])
+            if len(gt_bbox) >= 4:
+                x, y, w, h = gt_bbox[0], gt_bbox[1], gt_bbox[2], gt_bbox[3]
+
+                outer_color = (255, 0, 0)  # Red (outer)
+                inner_color = (255, 255, 0)  # Yellow (inner)
+                outer_width = 5
+                inner_width = 3
+                offset = 2
+                dash_length = 8
+                gap_length = 8
+
+                # Helper to draw dashed line
+                def draw_dashed_line(p1, p2, color, width):
+                    dx = p2[0] - p1[0]
+                    dy = p2[1] - p1[1]
+                    dist = (dx**2 + dy**2)**0.5
+                    if dist == 0: return
+
+                    num_dashes = int(dist / (dash_length + gap_length))
+
+                    for i in range(num_dashes + 1):
+                        start_factor = i * (dash_length + gap_length) / dist
+                        end_factor = min(1.0, (i * (dash_length + gap_length) + dash_length) / dist)
+
+                        start_point = (p1[0] + dx * start_factor, p1[1] + dy * start_factor)
+                        end_point = (p1[0] + dx * end_factor, p1[1] + dy * end_factor)
+                        draw.line([start_point, end_point], fill=color, width=width)
+
+                # Draw outer dashed rectangle
+                draw_dashed_line((x, y), (x + w, y), outer_color, outer_width)
+                draw_dashed_line((x + w, y), (x + w, y + h), outer_color, outer_width)
+                draw_dashed_line((x + w, y + h), (x, y + h), outer_color, outer_width)
+                draw_dashed_line((x, y + h), (x, y), outer_color, outer_width)
+
+                # Draw inner dashed rectangle
+                x_inner, y_inner, w_inner, h_inner = x + offset, y + offset, w - 2*offset, h - 2*offset
+                if w_inner > 0 and h_inner > 0:
+                    draw_dashed_line((x_inner, y_inner), (x_inner + w_inner, y_inner), inner_color, inner_width)
+                    draw_dashed_line((x_inner + w_inner, y_inner), (x_inner + w_inner, y_inner + h_inner), inner_color, inner_width)
+                    draw_dashed_line((x_inner + w_inner, y_inner + h_inner), (x_inner, y_inner + h_inner), inner_color, inner_width)
+                    draw_dashed_line((x_inner, y_inner + h_inner), (x_inner, y_inner), inner_color, inner_width)
+        except Exception as e:
+            pass
+
+    # Draw mouse cursor at predicted coordinates
+    coords = parse_coords(row.get('coordinates'))
+    if coords:
+        cx, cy = int(coords[0]), int(coords[1])
+
+        # Cursor colors based on variant
+        if cursor_color == 'white':
+            fill_color = (255, 255, 255)
+            outline_color = (0, 0, 0)
+        elif cursor_color == 'blue':
+            fill_color = (100, 150, 255)
+            outline_color = (0, 50, 150)
+        elif cursor_color == 'red':
+            fill_color = (255, 100, 100)
+            outline_color = (150, 0, 0)
         else:
-            coords = coordinates
+            fill_color = (255, 255, 255)
+            outline_color = (0, 0, 0)
 
-        # Create a copy to draw on
-        img_with_overlay = img.copy()
-        draw = ImageDraw.Draw(img_with_overlay)
+        # Standard mouse cursor shape: arrow pointing northwest (3x scale)
+        cursor_points = [
+            (cx, cy),           # Tip (hotspot)
+            (cx, cy + 48),      # Bottom of shaft
+            (cx + 12, cy + 36), # Inner notch left
+            (cx + 21, cy + 54), # Bottom left of tail
+            (cx + 27, cy + 51), # Bottom right of tail
+            (cx + 18, cy + 33), # Inner notch right
+            (cx + 33, cy + 33), # Right edge
+        ]
+        draw.polygon(cursor_points, fill=fill_color, outline=outline_color, width=2)
 
-        x, y = int(coords[0]), int(coords[1])
-
-        # Convert color names to RGB tuples for better visibility
-        color_rgb = {
-            'blue': (0, 100, 255),
-            'red': (255, 50, 50)
-        }.get(color, color)
-
-        # Draw crosshair with thicker lines
-        size = 30
-        # Horizontal line
-        draw.line([(x-size, y), (x+size, y)], fill=color_rgb, width=4)
-        # Vertical line
-        draw.line([(x, y-size), (x, y+size)], fill=color_rgb, width=4)
-
-        # Draw circle around prediction
-        radius = 12
-        draw.ellipse([(x-radius, y-radius), (x+radius, y+radius)], outline=color_rgb, width=4)
-
-        # Add label with background for visibility
-        # Draw a small rectangle behind the text
-        label_text = f"{label}"
-        # Estimate text size (rough approximation)
-        text_bg_box = [(x+25, y-15), (x+25+len(label_text)*7, y+5)]
-        draw.rectangle(text_bg_box, fill=(255, 255, 255, 200))
-        draw.text((x+28, y-12), label_text, fill=color_rgb)
-
-        return img_with_overlay
-
-    except Exception as e:
-        st.warning(f"Could not overlay prediction: {e}")
-        return img
+    return annotated_img
 
 def display_comparison(original_row, variant_row, variant_name, debug_mode=False):
     """Display side-by-side comparison with prediction overlays"""
@@ -128,19 +178,14 @@ def display_comparison(original_row, variant_row, variant_name, debug_mode=False
 
     with col1:
 
-        # Display image with prediction overlay
+        # Display image with annotations
         img_path = resolve_image_path(original_row, debug_mode)
         if img_path and img_path.exists():
             img = Image.open(img_path)
-            # Add prediction overlay
-            img_with_prediction = add_prediction_overlay(
-                img,
-                original_row.get('coordinates'),
-                'blue',
-                'Original'
-            )
+            # Add annotations (ground truth bbox + mouse cursor)
+            img_annotated = annotate_image(img, original_row, cursor_color='white')
             # Display at full resolution by default
-            st.image(img_with_prediction, use_container_width=False)
+            st.image(img_annotated, use_container_width=False)
         else:
             st.info("Image not available")
             st.caption(f"❌ Path: {img_path}")
@@ -174,19 +219,14 @@ def display_comparison(original_row, variant_row, variant_name, debug_mode=False
                     st.code(formatted_pred, language="text")
 
     with col2:
-        # Display image with prediction overlay
+        # Display image with annotations
         img_path = resolve_image_path(variant_row, debug_mode)
         if img_path and img_path.exists():
             img = Image.open(img_path)
-            # Add prediction overlay
-            img_with_prediction = add_prediction_overlay(
-                img,
-                variant_row.get('coordinates'),
-                'red',
-                variant_name.title()
-            )
+            # Add annotations (ground truth bbox + mouse cursor)
+            img_annotated = annotate_image(img, variant_row, cursor_color='red')
             # Display at full resolution by default
-            st.image(img_with_prediction, use_container_width=False)
+            st.image(img_annotated, use_container_width=False)
         else:
             st.info("Image not available")
             st.caption(f"❌ Path: {img_path}")
