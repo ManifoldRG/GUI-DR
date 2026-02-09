@@ -210,6 +210,60 @@ def main():
     # Sidebar controls
     st.sidebar.header("🎯 Comparison Settings")
 
+    # Model filter
+    models = sorted(df['model'].unique().tolist())
+    selected_model = st.sidebar.selectbox(
+        "Model",
+        models,
+        help="Select the AI model to analyze"
+    )
+
+    # Query type filter
+    query_types = sorted(df['query_type'].unique().tolist())
+    selected_query_type = st.sidebar.selectbox(
+        "Query Type",
+        query_types,
+        format_func=lambda x: x.replace('_', ' ').title(),
+        help="Filter by query type: Direct Query (simple element targeting) vs Relational Query (spatial/contextual reasoning)"
+    )
+
+    # Use reasoning filter
+    use_reasoning_options = sorted(df['use_reasoning'].unique().tolist())
+    selected_use_reasoning = st.sidebar.selectbox(
+        "Use Reasoning",
+        use_reasoning_options,
+        format_func=lambda x: "Yes" if x else "No",
+        help="Filter by whether chain-of-thought reasoning was used"
+    )
+
+    # Test split filter
+    test_splits = sorted(df['test_split'].unique().tolist())
+    selected_test_split = st.sidebar.selectbox(
+        "Test Split",
+        test_splits,
+        format_func=lambda x: x.replace('_', ' ').title(),
+        help="Select the test split: domain-based vs task-based vs website-based test sets"
+    )
+
+    # Success filter
+    success_filter = st.sidebar.selectbox(
+        "Success",
+        ['All', 'True', 'False'],
+        help="Filter by prediction success (whether click coordinates hit the target bounding box)"
+    )
+
+    # Apply filters
+    df = df[
+        (df['model'] == selected_model) &
+        (df['query_type'] == selected_query_type) &
+        (df['use_reasoning'] == selected_use_reasoning) &
+        (df['test_split'] == selected_test_split)
+    ]
+
+    # Apply success filter if not 'All'
+    if success_filter != 'All':
+        df = df[df['success'] == (success_filter == 'True')]
+
     # Debug mode toggle
     debug_mode = st.sidebar.checkbox("🔍 Debug Mode", value=False, help="Show technical debug information")
 
