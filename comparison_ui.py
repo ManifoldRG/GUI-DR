@@ -3,6 +3,8 @@ import pandas as pd
 from pathlib import Path
 from PIL import Image, ImageDraw
 import ast
+import json
+import re
 
 st.set_page_config(page_title="AI Agent Comparison", page_icon="🔬", layout="wide")
 
@@ -60,6 +62,12 @@ def resolve_image_path(row, debug_mode=False):
         return exact_path
 
     return None
+
+def format_raw_prediction(raw_pred):
+    """Format raw prediction for display"""
+    if pd.isna(raw_pred):
+        return None
+    return str(raw_pred)
 
 def add_prediction_overlay(img, coordinates, color, label):
     """Add prediction overlay to image"""
@@ -144,7 +152,7 @@ def display_comparison(original_row, variant_row, variant_name, debug_mode=False
         else:
             st.error(success)
 
-        col1_1, col1_2 = st.columns(2)
+        col1_1, col1_2, col1_3 = st.columns(3)
         with col1_1:
             st.metric("Prediction Error", f"{original_row['bbox_center_mse']:.1f}", help="Mean Squared Error (MSE) between predicted click coordinates and target bounding box center. Lower is better.")
         with col1_2:
@@ -154,10 +162,16 @@ def display_comparison(original_row, variant_row, variant_name, debug_mode=False
                     st.metric("Coordinates", f"({coords[0]:.0f}, {coords[1]:.0f})")
                 except:
                     st.metric("Coordinates", "N/A")
+        with col1_3:
+            if pd.notna(original_row.get('action_type')):
+                st.metric("Action", original_row['action_type'].title())
 
-        # Show raw prediction
-        if pd.notna(original_row.get('raw_prediction')):
-            st.caption(f"**Raw Prediction:** {original_row['raw_prediction']}")
+        # Show raw prediction in debug mode
+        if debug_mode and pd.notna(original_row.get('raw_prediction')):
+            formatted_pred = format_raw_prediction(original_row['raw_prediction'])
+            if formatted_pred:
+                with st.expander("🔍 Raw Prediction"):
+                    st.code(formatted_pred, language="text")
 
     with col2:
         # Display image with prediction overlay
@@ -184,7 +198,7 @@ def display_comparison(original_row, variant_row, variant_name, debug_mode=False
         else:
             st.error(success)
 
-        col2_1, col2_2 = st.columns(2)
+        col2_1, col2_2, col2_3 = st.columns(3)
         with col2_1:
             mse_delta = variant_row['bbox_center_mse'] - original_row['bbox_center_mse']
             # Higher MSE is worse, so positive delta should be red (bad)
@@ -201,10 +215,16 @@ def display_comparison(original_row, variant_row, variant_name, debug_mode=False
                     st.metric("Coordinates", f"({coords[0]:.0f}, {coords[1]:.0f})")
                 except:
                     st.metric("Coordinates", "N/A")
+        with col2_3:
+            if pd.notna(variant_row.get('action_type')):
+                st.metric("Action", variant_row['action_type'].title())
 
-        # Show raw prediction
-        if pd.notna(variant_row.get('raw_prediction')):
-            st.caption(f"**Raw Prediction:** {variant_row['raw_prediction']}")
+        # Show raw prediction in debug mode
+        if debug_mode and pd.notna(variant_row.get('raw_prediction')):
+            formatted_pred = format_raw_prediction(variant_row['raw_prediction'])
+            if formatted_pred:
+                with st.expander("🔍 Raw Prediction"):
+                    st.code(formatted_pred, language="text")
 
 def main():
     st.title("🔬 Original vs Perturbation Comparison")
@@ -260,7 +280,10 @@ def main():
         help="Filter by prediction success (whether click coordinates hit the target bounding box)"
     )
 
-    # Apply filters
+    # Debug mode toggle
+    debug_mode = st.sidebar.checkbox("🔍 Debug Mode", value=False, help="Show technical debug information")
+
+    # Apply filters BEFORE building task list
     df = df[
         (df['model'] == selected_model) &
         (df['query_type'] == selected_query_type) &
@@ -272,14 +295,11 @@ def main():
     if success_filter != 'All':
         df = df[df['success'] == (success_filter == 'True')]
 
-    # Debug mode toggle
-    debug_mode = st.sidebar.checkbox("🔍 Debug Mode", value=False, help="Show technical debug information")
-
     # Default perturbation for initial filtering
     perturbation_variants = ['precision', 'style', 'text_shrink']
     default_variant = 'precision'
 
-    # Get tasks that have both original and any perturbation variant
+    # Get tasks that have both original and any perturbation variant (from filtered data)
     available_tasks = []
     for task_id in df['task_id'].unique():
         for step_idx in df[df['task_id'] == task_id]['step_index'].unique():
