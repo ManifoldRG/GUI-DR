@@ -155,6 +155,10 @@ def display_comparison(original_row, variant_row, variant_name, debug_mode=False
                 except:
                     st.metric("Coordinates", "N/A")
 
+        # Show raw prediction
+        if pd.notna(original_row.get('raw_prediction')):
+            st.caption(f"**Raw Prediction:** {original_row['raw_prediction']}")
+
     with col2:
         # Display image with prediction overlay
         img_path = resolve_image_path(variant_row, debug_mode)
@@ -197,6 +201,10 @@ def display_comparison(original_row, variant_row, variant_name, debug_mode=False
                     st.metric("Coordinates", f"({coords[0]:.0f}, {coords[1]:.0f})")
                 except:
                     st.metric("Coordinates", "N/A")
+
+        # Show raw prediction
+        if pd.notna(variant_row.get('raw_prediction')):
+            st.caption(f"**Raw Prediction:** {variant_row['raw_prediction']}")
 
 def main():
     st.title("🔬 Original vs Perturbation Comparison")
