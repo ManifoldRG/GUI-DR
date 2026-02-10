@@ -5,6 +5,7 @@ from PIL import Image, ImageDraw
 import ast
 import json
 import re
+import random
 
 st.set_page_config(page_title="AI Agent Comparison", page_icon="🔬", layout="wide")
 
@@ -21,7 +22,7 @@ def load_data():
     )
     return df
 
-def resolve_image_path(row, debug_mode=False):
+def resolve_image_path(row):
     """Get image path for a row - improved to find variant-specific images"""
     image_path = row.get('image_path', '')
     if not image_path or pd.isna(image_path):
@@ -51,9 +52,6 @@ def resolve_image_path(row, debug_mode=False):
     for pattern in variant_patterns:
         matching_files = list(image_dir.glob(pattern))
         if matching_files:
-            # Debug: print what we found
-            if debug_mode:
-                st.caption(f"🔍 Found {len(matching_files)} files for pattern '{pattern}': {[f.name for f in matching_files[:3]]}")
             return matching_files[0]
 
     # If no files found, try the exact path
@@ -63,11 +61,36 @@ def resolve_image_path(row, debug_mode=False):
 
     return None
 
-def format_raw_prediction(raw_pred):
-    """Format raw prediction for display"""
+def format_raw_prediction(raw_pred, action_type=None, coordinates=None):
+    """Format raw prediction for display - show entire raw prediction or construct from available data"""
     if pd.isna(raw_pred):
         return None
-    return str(raw_pred)
+
+    raw_str = str(raw_pred)
+
+    # If it contains tool_call tags with JSON, return the entire thing
+    if '<tool_call>' in raw_str or '{' in raw_str:
+        return raw_str
+
+    # If raw_pred is just coordinates, construct a JSON-like structure with available data
+    if raw_str.startswith('(') and raw_str.endswith(')'):
+        prediction_obj = {}
+        if pd.notna(action_type):
+            prediction_obj['action_type'] = action_type
+        if pd.notna(coordinates):
+            try:
+                coords = ast.literal_eval(coordinates)
+                prediction_obj['coordinates'] = coords
+            except:
+                prediction_obj['raw_coordinates'] = raw_str
+        else:
+            prediction_obj['raw_prediction'] = raw_str
+
+        if prediction_obj:
+            return json.dumps(prediction_obj, indent=2)
+
+    # Otherwise return raw string
+    return raw_str
 
 def parse_coords(coord_str):
     """Parse coordinate string like '[553, 86]' to tuple"""
@@ -167,19 +190,14 @@ def annotate_image(img, row, cursor_color='white'):
 
     return annotated_img
 
-def display_comparison(original_row, variant_row, variant_name, debug_mode=False):
+def display_comparison(original_row, variant_row, variant_name):
     """Display side-by-side comparison with prediction overlays"""
     col1, col2 = st.columns(2)
-
-    # Debug info
-    if debug_mode:
-        st.caption(f"🔍 Original variant: {original_row.get('variant', 'unknown')}, Perturbation: {variant_row.get('variant', 'unknown')}")
-        st.caption(f"📁 Image paths - Original: {original_row.get('image_path', 'N/A')[:50]}... | Perturbation: {variant_row.get('image_path', 'N/A')[:50]}...")
 
     with col1:
 
         # Display image with annotations
-        img_path = resolve_image_path(original_row, debug_mode)
+        img_path = resolve_image_path(original_row)
         if img_path and img_path.exists():
             img = Image.open(img_path)
             # Add annotations (ground truth bbox + mouse cursor)
@@ -188,7 +206,6 @@ def display_comparison(original_row, variant_row, variant_name, debug_mode=False
             st.image(img_annotated, use_container_width=False)
         else:
             st.info("Image not available")
-            st.caption(f"❌ Path: {img_path}")
 
         # Display metrics
         success = "✅ SUCCESS" if original_row['success'] else "❌ FAILED"
@@ -199,7 +216,7 @@ def display_comparison(original_row, variant_row, variant_name, debug_mode=False
 
         col1_1, col1_2, col1_3 = st.columns(3)
         with col1_1:
-            st.metric("Prediction Error", f"{original_row['bbox_center_mse']:.1f}", help="Mean Squared Error (MSE) between predicted click coordinates and target bounding box center. Lower is better.")
+            st.metric("MSE", f"{original_row['bbox_center_mse']:.1f}", help="Mean Squared Error between predicted click coordinates and target bounding box center. Lower is better.")
         with col1_2:
             if pd.notna(original_row.get('coordinates')):
                 try:
@@ -211,16 +228,20 @@ def display_comparison(original_row, variant_row, variant_name, debug_mode=False
             if pd.notna(original_row.get('action_type')):
                 st.metric("Action", original_row['action_type'].title())
 
-        # Show raw prediction in debug mode
-        if debug_mode and pd.notna(original_row.get('raw_prediction')):
-            formatted_pred = format_raw_prediction(original_row['raw_prediction'])
+        # Show raw prediction in expander
+        if pd.notna(original_row.get('raw_prediction')):
+            formatted_pred = format_raw_prediction(
+                original_row['raw_prediction'],
+                original_row.get('action_type'),
+                original_row.get('coordinates')
+            )
             if formatted_pred:
                 with st.expander("🔍 Raw Prediction"):
                     st.code(formatted_pred, language="text")
 
     with col2:
         # Display image with annotations
-        img_path = resolve_image_path(variant_row, debug_mode)
+        img_path = resolve_image_path(variant_row)
         if img_path and img_path.exists():
             img = Image.open(img_path)
             # Add annotations (ground truth bbox + mouse cursor)
@@ -229,7 +250,6 @@ def display_comparison(original_row, variant_row, variant_name, debug_mode=False
             st.image(img_annotated, use_container_width=False)
         else:
             st.info("Image not available")
-            st.caption(f"❌ Path: {img_path}")
 
         # Display metrics
         success = "✅ SUCCESS" if variant_row['success'] else "❌ FAILED"
@@ -241,13 +261,12 @@ def display_comparison(original_row, variant_row, variant_name, debug_mode=False
         col2_1, col2_2, col2_3 = st.columns(3)
         with col2_1:
             mse_delta = variant_row['bbox_center_mse'] - original_row['bbox_center_mse']
-            # Higher MSE is worse, so positive delta should be red (bad)
-            delta_color = "inverse" if mse_delta > 0 else "normal"
-            st.metric("Prediction Error",
+            # Lower MSE is better, so use "inverse" to make decreases green and increases red
+            st.metric("MSE",
                      f"{variant_row['bbox_center_mse']:.1f}",
                      f"{mse_delta:+.1f}",
-                     delta_color=delta_color,
-                     help="Mean Squared Error (MSE) between predicted click coordinates and target bounding box center. Lower is better. Delta shows change from original.")
+                     delta_color="inverse",
+                     help="Mean Squared Error between predicted click coordinates and target bounding box center. Lower is better. Delta shows change from original.")
         with col2_2:
             if pd.notna(variant_row.get('coordinates')):
                 try:
@@ -259,9 +278,13 @@ def display_comparison(original_row, variant_row, variant_name, debug_mode=False
             if pd.notna(variant_row.get('action_type')):
                 st.metric("Action", variant_row['action_type'].title())
 
-        # Show raw prediction in debug mode
-        if debug_mode and pd.notna(variant_row.get('raw_prediction')):
-            formatted_pred = format_raw_prediction(variant_row['raw_prediction'])
+        # Show raw prediction in expander
+        if pd.notna(variant_row.get('raw_prediction')):
+            formatted_pred = format_raw_prediction(
+                variant_row['raw_prediction'],
+                variant_row.get('action_type'),
+                variant_row.get('coordinates')
+            )
             if formatted_pred:
                 with st.expander("🔍 Raw Prediction"):
                     st.code(formatted_pred, language="text")
@@ -304,15 +327,6 @@ def main():
         help="Filter by whether chain-of-thought reasoning was used"
     )
 
-    # Test split filter
-    test_splits = sorted(df['test_split'].unique().tolist())
-    selected_test_split = st.sidebar.selectbox(
-        "Test Split",
-        test_splits,
-        format_func=lambda x: x.replace('_', ' ').title(),
-        help="Select the test split: domain-based vs task-based vs website-based test sets"
-    )
-
     # Success filter
     success_filter = st.sidebar.selectbox(
         "Success",
@@ -320,195 +334,131 @@ def main():
         help="Filter by prediction success (whether click coordinates hit the target bounding box)"
     )
 
-    # Debug mode toggle
-    debug_mode = st.sidebar.checkbox("🔍 Debug Mode", value=False, help="Show technical debug information")
-
     # Apply filters BEFORE building task list
     df = df[
         (df['model'] == selected_model) &
         (df['query_type'] == selected_query_type) &
-        (df['use_reasoning'] == selected_use_reasoning) &
-        (df['test_split'] == selected_test_split)
+        (df['use_reasoning'] == selected_use_reasoning)
     ]
 
     # Apply success filter if not 'All'
     if success_filter != 'All':
         df = df[df['success'] == (success_filter == 'True')]
 
+    # Initialize session state for navigation
+    if 'current_sample_index' not in st.session_state:
+        st.session_state.current_sample_index = 0
+
     # Default perturbation for initial filtering
     perturbation_variants = ['precision', 'style', 'text_shrink']
-    default_variant = 'precision'
 
-    # Get tasks that have both original and any perturbation variant (from filtered data)
-    available_tasks = []
+    # Initialize selected_variant in session state if not exists
+    if 'selected_variant' not in st.session_state:
+        st.session_state.selected_variant = perturbation_variants[0]
+
+    # Get all samples (task_id, step_index combinations) that have both original and selected perturbation
+    available_samples = []
     for task_id in df['task_id'].unique():
         for step_idx in df[df['task_id'] == task_id]['step_index'].unique():
-            task_data = df[(df['task_id'] == task_id) & (df['step_index'] == step_idx)]
-            variants = set(task_data['variant'].values)
+            sample_data = df[(df['task_id'] == task_id) & (df['step_index'] == step_idx)]
+            variants = set(sample_data['variant'].values)
 
-            # Check if we have original and at least one perturbation variant
-            if 'original' in variants and any(v in variants for v in perturbation_variants):
-                instruction = task_data.iloc[0]['instruction']
-                available_tasks.append({
+            # Check if we have both original and the selected perturbation
+            if 'original' in variants and st.session_state.selected_variant in variants:
+                instruction = sample_data.iloc[0]['instruction']
+                available_samples.append({
                     'task_id': task_id,
                     'step_index': step_idx,
-                    'instruction': instruction,
-                    'display': f"Task {len(available_tasks)+1}: {instruction[:50]}...",
-                    'available_variants': list(variants)
+                    'instruction': instruction
                 })
 
-    if not available_tasks:
-        st.error("No tasks found with both original and selected perturbation")
+    if not available_samples:
+        st.error(f"No samples found with both original and {st.session_state.selected_variant} perturbation")
         return
 
-    # Task selector
-    task_options = [task['display'] for task in available_tasks]
-    selected_task_idx = st.sidebar.selectbox(
-        "Select Task",
-        range(len(task_options)),
-        format_func=lambda i: task_options[i]
-    )
+    # Ensure current index is valid
+    if st.session_state.current_sample_index >= len(available_samples):
+        st.session_state.current_sample_index = 0
 
-    selected_task = available_tasks[selected_task_idx]
+    current_sample = available_samples[st.session_state.current_sample_index]
 
-    # Show comparison
+    # Navigation controls
+    st.markdown("### 🔍 Sample Navigation")
+
+    st.markdown(f"<div style='text-align: center; padding: 0.5rem;'><strong>Sample {st.session_state.current_sample_index + 1} of {len(available_samples)}</strong></div>", unsafe_allow_html=True)
+
+    col1, col2 = st.columns([4, 1])
+
+    with col1:
+        # Jump to specific sample
+        sample_input = st.number_input(
+            "Jump to sample:",
+            min_value=1,
+            max_value=len(available_samples),
+            value=st.session_state.current_sample_index + 1,
+            key=f"jump_to_sample_{len(available_samples)}",
+            label_visibility="collapsed"
+        )
+        # Update index if changed
+        if sample_input - 1 != st.session_state.current_sample_index:
+            st.session_state.current_sample_index = sample_input - 1
+
+    with col2:
+        # Randomize button with callback
+        def randomize():
+            st.session_state.current_sample_index = random.randint(0, len(available_samples) - 1)
+
+        st.button("🎲 Randomize", use_container_width=True, on_click=randomize, key="randomize_btn")
+
     st.divider()
 
-    # Task info
+    # Sample info
     st.markdown(f"### 📋 Task Instruction")
-    st.info(f"**{selected_task['instruction']}**")
-    st.caption("Note: Each step represents a different stage in executing this task. Steps may share the same instruction but have different UI states.")
+    st.markdown(f"<div style='text-align: center;'><span style='display: inline-block; padding: 0.5rem 1rem; background-color: rgba(33, 195, 228, 0.1); border-radius: 0.5rem; font-size: 1.25rem;'><strong>{current_sample['instruction']}</strong></span></div>", unsafe_allow_html=True)
 
-    # Step selector - show all available steps for this task that have both original and perturbation data
-    task_id = selected_task['task_id']
-
-    # Get steps that have both original and at least one perturbation variant
-    available_steps = []
-    for step in df[df['task_id'] == task_id]['step_index'].unique():
-        step_data = df[(df['task_id'] == task_id) & (df['step_index'] == step)]
-        variants = set(step_data['variant'].values)
-        if 'original' in variants and any(v in variants for v in perturbation_variants):
-            available_steps.append(step)
-
-    available_steps = sorted(available_steps)
-
-    # Debug info about step availability
-    if debug_mode:
-        all_steps = sorted(df[df['task_id'] == task_id]['step_index'].unique())
-        st.caption(f"🔍 Debug: All steps for this task: {all_steps}")
-        st.caption(f"🔍 Debug: Steps with both original + perturbation: {available_steps}")
-
-    # Timeline Navigation Bar - Draggable Slider
-    st.markdown("### 📊 Step Timeline")
-
-    if len(available_steps) > 1:
-        # Default to the task's original step if available, otherwise first available step
-        default_step = available_steps[0]
-        if selected_task['step_index'] in available_steps:
-            default_step = selected_task['step_index']
-
-        # Track current task to detect task changes
-        if 'current_task_id' not in st.session_state or st.session_state.current_task_id != task_id:
-            st.session_state.current_task_id = task_id
-            default_step = available_steps[0]
-
-        # Create a draggable slider for step navigation with actual step numbers
-        selected_step = st.select_slider(
-            "Drag to navigate through steps",
-            options=available_steps,
-            value=default_step,
-            key=f"step_slider_{task_id}",
-            label_visibility="collapsed",
-            help="Each step represents a different stage in the task execution. Drag to navigate through the available steps for this task."
-        )
-
-        # Show step info below slider
-        selected_index = available_steps.index(selected_step)
-        step_labels = " → ".join([f"**Step {s}**" if i == selected_index else f"Step {s}"
-                                   for i, s in enumerate(available_steps)])
-        st.markdown(step_labels)
-        st.caption(f"Task ID: {task_id[:8]}... | Currently viewing: Step {selected_step} ({selected_index + 1} of {len(available_steps)} available steps)")
-    else:
-        selected_step = available_steps[0] if available_steps else selected_task['step_index']
-        st.caption(f"Task ID: {task_id[:8]}... | Step: {selected_step} (only available step)")
-
-    # Layout with perturbation selector above right image
+    # Layout with headers
     col1, col2 = st.columns(2)
 
     with col1:
         st.markdown("#### 🔵 Original")
 
     with col2:
-        # Perturbation selector directly above the perturbed image
-        available_variants_for_task = [v for v in perturbation_variants if v in selected_task['available_variants']]
-
-        if not available_variants_for_task:
-            st.error("No perturbation variants available for this task")
-            return
-
+        # Perturbation selector above the image
         selected_variant = st.selectbox(
             "🔴 Select Perturbation",
-            available_variants_for_task,
-            format_func=lambda x: x.replace('_', ' ').title()
+            perturbation_variants,
+            index=perturbation_variants.index(st.session_state.selected_variant),
+            format_func=lambda x: x.replace('_', ' ').title(),
+            help="""**Precision**: Viewport zoom (70% scale), tests precision with zoomed interfaces
+
+**Style**: Visual randomization (colors, fonts, borders, shadows)
+
+**Text Shrink**: Font size reduced 20%, tests readability with dense text"""
         )
 
-    # Get the specific rows for selected step
-    task_data = df[
-        (df['task_id'] == selected_task['task_id']) &
-        (df['step_index'] == selected_step)
+        # Update session state if changed
+        if selected_variant != st.session_state.selected_variant:
+            st.session_state.selected_variant = selected_variant
+            st.rerun()
+
+    # Get the specific rows for current sample
+    sample_data = df[
+        (df['task_id'] == current_sample['task_id']) &
+        (df['step_index'] == current_sample['step_index'])
     ]
 
-    if task_data.empty:
-        st.error(f"No data found for Task {selected_task['task_id'][:8]}... Step {selected_step}")
-        return
-
-    original_data = task_data[task_data['variant'] == 'original']
-    variant_data = task_data[task_data['variant'] == selected_variant]
+    original_data = sample_data[sample_data['variant'] == 'original']
+    variant_data = sample_data[sample_data['variant'] == st.session_state.selected_variant]
 
     if original_data.empty or variant_data.empty:
-        st.error(f"Missing variant data for this step. Available variants: {list(task_data['variant'].unique())}")
+        st.error(f"Missing variant data for this sample")
         return
 
     original_row = original_data.iloc[0]
     variant_row = variant_data.iloc[0]
 
     # Display comparison
-    display_comparison(original_row, variant_row, selected_variant, debug_mode)
-
-    # Add legend below the images
-    st.divider()
-    st.markdown("### 📖 Perturbation Legend")
-
-    legend_col1, legend_col2, legend_col3 = st.columns(3)
-
-    with legend_col1:
-        st.markdown("""
-        **🎯 Precision (Type 1 - Viewport Zoom)**
-        - Fixed viewport zoom (default 0.7 = 70% scale)
-        - CSS transform scale from top-left origin
-        - Body enlarged to maintain layout proportions
-        - Tests AI precision with zoomed-out interfaces
-        """)
-
-    with legend_col2:
-        st.markdown("""
-        **🎨 Style (Type 3 - Visual Randomization)**
-        - Random design style (neobrutalism, glassmorphism, etc.)
-        - Random colors from palette (WCAG compliant)
-        - Random typography (fonts, sizes, weights, spacing)
-        - Random styling (borders, shadows, padding)
-        - Optional element reordering
-        """)
-
-    with legend_col3:
-        st.markdown("""
-        **📏 Text Shrink (Type 2 - Dense Info)**
-        - Font size reduced by 20% (×0.8, min 11px)
-        - Removes overflow/ellipsis restrictions
-        - Unwraps text from nowrap constraints
-        - Removes small fixed width limits
-        - Tests readability with compressed text
-        """)
+    display_comparison(original_row, variant_row, st.session_state.selected_variant)
 
     # Primary Research Findings
     st.divider()
