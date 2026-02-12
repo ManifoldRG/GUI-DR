@@ -3,8 +3,6 @@ import pandas as pd
 from pathlib import Path
 from PIL import Image, ImageDraw
 import ast
-import json
-import re
 import random
 
 st.set_page_config(page_title="AI Agent Comparison", page_icon="🔬", layout="wide")
@@ -61,36 +59,13 @@ def resolve_image_path(row):
 
     return None
 
-def format_raw_prediction(raw_pred, action_type=None, coordinates=None):
-    """Format raw prediction for display - show entire raw prediction or construct from available data"""
+def format_raw_prediction(raw_pred):
+    """Format raw prediction for display - show entire raw prediction as-is"""
     if pd.isna(raw_pred):
         return None
 
-    raw_str = str(raw_pred)
-
-    # If it contains tool_call tags with JSON, return the entire thing
-    if '<tool_call>' in raw_str or '{' in raw_str:
-        return raw_str
-
-    # If raw_pred is just coordinates, construct a JSON-like structure with available data
-    if raw_str.startswith('(') and raw_str.endswith(')'):
-        prediction_obj = {}
-        if pd.notna(action_type):
-            prediction_obj['action_type'] = action_type
-        if pd.notna(coordinates):
-            try:
-                coords = ast.literal_eval(coordinates)
-                prediction_obj['coordinates'] = coords
-            except:
-                prediction_obj['raw_coordinates'] = raw_str
-        else:
-            prediction_obj['raw_prediction'] = raw_str
-
-        if prediction_obj:
-            return json.dumps(prediction_obj, indent=2)
-
-    # Otherwise return raw string
-    return raw_str
+    # Return the raw prediction exactly as it is in the CSV
+    return str(raw_pred)
 
 def parse_coords(coord_str):
     """Parse coordinate string like '[553, 86]' to tuple"""
@@ -230,11 +205,7 @@ def display_comparison(original_row, variant_row, variant_name):
 
         # Show raw prediction in expander
         if pd.notna(original_row.get('raw_prediction')):
-            formatted_pred = format_raw_prediction(
-                original_row['raw_prediction'],
-                original_row.get('action_type'),
-                original_row.get('coordinates')
-            )
+            formatted_pred = format_raw_prediction(original_row['raw_prediction'])
             if formatted_pred:
                 with st.expander("🔍 Raw Prediction"):
                     st.code(formatted_pred, language="text")
@@ -280,11 +251,7 @@ def display_comparison(original_row, variant_row, variant_name):
 
         # Show raw prediction in expander
         if pd.notna(variant_row.get('raw_prediction')):
-            formatted_pred = format_raw_prediction(
-                variant_row['raw_prediction'],
-                variant_row.get('action_type'),
-                variant_row.get('coordinates')
-            )
+            formatted_pred = format_raw_prediction(variant_row['raw_prediction'])
             if formatted_pred:
                 with st.expander("🔍 Raw Prediction"):
                     st.code(formatted_pred, language="text")
@@ -334,20 +301,25 @@ def main():
         help="Filter by prediction success (whether click coordinates hit the target bounding box)"
     )
 
-    # Apply filters BEFORE building task list
+    # Apply base filters BEFORE building task list
     df = df[
         (df['model'] == selected_model) &
         (df['query_type'] == selected_query_type) &
         (df['use_reasoning'] == selected_use_reasoning)
     ]
 
-    # Apply success filter if not 'All'
-    if success_filter != 'All':
-        df = df[df['success'] == (success_filter == 'True')]
+    # Store success filter value - will be applied to ORIGINAL variant only when building samples
+    success_filter_value = None if success_filter == 'All' else (success_filter == 'True')
 
     # Initialize session state for navigation
     if 'current_sample_index' not in st.session_state:
         st.session_state.current_sample_index = 0
+
+    # Store current task/step to preserve position when switching variants
+    if 'current_task_id' not in st.session_state:
+        st.session_state.current_task_id = None
+    if 'current_step_index' not in st.session_state:
+        st.session_state.current_step_index = None
 
     # Default perturbation for initial filtering
     perturbation_variants = ['precision', 'style', 'text_shrink']
@@ -355,6 +327,10 @@ def main():
     # Initialize selected_variant in session state if not exists
     if 'selected_variant' not in st.session_state:
         st.session_state.selected_variant = perturbation_variants[0]
+
+    # Track if variant changed (to know when to preserve position)
+    if 'previous_variant' not in st.session_state:
+        st.session_state.previous_variant = st.session_state.selected_variant
 
     # Get all samples (task_id, step_index combinations) that have both original and selected perturbation
     available_samples = []
@@ -365,6 +341,11 @@ def main():
 
             # Check if we have both original and the selected perturbation
             if 'original' in variants and st.session_state.selected_variant in variants:
+                # Apply success filter to ORIGINAL only (so switching variants doesn't change the sample list)
+                original_row = sample_data[sample_data['variant'] == 'original'].iloc[0]
+                if success_filter_value is not None and original_row['success'] != success_filter_value:
+                    continue
+
                 instruction = sample_data.iloc[0]['instruction']
                 available_samples.append({
                     'task_id': task_id,
@@ -376,11 +357,30 @@ def main():
         st.error(f"No samples found with both original and {st.session_state.selected_variant} perturbation")
         return
 
+    # Try to preserve current task/step position ONLY when variant changes
+    variant_changed = st.session_state.previous_variant != st.session_state.selected_variant
+    if variant_changed and st.session_state.current_task_id is not None and st.session_state.current_step_index is not None:
+        # Find the index of the current task/step in the new available_samples list
+        for idx, sample in enumerate(available_samples):
+            if (sample['task_id'] == st.session_state.current_task_id and
+                sample['step_index'] == st.session_state.current_step_index):
+                st.session_state.current_sample_index = idx
+                break
+        else:
+            # If current task/step not found in new list, reset to 0
+            st.session_state.current_sample_index = 0
+        # Update previous_variant after handling
+        st.session_state.previous_variant = st.session_state.selected_variant
+
     # Ensure current index is valid
     if st.session_state.current_sample_index >= len(available_samples):
         st.session_state.current_sample_index = 0
 
     current_sample = available_samples[st.session_state.current_sample_index]
+
+    # Store current task/step for next rerun
+    st.session_state.current_task_id = current_sample['task_id']
+    st.session_state.current_step_index = current_sample['step_index']
 
     # Navigation controls
     st.markdown("### 🔍 Sample Navigation")
@@ -404,11 +404,21 @@ def main():
             st.session_state.current_sample_index = sample_input - 1
 
     with col2:
-        # Randomize button with callback
-        def randomize():
-            st.session_state.current_sample_index = random.randint(0, len(available_samples) - 1)
+        # Randomize button - sets a flag that triggers randomization
+        def trigger_randomize():
+            st.session_state.randomize_requested = True
 
-        st.button("🎲 Randomize", use_container_width=True, on_click=randomize, key="randomize_btn")
+        st.button("🎲 Randomize", use_container_width=True, on_click=trigger_randomize, key="randomize_btn")
+
+    # Handle randomize request (done after available_samples is built, so length is correct)
+    if st.session_state.get('randomize_requested', False):
+        st.session_state.current_sample_index = random.randint(0, len(available_samples) - 1)
+        st.session_state.randomize_requested = False
+        # Update stored task/step for the new random sample
+        new_sample = available_samples[st.session_state.current_sample_index]
+        st.session_state.current_task_id = new_sample['task_id']
+        st.session_state.current_step_index = new_sample['step_index']
+        st.rerun()
 
     st.divider()
 
@@ -459,28 +469,6 @@ def main():
 
     # Display comparison
     display_comparison(original_row, variant_row, st.session_state.selected_variant)
-
-    # Primary Research Findings
-    st.divider()
-    st.markdown("### 🔬 Primary Research Findings")
-
-    findings_col1, findings_col2 = st.columns(2)
-
-    with findings_col1:
-        st.markdown("""
-        **🎯 Key Observations:**
-        - **Spatial reasoning gaps**: Models lack GUI spatial relation understanding and reasoning
-        - **Static visual heuristics**: Models rely on inaccurate heuristics that fail after interface updates
-        - **Reasoning trade-offs**: CoT reasoning hurts performance on simple tasks but helps on complex/unfamiliar tasks
-        """)
-
-    with findings_col2:
-        st.markdown("""
-        **⚠️ Training Insights:**
-        - **SFT limitations**: LoRA fine-tuning on noisy synthetic data can hurt performance on direct GUI grounding
-        - **Overfitting sensitivity**: Models show high sensitivity to domain-randomized perturbations
-        - **Robustness needs**: General software control requires robustness to version changes and fine-grained visual understanding
-        """)
 
 
 if __name__ == "__main__":
