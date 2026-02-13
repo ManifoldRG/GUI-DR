@@ -5,7 +5,7 @@ from PIL import Image, ImageDraw
 import ast
 import random
 
-st.set_page_config(page_title="AI Agent Comparison", page_icon="🔬", layout="wide")
+st.set_page_config(page_title="UI Perturbations Demo", page_icon="🔬", layout="wide")
 
 # Reduce top padding
 st.markdown("""
@@ -16,6 +16,13 @@ st.markdown("""
     }
     header[data-testid="stHeader"] {
         display: none;
+    }
+    section[data-testid="stSidebar"] > div:first-child {
+        padding-top: 0.5rem;
+    }
+    section[data-testid="stSidebar"] hr {
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -326,6 +333,7 @@ def main():
         selected_query_type = st.selectbox(
             "Query Type",
             query_types,
+            key="query_type_filter",
             format_func=lambda x: x.replace('_', ' ').title(),
             help="Filter by query type: Direct Query (simple element targeting) vs Relational Query (spatial/contextual reasoning)"
         )
@@ -335,6 +343,7 @@ def main():
         selected_use_reasoning = st.selectbox(
             "Use Reasoning",
             use_reasoning_options,
+            key="use_reasoning_filter",
             format_func=lambda x: "Yes" if x else "No",
             help="Filter by whether chain-of-thought reasoning was used"
         )
@@ -347,32 +356,6 @@ def main():
 
     # Get available models from data
     all_models = sorted(df_filtered['model'].unique().tolist())
-
-    # Per-model success filters in filters section
-    with filters_placeholder:
-        st.markdown("**Success Filter (per model)**")
-
-        # Initialize per-model success filter in session state
-        if 'model_success_filter' not in st.session_state:
-            st.session_state.model_success_filter = {model: 'All' for model in all_models}
-
-        # Ensure all models have entries
-        for model in all_models:
-            if model not in st.session_state.model_success_filter:
-                st.session_state.model_success_filter[model] = 'All'
-
-        model_success_filters = {}
-        for model in all_models:
-            style = MODEL_STYLES.get(model, {'label': model})
-            label = style.get('label', model)
-            model_success_filters[model] = st.selectbox(
-                f"{label}",
-                ['All', 'Success', 'Failure'],
-                index=['All', 'Success', 'Failure'].index(st.session_state.model_success_filter.get(model, 'All')),
-                key=f"success_filter_{model}",
-                help=f"Filter by {label}'s prediction success on original"
-            )
-            st.session_state.model_success_filter[model] = model_success_filters[model]
 
     # Initialize model selection in session state
     if 'selected_models' not in st.session_state:
@@ -411,6 +394,32 @@ def main():
     if not selected_models:
         st.error("Please select at least one model")
         return
+
+    # Per-model success filters - only for selected models
+    with filters_placeholder:
+        # Initialize per-model success filter in session state
+        if 'model_success_filter' not in st.session_state:
+            st.session_state.model_success_filter = {model: 'All' for model in all_models}
+
+        # Ensure all models have entries
+        for model in all_models:
+            if model not in st.session_state.model_success_filter:
+                st.session_state.model_success_filter[model] = 'All'
+
+        model_success_filters = {}
+        with st.expander("**Success Filter (per model)**", expanded=True):
+            for model in selected_models:  # Only show filters for selected models
+                style = MODEL_STYLES.get(model, {'label': model})
+                label = style.get('label', model)
+                symbol = model_symbols.get(model, '⚪')
+                model_success_filters[model] = st.selectbox(
+                    f"{symbol} {label}",
+                    ['All', 'Success', 'Failure'],
+                    index=['All', 'Success', 'Failure'].index(st.session_state.model_success_filter.get(model, 'All')),
+                    key=f"success_filter_{model}",
+                    help=f"Filter by {label}'s prediction success on original"
+                )
+                st.session_state.model_success_filter[model] = model_success_filters[model]
 
     # Default perturbation for initial filtering
     perturbation_variants = ['precision', 'style', 'text_shrink']
@@ -547,6 +556,34 @@ def main():
         st.session_state.current_sample_index = new_idx
         st.session_state.sample_nav_input = new_idx + 1
 
+    # Callback for reset button
+    def on_reset():
+        # Reset navigation
+        st.session_state.current_sample_index = 0
+        st.session_state.sample_nav_input = 1
+        st.session_state.current_task_id = None
+        st.session_state.current_step_index = None
+        # Reset model selections to all checked
+        for model in all_models:
+            st.session_state.selected_models[model] = True
+            # Also reset the checkbox widget state
+            if f"model_{model}" in st.session_state:
+                st.session_state[f"model_{model}"] = True
+        # Reset success filters to 'All'
+        for model in all_models:
+            st.session_state.model_success_filter[model] = 'All'
+            # Also reset the selectbox widget state
+            if f"success_filter_{model}" in st.session_state:
+                st.session_state[f"success_filter_{model}"] = 'All'
+        # Reset perturbation to first option
+        st.session_state.selected_variant = 'precision'
+        st.session_state.previous_variant = 'precision'
+        # Reset query type and use reasoning filters to first option
+        if 'query_type_filter' in st.session_state:
+            st.session_state.query_type_filter = query_types[0]
+        if 'use_reasoning_filter' in st.session_state:
+            st.session_state.use_reasoning_filter = use_reasoning_options[0]
+
     # Now fill in the navigation placeholder at the top of sidebar
     with nav_placeholder:
         st.markdown("**🔍 Sample Navigation**")
@@ -564,6 +601,10 @@ def main():
 
         # Randomize button
         st.button("🎲 Randomize", use_container_width=True, key="randomize_btn", on_click=on_randomize)
+
+    # Reset button at the bottom of sidebar
+    st.sidebar.markdown("---")
+    st.sidebar.button("🔄 Reset All", use_container_width=True, key="reset_btn", on_click=on_reset)
 
     # Sample info
     st.markdown(f"<div style='text-align: left;'><span style='font-size: 1.5rem;'>📋 Task Instruction:</span> <span style='display: inline-block; padding: 0.5rem 1rem; background-color: rgba(33, 195, 228, 0.1); border-radius: 0.5rem; font-size: 1.5rem;'><strong>{current_sample['instruction']}</strong></span></div>", unsafe_allow_html=True)
