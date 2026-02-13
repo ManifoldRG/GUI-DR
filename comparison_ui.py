@@ -7,6 +7,19 @@ import random
 
 st.set_page_config(page_title="AI Agent Comparison", page_icon="🔬", layout="wide")
 
+# Reduce top padding
+st.markdown("""
+<style>
+    .block-container {
+        padding-top: 1rem;
+        padding-bottom: 0rem;
+    }
+    header[data-testid="stHeader"] {
+        display: none;
+    }
+</style>
+""", unsafe_allow_html=True)
+
 @st.cache_data
 def load_data():
     """Load and clean data"""
@@ -79,15 +92,69 @@ def parse_coords(coord_str):
         pass
     return None
 
-def annotate_image(img, row, cursor_color='white'):
-    """Annotate image with GT bbox and mouse cursor at predicted coordinates"""
+# Model colors and symbols for multi-model display
+MODEL_STYLES = {
+    'gta1': {'color': (0, 150, 255), 'outline': (0, 50, 150), 'symbol': 'cursor', 'label': 'GTA1'},
+    'qwen25vl': {'color': (50, 205, 50), 'outline': (0, 100, 0), 'symbol': 'diamond', 'label': 'Qwen2.5VL'},
+    'uitars15': {'color': (255, 165, 0), 'outline': (200, 100, 0), 'symbol': 'triangle', 'label': 'UI-TARS-1.5'},
+}
+
+def draw_model_prediction(draw, coords, model, scale=1.0):
+    """Draw a model's prediction with its unique symbol"""
+    if not coords:
+        return
+
+    cx, cy = int(coords[0]), int(coords[1])
+    style = MODEL_STYLES.get(model, {'color': (255, 255, 255), 'outline': (0, 0, 0), 'symbol': 'cursor'})
+    fill_color = style['color']
+    outline_color = style['outline']
+    symbol = style['symbol']
+
+    if symbol == 'cursor':
+        # Mouse cursor shape
+        cursor_points = [
+            (cx, cy),
+            (cx, cy + 48),
+            (cx + 12, cy + 36),
+            (cx + 21, cy + 54),
+            (cx + 27, cy + 51),
+            (cx + 18, cy + 33),
+            (cx + 33, cy + 33),
+        ]
+        draw.polygon(cursor_points, fill=fill_color, outline=outline_color, width=2)
+    elif symbol == 'diamond':
+        # Diamond shape
+        size = 20
+        diamond_points = [
+            (cx, cy - size),      # Top
+            (cx + size, cy),      # Right
+            (cx, cy + size),      # Bottom
+            (cx - size, cy),      # Left
+        ]
+        draw.polygon(diamond_points, fill=fill_color, outline=outline_color, width=3)
+        # Draw crosshair inside
+        draw.line([(cx - size//2, cy), (cx + size//2, cy)], fill=outline_color, width=2)
+        draw.line([(cx, cy - size//2), (cx, cy + size//2)], fill=outline_color, width=2)
+    elif symbol == 'triangle':
+        # Triangle pointing down
+        size = 22
+        triangle_points = [
+            (cx, cy + size),      # Bottom point
+            (cx - size, cy - size//2),  # Top left
+            (cx + size, cy - size//2),  # Top right
+        ]
+        draw.polygon(triangle_points, fill=fill_color, outline=outline_color, width=3)
+
+def annotate_image_multi_model(img, rows_by_model, selected_models):
+    """Annotate image with GT bbox and predictions from multiple models"""
     annotated_img = img.copy()
     draw = ImageDraw.Draw(annotated_img)
 
-    # Draw GT bbox with dashed lines
-    if pd.notna(row.get('ground_truth_bbox')):
+    # Draw GT bbox from first available row
+    first_row = next(iter(rows_by_model.values()), None)
+    if first_row is not None and pd.notna(first_row.get('ground_truth_bbox')):
         try:
-            gt_bbox = ast.literal_eval(row['ground_truth_bbox'])
+            gt_bbox = ast.literal_eval(first_row['ground_truth_bbox'])
             if len(gt_bbox) >= 4:
                 x, y, w, h = gt_bbox[0], gt_bbox[1], gt_bbox[2], gt_bbox[3]
 
@@ -99,217 +166,284 @@ def annotate_image(img, row, cursor_color='white'):
                 dash_length = 8
                 gap_length = 8
 
-                # Helper to draw dashed line
                 def draw_dashed_line(p1, p2, color, width):
                     dx = p2[0] - p1[0]
                     dy = p2[1] - p1[1]
                     dist = (dx**2 + dy**2)**0.5
                     if dist == 0: return
-
                     num_dashes = int(dist / (dash_length + gap_length))
-
                     for i in range(num_dashes + 1):
                         start_factor = i * (dash_length + gap_length) / dist
                         end_factor = min(1.0, (i * (dash_length + gap_length) + dash_length) / dist)
-
                         start_point = (p1[0] + dx * start_factor, p1[1] + dy * start_factor)
                         end_point = (p1[0] + dx * end_factor, p1[1] + dy * end_factor)
                         draw.line([start_point, end_point], fill=color, width=width)
 
-                # Draw outer dashed rectangle
                 draw_dashed_line((x, y), (x + w, y), outer_color, outer_width)
                 draw_dashed_line((x + w, y), (x + w, y + h), outer_color, outer_width)
                 draw_dashed_line((x + w, y + h), (x, y + h), outer_color, outer_width)
                 draw_dashed_line((x, y + h), (x, y), outer_color, outer_width)
 
-                # Draw inner dashed rectangle
                 x_inner, y_inner, w_inner, h_inner = x + offset, y + offset, w - 2*offset, h - 2*offset
                 if w_inner > 0 and h_inner > 0:
                     draw_dashed_line((x_inner, y_inner), (x_inner + w_inner, y_inner), inner_color, inner_width)
                     draw_dashed_line((x_inner + w_inner, y_inner), (x_inner + w_inner, y_inner + h_inner), inner_color, inner_width)
                     draw_dashed_line((x_inner + w_inner, y_inner + h_inner), (x_inner, y_inner + h_inner), inner_color, inner_width)
                     draw_dashed_line((x_inner, y_inner + h_inner), (x_inner, y_inner), inner_color, inner_width)
-        except Exception as e:
+        except Exception:
             pass
 
-    # Draw mouse cursor at predicted coordinates
-    coords = parse_coords(row.get('coordinates'))
-    if coords:
-        cx, cy = int(coords[0]), int(coords[1])
-
-        # Cursor colors based on variant
-        if cursor_color == 'white':
-            fill_color = (255, 255, 255)
-            outline_color = (0, 0, 0)
-        elif cursor_color == 'blue':
-            fill_color = (100, 150, 255)
-            outline_color = (0, 50, 150)
-        elif cursor_color == 'red':
-            fill_color = (255, 100, 100)
-            outline_color = (150, 0, 0)
-        else:
-            fill_color = (255, 255, 255)
-            outline_color = (0, 0, 0)
-
-        # Standard mouse cursor shape: arrow pointing northwest (3x scale)
-        cursor_points = [
-            (cx, cy),           # Tip (hotspot)
-            (cx, cy + 48),      # Bottom of shaft
-            (cx + 12, cy + 36), # Inner notch left
-            (cx + 21, cy + 54), # Bottom left of tail
-            (cx + 27, cy + 51), # Bottom right of tail
-            (cx + 18, cy + 33), # Inner notch right
-            (cx + 33, cy + 33), # Right edge
-        ]
-        draw.polygon(cursor_points, fill=fill_color, outline=outline_color, width=2)
+    # Draw predictions for each selected model
+    for model in selected_models:
+        if model in rows_by_model:
+            row = rows_by_model[model]
+            coords = parse_coords(row.get('coordinates'))
+            draw_model_prediction(draw, coords, model)
 
     return annotated_img
 
-def display_comparison(original_row, variant_row, variant_name):
-    """Display side-by-side comparison with prediction overlays"""
+def display_comparison_multi_model(original_rows_by_model, variant_rows_by_model, selected_models, variant_name):
+    """Display side-by-side comparison with predictions from multiple models"""
+    # Add CSS for visual divider between columns
+    st.markdown("""
+    <style>
+    div[data-testid="column"]:first-child {
+        border-right: 3px solid rgba(128, 128, 128, 0.3);
+        padding-right: 1rem;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
     col1, col2 = st.columns(2)
 
+    # Get first available row for image path
+    first_original = next(iter(original_rows_by_model.values()), None)
+    first_variant = next(iter(variant_rows_by_model.values()), None)
+
     with col1:
+        st.markdown("#### 🔵 Original")
 
-        # Display image with annotations
-        img_path = resolve_image_path(original_row)
-        if img_path and img_path.exists():
-            img = Image.open(img_path)
-            # Add annotations (ground truth bbox + mouse cursor)
-            img_annotated = annotate_image(img, original_row, cursor_color='white')
-            # Display at full resolution by default
-            st.image(img_annotated, use_container_width=False)
-        else:
-            st.info("Image not available")
+        # Display image with multi-model annotations
+        if first_original is not None:
+            img_path = resolve_image_path(first_original)
+            if img_path and img_path.exists():
+                img = Image.open(img_path)
+                img_annotated = annotate_image_multi_model(img, original_rows_by_model, selected_models)
+                st.image(img_annotated, use_container_width=False)
+            else:
+                st.info("Image not available")
 
-        # Display metrics
-        success = "✅ SUCCESS" if original_row['success'] else "❌ FAILED"
-        if original_row['success']:
-            st.success(success)
-        else:
-            st.error(success)
+        # Show metrics and raw predictions for each selected model
+        for model in selected_models:
+            if model in original_rows_by_model:
+                row = original_rows_by_model[model]
+                style = MODEL_STYLES.get(model, {})
+                label = style.get('label', model)
 
-        col1_1, col1_2, col1_3 = st.columns(3)
-        with col1_1:
-            st.metric("MSE", f"{original_row['bbox_center_mse']:.1f}", help="Mean Squared Error between predicted click coordinates and target bounding box center. Lower is better.")
-        with col1_2:
-            if pd.notna(original_row.get('coordinates')):
-                try:
-                    coords = ast.literal_eval(original_row['coordinates'])
-                    st.metric("Coordinates", f"({coords[0]:.0f}, {coords[1]:.0f})")
-                except:
-                    st.metric("Coordinates", "N/A")
-        with col1_3:
-            if pd.notna(original_row.get('action_type')):
-                st.metric("Action", original_row['action_type'].title())
+                with st.expander(f"📊 {label}", expanded=True):
+                    success = "✅ SUCCESS" if row['success'] else "❌ FAILED"
+                    cols = st.columns(3)
+                    with cols[0]:
+                        st.metric("MSE", f"{row['bbox_center_mse']:.1f}")
+                    with cols[1]:
+                        if pd.notna(row.get('coordinates')):
+                            try:
+                                coords = ast.literal_eval(row['coordinates'])
+                                st.metric("Coords", f"({coords[0]:.0f}, {coords[1]:.0f})")
+                            except:
+                                st.metric("Coords", "N/A")
+                    with cols[2]:
+                        st.metric("Status", "✅" if row['success'] else "❌")
 
-        # Show raw prediction in expander
-        if pd.notna(original_row.get('raw_prediction')):
-            formatted_pred = format_raw_prediction(original_row['raw_prediction'])
-            if formatted_pred:
-                with st.expander("🔍 Raw Prediction"):
-                    st.code(formatted_pred, language="text")
+                    if pd.notna(row.get('raw_prediction')):
+                        formatted_pred = format_raw_prediction(row['raw_prediction'])
+                        if formatted_pred:
+                            st.code(formatted_pred, language="text")
 
     with col2:
-        # Display image with annotations
-        img_path = resolve_image_path(variant_row)
-        if img_path and img_path.exists():
-            img = Image.open(img_path)
-            # Add annotations (ground truth bbox + mouse cursor)
-            img_annotated = annotate_image(img, variant_row, cursor_color='red')
-            # Display at full resolution by default
-            st.image(img_annotated, use_container_width=False)
-        else:
-            st.info("Image not available")
+        st.markdown(f"#### 🔴 Perturbed ({variant_name.replace('_', ' ').title()})")
 
-        # Display metrics
-        success = "✅ SUCCESS" if variant_row['success'] else "❌ FAILED"
-        if variant_row['success']:
-            st.success(success)
-        else:
-            st.error(success)
+        # Display image with multi-model annotations
+        if first_variant is not None:
+            img_path = resolve_image_path(first_variant)
+            if img_path and img_path.exists():
+                img = Image.open(img_path)
+                img_annotated = annotate_image_multi_model(img, variant_rows_by_model, selected_models)
+                st.image(img_annotated, use_container_width=False)
+            else:
+                st.info("Image not available")
 
-        col2_1, col2_2, col2_3 = st.columns(3)
-        with col2_1:
-            mse_delta = variant_row['bbox_center_mse'] - original_row['bbox_center_mse']
-            # Lower MSE is better, so use "inverse" to make decreases green and increases red
-            st.metric("MSE",
-                     f"{variant_row['bbox_center_mse']:.1f}",
-                     f"{mse_delta:+.1f}",
-                     delta_color="inverse",
-                     help="Mean Squared Error between predicted click coordinates and target bounding box center. Lower is better. Delta shows change from original.")
-        with col2_2:
-            if pd.notna(variant_row.get('coordinates')):
-                try:
-                    coords = ast.literal_eval(variant_row['coordinates'])
-                    st.metric("Coordinates", f"({coords[0]:.0f}, {coords[1]:.0f})")
-                except:
-                    st.metric("Coordinates", "N/A")
-        with col2_3:
-            if pd.notna(variant_row.get('action_type')):
-                st.metric("Action", variant_row['action_type'].title())
+        # Show metrics and raw predictions for each selected model
+        for model in selected_models:
+            if model in variant_rows_by_model:
+                row = variant_rows_by_model[model]
+                orig_row = original_rows_by_model.get(model)
+                style = MODEL_STYLES.get(model, {})
+                label = style.get('label', model)
 
-        # Show raw prediction in expander
-        if pd.notna(variant_row.get('raw_prediction')):
-            formatted_pred = format_raw_prediction(variant_row['raw_prediction'])
-            if formatted_pred:
-                with st.expander("🔍 Raw Prediction"):
-                    st.code(formatted_pred, language="text")
+                with st.expander(f"📊 {label}", expanded=True):
+                    cols = st.columns(3)
+                    with cols[0]:
+                        if orig_row is not None:
+                            mse_delta = row['bbox_center_mse'] - orig_row['bbox_center_mse']
+                            st.metric("MSE", f"{row['bbox_center_mse']:.1f}", f"{mse_delta:+.1f}", delta_color="inverse")
+                        else:
+                            st.metric("MSE", f"{row['bbox_center_mse']:.1f}")
+                    with cols[1]:
+                        if pd.notna(row.get('coordinates')):
+                            try:
+                                coords = ast.literal_eval(row['coordinates'])
+                                st.metric("Coords", f"({coords[0]:.0f}, {coords[1]:.0f})")
+                            except:
+                                st.metric("Coords", "N/A")
+                    with cols[2]:
+                        st.metric("Status", "✅" if row['success'] else "❌")
+
+                    if pd.notna(row.get('raw_prediction')):
+                        formatted_pred = format_raw_prediction(row['raw_prediction'])
+                        if formatted_pred:
+                            st.code(formatted_pred, language="text")
 
 def main():
-    st.title("🔬 Original vs Perturbation Comparison")
-    st.markdown("Compare how UI modifications affect AI agent performance")
+    # Compact header with less vertical space
+    st.markdown("### 🔬 Original vs Perturbation Comparison")
 
     df = load_data()
     if df.empty:
         st.error("No data found")
         return
 
-    # Sidebar controls
-    st.sidebar.header("🎯 Comparison Settings")
+    # Create placeholders for sidebar sections in desired order
+    nav_placeholder = st.sidebar.container()
+    models_placeholder = st.sidebar.container()
+    perturbation_placeholder = st.sidebar.container()
+    filters_placeholder = st.sidebar.container()
 
-    # Model filter
-    models = sorted(df['model'].unique().tolist())
-    selected_model = st.sidebar.selectbox(
-        "Model",
-        models,
-        help="Select the AI model to analyze"
-    )
+    # Render filters section (will appear at bottom due to placeholder order)
+    with filters_placeholder:
+        # Query type filter
+        query_types = sorted(df['query_type'].unique().tolist())
+        selected_query_type = st.selectbox(
+            "Query Type",
+            query_types,
+            format_func=lambda x: x.replace('_', ' ').title(),
+            help="Filter by query type: Direct Query (simple element targeting) vs Relational Query (spatial/contextual reasoning)"
+        )
 
-    # Query type filter
-    query_types = sorted(df['query_type'].unique().tolist())
-    selected_query_type = st.sidebar.selectbox(
-        "Query Type",
-        query_types,
-        format_func=lambda x: x.replace('_', ' ').title(),
-        help="Filter by query type: Direct Query (simple element targeting) vs Relational Query (spatial/contextual reasoning)"
-    )
+        # Use reasoning filter
+        use_reasoning_options = sorted(df['use_reasoning'].unique().tolist())
+        selected_use_reasoning = st.selectbox(
+            "Use Reasoning",
+            use_reasoning_options,
+            format_func=lambda x: "Yes" if x else "No",
+            help="Filter by whether chain-of-thought reasoning was used"
+        )
 
-    # Use reasoning filter
-    use_reasoning_options = sorted(df['use_reasoning'].unique().tolist())
-    selected_use_reasoning = st.sidebar.selectbox(
-        "Use Reasoning",
-        use_reasoning_options,
-        format_func=lambda x: "Yes" if x else "No",
-        help="Filter by whether chain-of-thought reasoning was used"
-    )
-
-    # Success filter
-    success_filter = st.sidebar.selectbox(
-        "Success",
-        ['All', 'True', 'False'],
-        help="Filter by prediction success (whether click coordinates hit the target bounding box)"
-    )
-
-    # Apply base filters BEFORE building task list
-    df = df[
-        (df['model'] == selected_model) &
+    # Apply base filters (without model filter - we'll show all models)
+    df_filtered = df[
         (df['query_type'] == selected_query_type) &
         (df['use_reasoning'] == selected_use_reasoning)
     ]
 
-    # Store success filter value - will be applied to ORIGINAL variant only when building samples
-    success_filter_value = None if success_filter == 'All' else (success_filter == 'True')
+    # Get available models from data
+    all_models = sorted(df_filtered['model'].unique().tolist())
+
+    # Per-model success filters in filters section
+    with filters_placeholder:
+        st.markdown("**Success Filter (per model)**")
+
+        # Initialize per-model success filter in session state
+        if 'model_success_filter' not in st.session_state:
+            st.session_state.model_success_filter = {model: 'All' for model in all_models}
+
+        # Ensure all models have entries
+        for model in all_models:
+            if model not in st.session_state.model_success_filter:
+                st.session_state.model_success_filter[model] = 'All'
+
+        model_success_filters = {}
+        for model in all_models:
+            style = MODEL_STYLES.get(model, {'label': model})
+            label = style.get('label', model)
+            model_success_filters[model] = st.selectbox(
+                f"{label}",
+                ['All', 'Success', 'Failure'],
+                index=['All', 'Success', 'Failure'].index(st.session_state.model_success_filter.get(model, 'All')),
+                key=f"success_filter_{model}",
+                help=f"Filter by {label}'s prediction success on original"
+            )
+            st.session_state.model_success_filter[model] = model_success_filters[model]
+
+    # Initialize model selection in session state
+    if 'selected_models' not in st.session_state:
+        st.session_state.selected_models = {model: True for model in all_models}
+
+    # Ensure all models have entries (in case new models appear)
+    for model in all_models:
+        if model not in st.session_state.selected_models:
+            st.session_state.selected_models[model] = True
+
+    # Symbol legend for models
+    model_symbols = {
+        'gta1': '🔵',
+        'qwen25vl': '🟢',
+        'uitars15': '🟠',
+    }
+
+    # Render models section
+    with models_placeholder:
+        st.markdown("---")
+        st.markdown("**🤖 Models to Display**")
+
+        selected_models = []
+        for model in all_models:
+            style = MODEL_STYLES.get(model, {'label': model})
+            label = style.get('label', model)
+            symbol = model_symbols.get(model, '⚪')
+            checkbox_label = f"{symbol} {label}"
+
+            if st.checkbox(checkbox_label, value=st.session_state.selected_models.get(model, True), key=f"model_{model}"):
+                selected_models.append(model)
+                st.session_state.selected_models[model] = True
+            else:
+                st.session_state.selected_models[model] = False
+
+    if not selected_models:
+        st.error("Please select at least one model")
+        return
+
+    # Default perturbation for initial filtering
+    perturbation_variants = ['precision', 'style', 'text_shrink']
+
+    # Initialize selected_variant in session state if not exists
+    if 'selected_variant' not in st.session_state:
+        st.session_state.selected_variant = perturbation_variants[0]
+
+    # Render perturbation section
+    with perturbation_placeholder:
+        st.markdown("---")
+        st.markdown("**🔴 Perturbation Type**")
+        selected_variant = st.selectbox(
+            "Select Perturbation",
+            perturbation_variants,
+            index=perturbation_variants.index(st.session_state.selected_variant),
+            format_func=lambda x: x.replace('_', ' ').title(),
+            label_visibility="collapsed",
+            help="""**Precision**: Viewport zoom (70% scale), tests precision with zoomed interfaces
+
+**Style**: Visual randomization (colors, fonts, borders, shadows)
+
+**Text Shrink**: Font size reduced 20%, tests readability with dense text"""
+        )
+
+    # Update session state if changed
+    if selected_variant != st.session_state.selected_variant:
+        st.session_state.selected_variant = selected_variant
+        st.rerun()
+
+    # Track if variant changed (to know when to preserve position)
+    if 'previous_variant' not in st.session_state:
+        st.session_state.previous_variant = st.session_state.selected_variant
 
     # Initialize session state for navigation
     if 'current_sample_index' not in st.session_state:
@@ -321,29 +455,40 @@ def main():
     if 'current_step_index' not in st.session_state:
         st.session_state.current_step_index = None
 
-    # Default perturbation for initial filtering
-    perturbation_variants = ['precision', 'style', 'text_shrink']
-
-    # Initialize selected_variant in session state if not exists
-    if 'selected_variant' not in st.session_state:
-        st.session_state.selected_variant = perturbation_variants[0]
-
-    # Track if variant changed (to know when to preserve position)
-    if 'previous_variant' not in st.session_state:
-        st.session_state.previous_variant = st.session_state.selected_variant
-
     # Get all samples (task_id, step_index combinations) that have both original and selected perturbation
+    # across ALL models (not filtered by model selection)
     available_samples = []
-    for task_id in df['task_id'].unique():
-        for step_idx in df[df['task_id'] == task_id]['step_index'].unique():
-            sample_data = df[(df['task_id'] == task_id) & (df['step_index'] == step_idx)]
+    for task_id in df_filtered['task_id'].unique():
+        for step_idx in df_filtered[df_filtered['task_id'] == task_id]['step_index'].unique():
+            sample_data = df_filtered[(df_filtered['task_id'] == task_id) & (df_filtered['step_index'] == step_idx)]
             variants = set(sample_data['variant'].values)
 
             # Check if we have both original and the selected perturbation
             if 'original' in variants and st.session_state.selected_variant in variants:
-                # Apply success filter to ORIGINAL only (so switching variants doesn't change the sample list)
-                original_row = sample_data[sample_data['variant'] == 'original'].iloc[0]
-                if success_filter_value is not None and original_row['success'] != success_filter_value:
+                original_rows = sample_data[sample_data['variant'] == 'original']
+                if original_rows.empty:
+                    continue
+
+                # Apply per-model success filters on ORIGINAL variant
+                passes_filter = True
+                for model in all_models:
+                    filter_val = model_success_filters.get(model, 'All')
+                    if filter_val == 'All':
+                        continue
+
+                    model_original = original_rows[original_rows['model'] == model]
+                    if model_original.empty:
+                        continue
+
+                    model_success = model_original.iloc[0]['success']
+                    if filter_val == 'Success' and not model_success:
+                        passes_filter = False
+                        break
+                    elif filter_val == 'Failure' and model_success:
+                        passes_filter = False
+                        break
+
+                if not passes_filter:
                     continue
 
                 instruction = sample_data.iloc[0]['instruction']
@@ -372,6 +517,9 @@ def main():
         # Update previous_variant after handling
         st.session_state.previous_variant = st.session_state.selected_variant
 
+    # Store available samples count in session state for callbacks
+    st.session_state.num_available_samples = len(available_samples)
+
     # Ensure current index is valid
     if st.session_state.current_sample_index >= len(available_samples):
         st.session_state.current_sample_index = 0
@@ -382,93 +530,70 @@ def main():
     st.session_state.current_task_id = current_sample['task_id']
     st.session_state.current_step_index = current_sample['step_index']
 
-    # Navigation controls
-    st.markdown("### 🔍 Sample Navigation")
+    # Initialize sample_nav_input if not exists
+    if 'sample_nav_input' not in st.session_state:
+        st.session_state.sample_nav_input = st.session_state.current_sample_index + 1
 
-    st.markdown(f"<div style='text-align: center; padding: 0.5rem;'><strong>Sample {st.session_state.current_sample_index + 1} of {len(available_samples)}</strong></div>", unsafe_allow_html=True)
+    # Callback for sample input change
+    def on_sample_change():
+        new_val = st.session_state.sample_nav_input
+        if new_val - 1 != st.session_state.current_sample_index:
+            st.session_state.current_sample_index = new_val - 1
 
-    col1, col2 = st.columns([4, 1])
+    # Callback for randomize button
+    def on_randomize():
+        max_idx = st.session_state.num_available_samples - 1
+        new_idx = random.randint(0, max_idx)
+        st.session_state.current_sample_index = new_idx
+        st.session_state.sample_nav_input = new_idx + 1
 
-    with col1:
-        # Jump to specific sample
-        sample_input = st.number_input(
+    # Now fill in the navigation placeholder at the top of sidebar
+    with nav_placeholder:
+        st.markdown("**🔍 Sample Navigation**")
+        st.markdown(f"Sample **{st.session_state.current_sample_index + 1}** of **{len(available_samples)}**")
+
+        # Jump to specific sample (no value param - uses session state key)
+        st.number_input(
             "Jump to sample:",
             min_value=1,
             max_value=len(available_samples),
-            value=st.session_state.current_sample_index + 1,
-            key=f"jump_to_sample_{len(available_samples)}",
-            label_visibility="collapsed"
+            key="sample_nav_input",
+            label_visibility="collapsed",
+            on_change=on_sample_change
         )
-        # Update index if changed
-        if sample_input - 1 != st.session_state.current_sample_index:
-            st.session_state.current_sample_index = sample_input - 1
 
-    with col2:
-        # Randomize button - sets a flag that triggers randomization
-        def trigger_randomize():
-            st.session_state.randomize_requested = True
-
-        st.button("🎲 Randomize", use_container_width=True, on_click=trigger_randomize, key="randomize_btn")
-
-    # Handle randomize request (done after available_samples is built, so length is correct)
-    if st.session_state.get('randomize_requested', False):
-        st.session_state.current_sample_index = random.randint(0, len(available_samples) - 1)
-        st.session_state.randomize_requested = False
-        # Update stored task/step for the new random sample
-        new_sample = available_samples[st.session_state.current_sample_index]
-        st.session_state.current_task_id = new_sample['task_id']
-        st.session_state.current_step_index = new_sample['step_index']
-        st.rerun()
-
-    st.divider()
+        # Randomize button
+        st.button("🎲 Randomize", use_container_width=True, key="randomize_btn", on_click=on_randomize)
 
     # Sample info
-    st.markdown(f"### 📋 Task Instruction")
-    st.markdown(f"<div style='text-align: center;'><span style='display: inline-block; padding: 0.5rem 1rem; background-color: rgba(33, 195, 228, 0.1); border-radius: 0.5rem; font-size: 1.25rem;'><strong>{current_sample['instruction']}</strong></span></div>", unsafe_allow_html=True)
+    st.markdown(f"<div style='text-align: left;'><span style='font-size: 1.5rem;'>📋 Task Instruction:</span> <span style='display: inline-block; padding: 0.5rem 1rem; background-color: rgba(33, 195, 228, 0.1); border-radius: 0.5rem; font-size: 1.5rem;'><strong>{current_sample['instruction']}</strong></span></div>", unsafe_allow_html=True)
 
-    # Layout with headers
-    col1, col2 = st.columns(2)
-
-    with col1:
-        st.markdown("#### 🔵 Original")
-
-    with col2:
-        # Perturbation selector above the image
-        selected_variant = st.selectbox(
-            "🔴 Select Perturbation",
-            perturbation_variants,
-            index=perturbation_variants.index(st.session_state.selected_variant),
-            format_func=lambda x: x.replace('_', ' ').title(),
-            help="""**Precision**: Viewport zoom (70% scale), tests precision with zoomed interfaces
-
-**Style**: Visual randomization (colors, fonts, borders, shadows)
-
-**Text Shrink**: Font size reduced 20%, tests readability with dense text"""
-        )
-
-        # Update session state if changed
-        if selected_variant != st.session_state.selected_variant:
-            st.session_state.selected_variant = selected_variant
-            st.rerun()
-
-    # Get the specific rows for current sample
-    sample_data = df[
-        (df['task_id'] == current_sample['task_id']) &
-        (df['step_index'] == current_sample['step_index'])
+    # Get the specific rows for current sample across all selected models
+    sample_data = df_filtered[
+        (df_filtered['task_id'] == current_sample['task_id']) &
+        (df_filtered['step_index'] == current_sample['step_index'])
     ]
 
-    original_data = sample_data[sample_data['variant'] == 'original']
-    variant_data = sample_data[sample_data['variant'] == st.session_state.selected_variant]
+    # Build rows by model for original and variant
+    original_rows_by_model = {}
+    variant_rows_by_model = {}
 
-    if original_data.empty or variant_data.empty:
-        st.error(f"Missing variant data for this sample")
+    for model in selected_models:
+        model_data = sample_data[sample_data['model'] == model]
+        original_data = model_data[model_data['variant'] == 'original']
+        variant_data = model_data[model_data['variant'] == st.session_state.selected_variant]
+
+        if not original_data.empty:
+            original_rows_by_model[model] = original_data.iloc[0]
+        if not variant_data.empty:
+            variant_rows_by_model[model] = variant_data.iloc[0]
+
+    if not original_rows_by_model and not variant_rows_by_model:
+        st.error(f"No data for selected models on this sample")
         return
 
-    original_row = original_data.iloc[0]
-    variant_row = variant_data.iloc[0]
-
-    # Display comparison
-    display_comparison(original_row, variant_row, st.session_state.selected_variant)
+    # Display comparison with multi-model support
+    display_comparison_multi_model(original_rows_by_model, variant_rows_by_model, selected_models, st.session_state.selected_variant)
 
 
 if __name__ == "__main__":
