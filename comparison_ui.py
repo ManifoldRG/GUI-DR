@@ -1,3 +1,5 @@
+import base64
+import io
 import streamlit as st
 import pandas as pd
 from pathlib import Path
@@ -5,17 +7,76 @@ from PIL import Image, ImageDraw
 import ast
 import random
 
-st.set_page_config(page_title="UI Perturbations Demo", page_icon="🔬", layout="wide")
 
-# Reduce top padding
+TECHNICAL_REPORT_1_LINK = "https://fig.inc/"
+TECHNICAL_REPORT_2_LINK = "https://fig.inc/"
+TECHNICAL_REPORT_3_LINK = "https://fig.inc/"
+CODE_LINK = "https://fig.inc/"
+DATA_LINK = "https://fig.inc/"
+FIG_LINK = "https://fig.inc/"
+MANIFOLDRG_LINK = "https://www.manifoldrg.com/"
+
+MEDIA_DIR = Path(__file__).parent / "media"
+LOGO_SIZE_PX = 48  # same width and height for both sidebar logos
+
+def _logo_data_uri(filename):
+    """Return data URI for a logo under media/ for use in HTML img src."""
+    path = MEDIA_DIR / filename
+    if not path.exists():
+        return None
+    raw = path.read_bytes()
+    b64 = base64.b64encode(raw).decode()
+    return f"data:image/png;base64,{b64}"
+
+def _pil_image_to_data_uri(img):
+    """Return data URI for a PIL Image for HTML embedding with fixed dimensions (no distortion)."""
+    buf = io.BytesIO()
+    img.save(buf, format="PNG")
+    b64 = base64.b64encode(buf.getvalue()).decode()
+    return f"data:image/png;base64,{b64}"
+
+st.set_page_config(page_title="GUI Perturbation Evaluation Viewer", page_icon="🔬", layout="wide")
+
+# Font and style consistent with reference page (Geist, Open Sans, Comfortaa; #23283c on #f2f2f2)
 st.markdown("""
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Comfortaa&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/geist@1.3.0/dist/geist.css">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
 <style>
-    .block-container {
-        padding-top: 1rem;
-        padding-bottom: 0rem;
+    /* Base typography and background (match reference page) */
+    body, .main, [data-testid="stAppViewContainer"] {
+        color: #23283c !important;
+        line-height: 1.5em !important;
+        font-weight: 400 !important;
+        font-size: 1.25rem !important;
+        font-family: 'Geist', 'Open Sans', Arial, sans-serif !important;
+        background-color: #f2f2f2 !important;
     }
-    header[data-testid="stHeader"] {
-        display: none;
+    .block-container {
+        padding-top: 3.5rem;
+        padding-bottom: 2rem;
+        color: #23283c !important;
+        font-family: 'Geist', 'Open Sans', Arial, sans-serif !important;
+        background-color: #f2f2f2 !important;
+    }
+    /* Prevent main title from being cut off when scrolled to top */
+    [data-testid="stAppViewContainer"] {
+        padding-top: 0.5rem;
+    }
+    .block-container > div:first-child {
+        margin-top: 0.5rem;
+    }
+    /* Constrain comparison images and layout so 100% zoom fits in view */
+    div[data-testid="column"] img {
+        max-width: 100% !important;
+        height: auto !important;
+        max-height: min(65vh, 600px) !important;
+        object-fit: contain !important;
+    }
+    section[data-testid="stSidebar"] {
+        background-color: #f2f2f2 !important;
+        color: #23283c !important;
+        font-family: 'Geist', 'Open Sans', Arial, sans-serif !important;
     }
     section[data-testid="stSidebar"] > div:first-child {
         padding-top: 0.5rem;
@@ -23,6 +84,45 @@ st.markdown("""
     section[data-testid="stSidebar"] hr {
         margin-top: 0.5rem;
         margin-bottom: 0.5rem;
+    }
+    /* Keep header visible so sidebar toggle (keyboard_double_arrow) button is shown */
+    header[data-testid="stHeader"] {
+        background-color: #f2f2f2 !important;
+    }
+    /* Expander titles: use normal text font (not icon font) so "GTA1", "Success Filter..." look good */
+    [data-testid="stExpander"] summary {
+        font-family: 'Open Sans', Arial, sans-serif !important;
+        font-weight: 600 !important;
+        font-size: 1rem !important;
+        white-space: normal !important;
+        word-break: break-word !important;
+        overflow: visible !important;
+    }
+    /* Only the expander arrow icon uses the icon font */
+    [data-testid="stExpander"] summary > span:first-child,
+    [data-testid="stExpander"] summary [class*="icon"] {
+        font-family: 'Material Symbols Rounded', 'Material Symbols Outlined', system-ui, sans-serif !important;
+    }
+    /* Sidebar expander: prevent label cut-off, allow wrap */
+    section[data-testid="stSidebar"] [data-testid="stExpander"] summary {
+        font-size: 0.95rem !important;
+        min-width: 0 !important;
+    }
+    /* Header/sidebar toggle: icon font for the button icon only */
+    header [role="button"],
+    header [role="button"] *,
+    header button,
+    header button *,
+    button[data-testid="baseButton-header"],
+    button[data-testid="baseButton-header"] * {
+        font-family: 'Material Symbols Rounded', 'Material Symbols Outlined', system-ui, sans-serif !important;
+    }
+    /* Text content only (exclude icon containers so expander/sidebar icons still render) */
+    .block-container > p, .block-container > div .stMarkdown p,
+    .stMarkdown p, .stCaption,
+    label[data-testid="stWidgetLabel"] {
+        color: #23283c !important;
+        font-family: 'Geist', 'Open Sans', Arial, sans-serif !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -35,6 +135,7 @@ def load_data():
         return pd.DataFrame()
 
     df = pd.read_csv(csv_path)
+    df = df[df['interesting_cases'] != 'Invalid']
     df['success'] = df['hit_box_accuracy'].apply(
         lambda x: True if (isinstance(x, bool) and x) or (isinstance(x, str) and x.lower() == 'true') else False
     )
@@ -99,62 +200,82 @@ def parse_coords(coord_str):
         pass
     return None
 
-# Model colors and symbols for multi-model display
+# Solid cursor colors: black, white, orange; semi-transparent so overlapping cursors stay visible
+CONTRAST_OUTLINE = (50, 50, 50)
+CURSOR_ALPHA = 180  # 0–255; lower = more see-through where cursors overlap
 MODEL_STYLES = {
-    'gta1': {'color': (0, 150, 255), 'outline': (0, 50, 150), 'symbol': 'cursor', 'label': 'GTA1'},
-    'qwen25vl': {'color': (50, 205, 50), 'outline': (0, 100, 0), 'symbol': 'diamond', 'label': 'Qwen2.5VL'},
-    'uitars15': {'color': (255, 165, 0), 'outline': (200, 100, 0), 'symbol': 'triangle', 'label': 'UI-TARS-1.5'},
+    'gta1': {'color': (0, 0, 0), 'label': 'GTA1'},
+    'qwen25vl': {'color': (255, 255, 255), 'label': 'Qwen2.5VL'},
+    'uitars15': {'color': (255, 165, 0), 'label': 'UI-TARS-1.5'},
 }
 
-def draw_model_prediction(draw, coords, model, scale=1.0):
-    """Draw a model's prediction with its unique symbol"""
+def _arrow_points(scale):
+    """Arrow shape with tip at origin, pointing down-right. Returns list of (dx, dy)."""
+    s = scale
+    return [
+        (0, 0),
+        (0, 48 * s),
+        (12 * s, 36 * s),
+        (21 * s, 54 * s),
+        (27 * s, 51 * s),
+        (18 * s, 33 * s),
+        (33 * s, 33 * s),
+    ]
+
+def _draw_cursor_arrow(draw, cx, cy, fill_color, scale=1.0, outline_color=None):
+    """Draw arrow cursor with tip at (cx, cy). fill_color/outline_color can be (r,g,b) or (r,g,b,a)."""
+    pts_rel = _arrow_points(scale)
+    pts_int = [(int(cx + x), int(cy + y)) for x, y in pts_rel]
+    outline = outline_color if outline_color is not None else CONTRAST_OUTLINE
+    draw.polygon(pts_int, fill=fill_color, outline=outline, width=max(1, int(2 * scale)))
+
+def draw_model_prediction(draw, coords, model, scale=1.0, alpha=255):
+    """Draw a model's prediction as solid arrow cursor. Use alpha < 255 for see-through overlap."""
     if not coords:
         return
 
     cx, cy = int(coords[0]), int(coords[1])
-    style = MODEL_STYLES.get(model, {'color': (255, 255, 255), 'outline': (0, 0, 0), 'symbol': 'cursor'})
-    fill_color = style['color']
-    outline_color = style['outline']
-    symbol = style['symbol']
+    style = MODEL_STYLES.get(model, {'color': (180, 180, 180), 'label': model})
+    color = style.get('color', (180, 180, 180))
+    fill_rgba = (*color, alpha)
+    outline_rgba = (*CONTRAST_OUTLINE, 255)
+    _draw_cursor_arrow(draw, cx, cy, fill_rgba, scale, outline_rgba)
 
-    if symbol == 'cursor':
-        # Mouse cursor shape
-        cursor_points = [
-            (cx, cy),
-            (cx, cy + 48),
-            (cx + 12, cy + 36),
-            (cx + 21, cy + 54),
-            (cx + 27, cy + 51),
-            (cx + 18, cy + 33),
-            (cx + 33, cy + 33),
-        ]
-        draw.polygon(cursor_points, fill=fill_color, outline=outline_color, width=2)
-    elif symbol == 'diamond':
-        # Diamond shape
-        size = 20
-        diamond_points = [
-            (cx, cy - size),      # Top
-            (cx + size, cy),      # Right
-            (cx, cy + size),      # Bottom
-            (cx - size, cy),      # Left
-        ]
-        draw.polygon(diamond_points, fill=fill_color, outline=outline_color, width=3)
-        # Draw crosshair inside
-        draw.line([(cx - size//2, cy), (cx + size//2, cy)], fill=outline_color, width=2)
-        draw.line([(cx, cy - size//2), (cx, cy + size//2)], fill=outline_color, width=2)
-    elif symbol == 'triangle':
-        # Triangle pointing down
-        size = 22
-        triangle_points = [
-            (cx, cy + size),      # Bottom point
-            (cx - size, cy - size//2),  # Top left
-            (cx + size, cy - size//2),  # Top right
-        ]
-        draw.polygon(triangle_points, fill=fill_color, outline=outline_color, width=3)
+def make_cursor_legend_image(selected_models, width=460, height=64):
+    """Create a horizontal legend: cursor + label per model, no overlap or clipping."""
+    img = Image.new("RGB", (width, height), (248, 248, 248))
+    draw = ImageDraw.Draw(img)
+    legend_scale = 0.4 * (height / 64)  # scale down when height is smaller
+    cursor_w = int(33 * legend_scale) + 10
+    x_start = int(24 * width / 460)
+    x_step = max(60, int(width / 3.5))  # fit all models in width
+    y_center = height // 2
+    cursor_cy = y_center - 10
+    for i, model in enumerate(selected_models):
+        style = MODEL_STYLES.get(model, {'color': (180, 180, 180), 'label': model})
+        color = style.get('color', (180, 180, 180))
+        label = style.get('label', model)
+        cx = x_start + i * x_step
+        cy = cursor_cy
+        _draw_cursor_arrow(draw, cx, cy, color, legend_scale)
+        # Label to the right of cursor so it doesn't overlap
+        text_x = cx + cursor_w
+        text_y = y_center - 6
+        try:
+            from PIL import ImageFont
+            font_size = max(8, int(13 * height / 64))
+            font = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", font_size)
+        except Exception:
+            font = None
+        if font:
+            draw.text((text_x, text_y), label, fill=(50, 50, 50), font=font)
+        else:
+            draw.text((text_x, text_y), label, fill=(50, 50, 50))
+    return img
 
 def annotate_image_multi_model(img, rows_by_model, selected_models):
-    """Annotate image with GT bbox and predictions from multiple models"""
-    annotated_img = img.copy()
+    """Annotate image with GT bbox and predictions from multiple models. Cursors are semi-transparent."""
+    annotated_img = img.copy().convert("RGBA")
     draw = ImageDraw.Draw(annotated_img)
 
     # Draw GT bbox from first available row
@@ -205,7 +326,7 @@ def annotate_image_multi_model(img, rows_by_model, selected_models):
         if model in rows_by_model:
             row = rows_by_model[model]
             coords = parse_coords(row.get('coordinates'))
-            draw_model_prediction(draw, coords, model)
+            draw_model_prediction(draw, coords, model, alpha=CURSOR_ALPHA)
 
     return annotated_img
 
@@ -222,33 +343,48 @@ def display_comparison_multi_model(original_rows_by_model, variant_rows_by_model
     """, unsafe_allow_html=True)
 
     col1, col2 = st.columns(2)
-
-    # Get first available row for image path
     first_original = next(iter(original_rows_by_model.values()), None)
     first_variant = next(iter(variant_rows_by_model.values()), None)
 
+    # Row 1: titles and images (same height row so cards below align)
     with col1:
-        st.markdown("#### 🔵 Original")
-
-        # Display image with multi-model annotations
+        st.markdown("#### Original")
         if first_original is not None:
             img_path = resolve_image_path(first_original)
             if img_path and img_path.exists():
                 img = Image.open(img_path)
                 img_annotated = annotate_image_multi_model(img, original_rows_by_model, selected_models)
-                st.image(img_annotated, use_container_width=False)
+                st.image(img_annotated, use_container_width=True)
             else:
                 st.info("Image not available")
+        else:
+            st.info("Image not available")
 
-        # Show metrics and raw predictions for each selected model
-        for model in selected_models:
-            if model in original_rows_by_model:
-                row = original_rows_by_model[model]
-                style = MODEL_STYLES.get(model, {})
-                label = style.get('label', model)
+    with col2:
+        st.markdown(f"#### Perturbed ({variant_name.replace('_', ' ').title()})")
+        if first_variant is not None:
+            img_path = resolve_image_path(first_variant)
+            if img_path and img_path.exists():
+                img = Image.open(img_path)
+                img_annotated = annotate_image_multi_model(img, variant_rows_by_model, selected_models)
+                st.image(img_annotated, use_container_width=True)
+            else:
+                st.info("Image not available")
+        else:
+            st.info("Image not available")
 
-                with st.expander(f"📊 {label}", expanded=True):
-                    success = "✅ SUCCESS" if row['success'] else "❌ FAILED"
+    # One row per model so Original and Perturbed cards align horizontally
+    for model in selected_models:
+        style = MODEL_STYLES.get(model, {'label': model})
+        label = style.get('label', model)
+        orig_row = original_rows_by_model.get(model)
+        var_row = variant_rows_by_model.get(model)
+
+        left_col, right_col = st.columns(2)
+        with left_col:
+            with st.expander(f"📊 {label}", expanded=True):
+                if orig_row is not None:
+                    row = orig_row
                     cols = st.columns(3)
                     with cols[0]:
                         st.metric("MSE", f"{row['bbox_center_mse']:.1f}")
@@ -260,42 +396,33 @@ def display_comparison_multi_model(original_rows_by_model, variant_rows_by_model
                             except:
                                 st.metric("Coords", "N/A")
                     with cols[2]:
-                        st.metric("Status", "✅" if row['success'] else "❌")
-
+                        st.metric("Success", "✅" if row['success'] else "❌")
                     if pd.notna(row.get('raw_prediction')):
                         formatted_pred = format_raw_prediction(row['raw_prediction'])
                         if formatted_pred:
                             st.code(formatted_pred, language="text")
+                else:
+                    st.caption("No original data for this model")
 
-    with col2:
-        st.markdown(f"#### 🔴 Perturbed ({variant_name.replace('_', ' ').title()})")
-
-        # Display image with multi-model annotations
-        if first_variant is not None:
-            img_path = resolve_image_path(first_variant)
-            if img_path and img_path.exists():
-                img = Image.open(img_path)
-                img_annotated = annotate_image_multi_model(img, variant_rows_by_model, selected_models)
-                st.image(img_annotated, use_container_width=False)
-            else:
-                st.info("Image not available")
-
-        # Show metrics and raw predictions for each selected model
-        for model in selected_models:
-            if model in variant_rows_by_model:
-                row = variant_rows_by_model[model]
-                orig_row = original_rows_by_model.get(model)
-                style = MODEL_STYLES.get(model, {})
-                label = style.get('label', model)
-
-                with st.expander(f"📊 {label}", expanded=True):
+        with right_col:
+            with st.expander(f"📊 {label}", expanded=True):
+                if var_row is not None:
+                    row = var_row
                     cols = st.columns(3)
                     with cols[0]:
+                        mse_val = f"{row['bbox_center_mse']:.1f}"
                         if orig_row is not None:
                             mse_delta = row['bbox_center_mse'] - orig_row['bbox_center_mse']
-                            st.metric("MSE", f"{row['bbox_center_mse']:.1f}", f"{mse_delta:+.1f}", delta_color="inverse")
+                            mse_left, mse_right = st.columns([2, 1])
+                            with mse_left:
+                                st.metric("MSE", mse_val)
+                            with mse_right:
+                                st.markdown(" ")  # align delta with value row
+                                arrow = "↑" if mse_delta > 0 else "↓" if mse_delta < 0 else ""
+                                color = "red" if mse_delta > 0 else "green" if mse_delta < 0 else "gray"
+                                st.markdown(f"<span style='color: {color}; font-weight: 600;'>{arrow} {mse_delta:+.1f}</span>", unsafe_allow_html=True)
                         else:
-                            st.metric("MSE", f"{row['bbox_center_mse']:.1f}")
+                            st.metric("MSE", mse_val)
                     with cols[1]:
                         if pd.notna(row.get('coordinates')):
                             try:
@@ -304,23 +431,25 @@ def display_comparison_multi_model(original_rows_by_model, variant_rows_by_model
                             except:
                                 st.metric("Coords", "N/A")
                     with cols[2]:
-                        st.metric("Status", "✅" if row['success'] else "❌")
-
+                        st.metric("Success", "✅" if row['success'] else "❌")
                     if pd.notna(row.get('raw_prediction')):
                         formatted_pred = format_raw_prediction(row['raw_prediction'])
                         if formatted_pred:
                             st.code(formatted_pred, language="text")
+                else:
+                    st.caption("No perturbed data for this model")
 
 def main():
     # Compact header with less vertical space
-    st.markdown("### 🔬 Original vs Perturbation Comparison")
-
+    st.markdown("## 🔬 GUI Perturbation Evaluation Result Viewer ")
+    st.markdown("---")
     df = load_data()
     if df.empty:
         st.error("No data found")
         return
 
-    # Create placeholders for sidebar sections in desired order
+    # Create placeholders for sidebar sections in desired order (logos first = top of sidebar)
+    logos_placeholder = st.sidebar.container()
     nav_placeholder = st.sidebar.container()
     models_placeholder = st.sidebar.container()
     perturbation_placeholder = st.sidebar.container()
@@ -366,13 +495,6 @@ def main():
         if model not in st.session_state.selected_models:
             st.session_state.selected_models[model] = True
 
-    # Symbol legend for models
-    model_symbols = {
-        'gta1': '🔵',
-        'qwen25vl': '🟢',
-        'uitars15': '🟠',
-    }
-
     # Render models section
     with models_placeholder:
         st.markdown("---")
@@ -382,8 +504,7 @@ def main():
         for model in all_models:
             style = MODEL_STYLES.get(model, {'label': model})
             label = style.get('label', model)
-            symbol = model_symbols.get(model, '⚪')
-            checkbox_label = f"{symbol} {label}"
+            checkbox_label = label
 
             if st.checkbox(checkbox_label, value=st.session_state.selected_models.get(model, True), key=f"model_{model}"):
                 selected_models.append(model)
@@ -411,9 +532,8 @@ def main():
             for model in selected_models:  # Only show filters for selected models
                 style = MODEL_STYLES.get(model, {'label': model})
                 label = style.get('label', model)
-                symbol = model_symbols.get(model, '⚪')
                 model_success_filters[model] = st.selectbox(
-                    f"{symbol} {label}",
+                    label,
                     ['All', 'Success', 'Failure'],
                     index=['All', 'Success', 'Failure'].index(st.session_state.model_success_filter.get(model, 'All')),
                     key=f"success_filter_{model}",
@@ -431,7 +551,7 @@ def main():
     # Render perturbation section
     with perturbation_placeholder:
         st.markdown("---")
-        st.markdown("**🔴 Perturbation Type**")
+        st.markdown("**Perturbation Type**")
         selected_variant = st.selectbox(
             "Select Perturbation",
             perturbation_variants,
@@ -584,7 +704,42 @@ def main():
         if 'use_reasoning_filter' in st.session_state:
             st.session_state.use_reasoning_filter = use_reasoning_options[0]
 
-    # Now fill in the navigation placeholder at the top of sidebar
+    # Logos and links at top of sidebar (above Sample Navigation) — two logos horizontal, text under each
+    with logos_placeholder:
+        fig_uri = _logo_data_uri("fig-logo.png")
+        manifold_uri = _logo_data_uri("manifoldrg-logo.png")
+        logo_style = f"width: {LOGO_SIZE_PX}px; height: {LOGO_SIZE_PX}px; object-fit: contain; display: block; margin: 0 auto;"
+        wrap_style = "display: flex; flex-direction: column; align-items: center; text-align: center; gap: 0.25rem;"
+        logo_col1, logo_col2 = st.columns(2)
+        with logo_col1:
+            if fig_uri:
+                st.markdown(
+                    '<div style="' + wrap_style + '"><a href="' + FIG_LINK + '" target="_blank" rel="noopener" title="fig.ai"><img src="' + fig_uri + '" style="' + logo_style + '"/></a><a href="' + FIG_LINK + '" target="_blank" rel="noopener" style="font-size: 0.85rem; color: rgb(128, 128, 128); text-decoration: none;">fig.ai</a></div>',
+                    unsafe_allow_html=True,
+                )
+        with logo_col2:
+            if manifold_uri:
+                st.markdown(
+                    '<div style="' + wrap_style + '"><a href="' + MANIFOLDRG_LINK + '" target="_blank" rel="noopener" title="manifold research"><img src="' + manifold_uri + '" style="' + logo_style + '"/></a><a href="' + MANIFOLDRG_LINK + '" target="_blank" rel="noopener" style="font-size: 0.85rem; color: rgb(128, 128, 128); text-decoration: none;">manifold research</a></div>',
+                    unsafe_allow_html=True,
+                )
+        st.markdown("")
+        st.markdown("---")
+        # Technical reports in a column (vertical)
+
+        # Code, Data, Technical report in a row
+        link_col1, link_col2, link_col3 = st.columns(3)
+        with link_col1:
+            st.markdown(f"[Technical report 1]({TECHNICAL_REPORT_1_LINK})")
+            st.markdown(f"[Code]({CODE_LINK})")
+        with link_col2:
+            st.markdown(f"[Technical report 2]({TECHNICAL_REPORT_2_LINK})")
+            st.markdown(f"[Data]({DATA_LINK})")
+        with link_col3:
+            st.markdown(f"[Technical report 3]({TECHNICAL_REPORT_3_LINK})")
+        st.markdown("---")
+
+    # Now fill in the navigation placeholder
     with nav_placeholder:
         st.markdown("**🔍 Sample Navigation**")
         st.markdown(f"Sample **{st.session_state.current_sample_index + 1}** of **{len(available_samples)}**")
@@ -600,14 +755,29 @@ def main():
         )
 
         # Randomize button
-        st.button("🎲 Randomize", use_container_width=True, key="randomize_btn", on_click=on_randomize)
+        st.button("🎲 Random sample", use_container_width=True, key="randomize_btn", on_click=on_randomize)
 
     # Reset button at the bottom of sidebar
     st.sidebar.markdown("---")
     st.sidebar.button("🔄 Reset All", use_container_width=True, key="reset_btn", on_click=on_reset)
 
-    # Sample info
-    st.markdown(f"<div style='text-align: left;'><span style='font-size: 1.5rem;'>📋 Task Instruction:</span> <span style='display: inline-block; padding: 0.5rem 1rem; background-color: rgba(33, 195, 228, 0.1); border-radius: 0.5rem; font-size: 1.5rem;'><strong>{current_sample['instruction']}</strong></span></div>", unsafe_allow_html=True)
+    # Task instruction (full width)
+    
+    instr_col, legend_col = st.columns([2, 1])
+    with instr_col:
+        st.markdown(f"<div style='text-align: left;'><span style='font-size: 1.5rem;'>📋 Task Instruction:</span> <span style='display: inline-block; padding: 0.5rem 1rem; background-color: rgba(33, 195, 228, 0.1); border-radius: 0.5rem; font-size: 1.5rem;'><strong>{current_sample['instruction']}</strong></span></div>", unsafe_allow_html=True)
+    with legend_col:
+        # Model prediction cursor legend — right-aligned, fixed dimensions so image is never distorted
+        legend_w, legend_h = 460, 64
+        legend_img = make_cursor_legend_image(selected_models, width=legend_w, height=legend_h)
+        legend_uri = _pil_image_to_data_uri(legend_img)
+        st.markdown(
+            f"<div style='text-align: right; margin-top: 0.5rem;'>"
+            f"<p style='font-size: 1.4rem; color: rgb(128, 128, 128); margin-bottom: 0.5rem;'>Model predictions</p>"
+            f"<img src='{legend_uri}' width='{legend_w}' height='{legend_h}' style='display: block; margin-left: auto;' />"
+            f"</div>",
+            unsafe_allow_html=True,
+        )
 
     # Get the specific rows for current sample across all selected models
     sample_data = df_filtered[
