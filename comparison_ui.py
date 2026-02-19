@@ -40,9 +40,17 @@ st.set_page_config(page_title="GUI Perturbation Evaluation Viewer", page_icon="ð
 # Font and style consistent with reference page (Geist, Open Sans, Comfortaa; #23283c on #f2f2f2)
 st.markdown("""
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Comfortaa&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://unpkg.com/geist@1.3.0/dist/geist.css">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
 <style>
+    /* Geist from Fontsource CDN (jsDelivr serves correct MIME types; unpkg/geist.css returns text/plain and is blocked) */
+    @font-face {
+        font-family: 'Geist';
+        font-style: normal;
+        font-display: swap;
+        font-weight: 400;
+        src: url(https://cdn.jsdelivr.net/fontsource/fonts/geist@latest/latin-400-normal.woff2) format('woff2'), url(https://cdn.jsdelivr.net/fontsource/fonts/geist@latest/latin-400-normal.woff) format('woff');
+        unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+    }
     /* Base typography and background (match reference page) */
     body, .main, [data-testid="stAppViewContainer"] {
         color: #23283c !important;
