@@ -536,7 +536,7 @@ def main():
                 st.session_state.model_success_filter[model] = 'All'
 
         model_success_filters = {}
-        with st.expander("**Success Filter (per model)**", expanded=True):
+        with st.expander("**Success Filter (on original variant)**", expanded=True):
             for model in selected_models:  # Only show filters for selected models
                 style = MODEL_STYLES.get(model, {'label': model})
                 label = style.get('label', model)
