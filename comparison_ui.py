@@ -42,6 +42,21 @@ st.markdown("""
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Comfortaa&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
 <style>
+    /* Theme-aware colors: light and dark (macOS system preference) */
+    :root {
+        --gui-viewer-text: #23283c;
+        --gui-viewer-bg: #f2f2f2;
+        --gui-viewer-muted: rgb(128, 128, 128);
+        --gui-viewer-heading: #23283c;
+    }
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --gui-viewer-text: #e4e4e7;
+            --gui-viewer-bg: #1e1e1e;
+            --gui-viewer-muted: #a1a1aa;
+            --gui-viewer-heading: #f4f4f5;
+        }
+    }
     /* Geist from Fontsource CDN (jsDelivr serves correct MIME types; unpkg/geist.css returns text/plain and is blocked) */
     @font-face {
         font-family: 'Geist';
@@ -51,21 +66,21 @@ st.markdown("""
         src: url(https://cdn.jsdelivr.net/fontsource/fonts/geist@latest/latin-400-normal.woff2) format('woff2'), url(https://cdn.jsdelivr.net/fontsource/fonts/geist@latest/latin-400-normal.woff) format('woff');
         unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
     }
-    /* Base typography and background (match reference page) */
+    /* Base typography and background (match reference page); theme-aware */
     body, .main, [data-testid="stAppViewContainer"] {
-        color: #23283c !important;
+        color: var(--gui-viewer-text) !important;
         line-height: 1.5em !important;
         font-weight: 400 !important;
         font-size: 1.25rem !important;
         font-family: 'Geist', 'Open Sans', Arial, sans-serif !important;
-        background-color: #f2f2f2 !important;
+        background-color: var(--gui-viewer-bg) !important;
     }
     .block-container {
         padding-top: 3.5rem;
         padding-bottom: 2rem;
-        color: #23283c !important;
+        color: var(--gui-viewer-text) !important;
         font-family: 'Geist', 'Open Sans', Arial, sans-serif !important;
-        background-color: #f2f2f2 !important;
+        background-color: var(--gui-viewer-bg) !important;
     }
     /* Prevent main title from being cut off when scrolled to top */
     [data-testid="stAppViewContainer"] {
@@ -82,8 +97,8 @@ st.markdown("""
         object-fit: contain !important;
     }
     section[data-testid="stSidebar"] {
-        background-color: #f2f2f2 !important;
-        color: #23283c !important;
+        background-color: var(--gui-viewer-bg) !important;
+        color: var(--gui-viewer-text) !important;
         font-family: 'Geist', 'Open Sans', Arial, sans-serif !important;
     }
     section[data-testid="stSidebar"] > div:first-child {
@@ -95,7 +110,7 @@ st.markdown("""
     }
     /* Keep header visible so sidebar toggle (keyboard_double_arrow) button is shown */
     header[data-testid="stHeader"] {
-        background-color: #f2f2f2 !important;
+        background-color: var(--gui-viewer-bg) !important;
     }
     /* Expander titles: use normal text font (not icon font) so "GTA1", "Success Filter..." look good */
     [data-testid="stExpander"] summary {
@@ -129,9 +144,23 @@ st.markdown("""
     .block-container > p, .block-container > div .stMarkdown p,
     .stMarkdown p, .stCaption,
     label[data-testid="stWidgetLabel"] {
-        color: #23283c !important;
+        color: var(--gui-viewer-text) !important;
         font-family: 'Geist', 'Open Sans', Arial, sans-serif !important;
     }
+    /* Headings (h1–h6) and section titles */
+    .block-container h1, .block-container h2, .block-container h3,
+    .block-container h4, .block-container h5, .block-container h6,
+    [data-testid="stAppViewContainer"] h1, [data-testid="stAppViewContainer"] h2,
+    [data-testid="stAppViewContainer"] h3, [data-testid="stAppViewContainer"] h4,
+    [data-testid="stAppViewContainer"] h5, [data-testid="stAppViewContainer"] h6 {
+        color: var(--gui-viewer-heading) !important;
+    }
+    /* Sidebar headings and labels */
+    section[data-testid="stSidebar"] .stMarkdown,
+    section[data-testid="stSidebar"] p,
+    .gui-viewer-muted { color: var(--gui-viewer-muted) !important; }
+    .gui-viewer-text { color: var(--gui-viewer-text) !important; }
+    .gui-viewer-heading { color: var(--gui-viewer-heading) !important; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -427,8 +456,14 @@ def display_comparison_multi_model(original_rows_by_model, variant_rows_by_model
                             with mse_right:
                                 st.markdown(" ")  # align delta with value row
                                 arrow = "↑" if mse_delta > 0 else "↓" if mse_delta < 0 else ""
-                                color = "red" if mse_delta > 0 else "green" if mse_delta < 0 else "gray"
-                                st.markdown(f"<span style='color: {color}; font-weight: 600;'>{arrow} {mse_delta:+.1f}</span>", unsafe_allow_html=True)
+                                if mse_delta > 0:
+                                    delta_style = "color: red; font-weight: 600;"
+                                elif mse_delta < 0:
+                                    delta_style = "color: green; font-weight: 600;"
+                                else:
+                                    delta_style = "font-weight: 600;"  # use class for theme-aware muted
+                                span_class = "gui-viewer-muted" if mse_delta == 0 else ""
+                                st.markdown(f"<span class='{span_class}' style='{delta_style}'>{arrow} {mse_delta:+.1f}</span>", unsafe_allow_html=True)
                         else:
                             st.metric("MSE", mse_val)
                     with cols[1]:
@@ -722,13 +757,13 @@ def main():
         with logo_col1:
             if fig_uri:
                 st.markdown(
-                    '<div style="' + wrap_style + '"><a href="' + FIG_LINK + '" target="_blank" rel="noopener" title="fig.ai"><img src="' + fig_uri + '" style="' + logo_style + '"/></a><a href="' + FIG_LINK + '" target="_blank" rel="noopener" style="font-size: 0.85rem; color: rgb(128, 128, 128); text-decoration: none;">fig.ai</a></div>',
+                    '<div style="' + wrap_style + '"><a href="' + FIG_LINK + '" target="_blank" rel="noopener" title="fig.ai"><img src="' + fig_uri + '" style="' + logo_style + '"/></a><a href="' + FIG_LINK + '" target="_blank" rel="noopener" class="gui-viewer-muted" style="font-size: 0.85rem; text-decoration: none;">fig.ai</a></div>',
                     unsafe_allow_html=True,
                 )
         with logo_col2:
             if manifold_uri:
                 st.markdown(
-                    '<div style="' + wrap_style + '"><a href="' + MANIFOLDRG_LINK + '" target="_blank" rel="noopener" title="manifold research"><img src="' + manifold_uri + '" style="' + logo_style + '"/></a><a href="' + MANIFOLDRG_LINK + '" target="_blank" rel="noopener" style="font-size: 0.85rem; color: rgb(128, 128, 128); text-decoration: none;">manifold research</a></div>',
+                    '<div style="' + wrap_style + '"><a href="' + MANIFOLDRG_LINK + '" target="_blank" rel="noopener" title="manifold research"><img src="' + manifold_uri + '" style="' + logo_style + '"/></a><a href="' + MANIFOLDRG_LINK + '" target="_blank" rel="noopener" class="gui-viewer-muted" style="font-size: 0.85rem; text-decoration: none;">manifold research</a></div>',
                     unsafe_allow_html=True,
                 )
         st.markdown("")
@@ -773,7 +808,7 @@ def main():
     
     instr_col, legend_col = st.columns([2, 1])
     with instr_col:
-        st.markdown(f"<div style='text-align: left;'><span style='font-size: 1.5rem;'>📋 Task Instruction:</span> <span style='display: inline-block; padding: 0.5rem 1rem; background-color: rgba(33, 195, 228, 0.1); border-radius: 0.5rem; font-size: 1.5rem;'><strong>{current_sample['instruction']}</strong></span></div>", unsafe_allow_html=True)
+        st.markdown(f"<div class='gui-viewer-text' style='text-align: left;'><span style='font-size: 1.5rem;'>📋 Task Instruction:</span> <span style='display: inline-block; padding: 0.5rem 1rem; background-color: rgba(33, 195, 228, 0.15); border-radius: 0.5rem; font-size: 1.5rem;'><strong>{current_sample['instruction']}</strong></span></div>", unsafe_allow_html=True)
     with legend_col:
         # Model prediction cursor legend — right-aligned, fixed dimensions so image is never distorted
         legend_w, legend_h = 460, 64
@@ -781,7 +816,7 @@ def main():
         legend_uri = _pil_image_to_data_uri(legend_img)
         st.markdown(
             f"<div style='text-align: right; margin-top: 0.5rem;'>"
-            f"<p style='font-size: 1.4rem; color: rgb(128, 128, 128); margin-bottom: 0.5rem;'>Model predictions</p>"
+            f"<p class='gui-viewer-muted' style='font-size: 1.4rem; margin-bottom: 0.5rem;'>Model predictions</p>"
             f"<img src='{legend_uri}' width='{legend_w}' height='{legend_h}' style='display: block; margin-left: auto;' />"
             f"</div>",
             unsafe_allow_html=True,
