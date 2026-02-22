@@ -628,7 +628,9 @@ def main():
         st.session_state.current_step_index = None
 
     # Get all samples (task_id, step_index combinations) that have both original and selected perturbation
-    # across ALL models (not filtered by model selection)
+    # across ALL models (not filtered by model selection).
+    # Build both: full list (no success filter) for absolute index, and filtered list (with success filter).
+    available_samples_all = []  # no success filter — for absolute "N of total" display
     available_samples = []
     for task_id in df_filtered['task_id'].unique():
         for step_idx in df_filtered[df_filtered['task_id'] == task_id]['step_index'].unique():
@@ -640,6 +642,14 @@ def main():
                 original_rows = sample_data[sample_data['variant'] == 'original']
                 if original_rows.empty:
                     continue
+
+                instruction = sample_data.iloc[0]['instruction']
+                sample_entry = {
+                    'task_id': task_id,
+                    'step_index': step_idx,
+                    'instruction': instruction
+                }
+                available_samples_all.append(sample_entry)
 
                 # Apply per-model success filters on ORIGINAL variant
                 passes_filter = True
@@ -663,30 +673,63 @@ def main():
                 if not passes_filter:
                     continue
 
-                instruction = sample_data.iloc[0]['instruction']
-                available_samples.append({
-                    'task_id': task_id,
-                    'step_index': step_idx,
-                    'instruction': instruction
-                })
+                available_samples.append(sample_entry)
 
     if not available_samples:
         st.error(f"No samples found with both original and {st.session_state.selected_variant} perturbation")
         return
 
-    # Try to preserve current task/step position ONLY when variant changes
-    variant_changed = st.session_state.previous_variant != st.session_state.selected_variant
-    if variant_changed and st.session_state.current_task_id is not None and st.session_state.current_step_index is not None:
-        # Find the index of the current task/step in the new available_samples list
+    # Build mapping from (task_id, step_index) to 1-based index in full list (for position preservation)
+    full_list_index_by_sample = {}
+    for idx, s in enumerate(available_samples_all):
+        full_list_index_by_sample[(s['task_id'], s['step_index'])] = idx + 1
+
+    # Only run preserve logic when filters actually changed (not on every run). Otherwise we would
+    # overwrite current_sample_index after the user clicks Random or uses the number input +/-.
+    current_filter_signature = (
+        selected_query_type,
+        selected_use_reasoning,
+        st.session_state.selected_variant,
+        frozenset(st.session_state.model_success_filter.items()),
+    )
+    filters_changed = st.session_state.get("_filter_signature") != current_filter_signature
+    if filters_changed:
+        st.session_state._filter_signature = current_filter_signature
+
+    # When filters changed: preserve current sample (same task/step or closest in full list).
+    # When filters unchanged: leave current_sample_index as-is (e.g. from Random or number input).
+    if filters_changed and st.session_state.current_task_id is not None and st.session_state.current_step_index is not None:
+        prev_key = (st.session_state.current_task_id, st.session_state.current_step_index)
+        found_in_filtered = False
         for idx, sample in enumerate(available_samples):
             if (sample['task_id'] == st.session_state.current_task_id and
                 sample['step_index'] == st.session_state.current_step_index):
                 st.session_state.current_sample_index = idx
+                if 'sample_nav_input' in st.session_state:
+                    st.session_state.sample_nav_input = idx + 1
+                found_in_filtered = True
                 break
-        else:
-            # If current task/step not found in new list, reset to 0
-            st.session_state.current_sample_index = 0
-        # Update previous_variant after handling
+        if not found_in_filtered:
+            # Preserve by absolute index: choose filtered sample closest to previous full-list position
+            prev_abs_1based = full_list_index_by_sample.get(prev_key)
+            if prev_abs_1based is not None and available_samples:
+                best_filtered_idx = 0
+                best_distance = float('inf')
+                for idx, sample in enumerate(available_samples):
+                    s_key = (sample['task_id'], sample['step_index'])
+                    abs_1based = full_list_index_by_sample.get(s_key)
+                    if abs_1based is not None:
+                        d = abs(abs_1based - prev_abs_1based)
+                        if d < best_distance:
+                            best_distance = d
+                            best_filtered_idx = idx
+                st.session_state.current_sample_index = best_filtered_idx
+            else:
+                st.session_state.current_sample_index = 0
+            if 'sample_nav_input' in st.session_state:
+                st.session_state.sample_nav_input = st.session_state.current_sample_index + 1
+
+    if st.session_state.previous_variant != st.session_state.selected_variant:
         st.session_state.previous_variant = st.session_state.selected_variant
 
     # Store available samples count in session state for callbacks
@@ -726,6 +769,8 @@ def main():
         st.session_state.sample_nav_input = 1
         st.session_state.current_task_id = None
         st.session_state.current_step_index = None
+        if "_filter_signature" in st.session_state:
+            del st.session_state["_filter_signature"]
         # Reset model selections to all checked
         for model in all_models:
             st.session_state.selected_models[model] = True
@@ -782,10 +827,22 @@ def main():
             st.markdown(f"[Technical report 3]({TECHNICAL_REPORT_3_LINK})")
         st.markdown("---")
 
+    # Position of current sample in full list (no success filter) for display
+    total_in_full_list = len(available_samples_all)
+    position_in_full_list = None
+    for idx, s in enumerate(available_samples_all):
+        if s['task_id'] == current_sample['task_id'] and s['step_index'] == current_sample['step_index']:
+            position_in_full_list = idx + 1
+            break
+
     # Now fill in the navigation placeholder
     with nav_placeholder:
         st.markdown("**🔍 Sample Navigation**")
-        st.markdown(f"Sample **{st.session_state.current_sample_index + 1}** of **{len(available_samples)}**")
+        in_filtered = f"In filtered list: **{st.session_state.current_sample_index + 1}** of **{len(available_samples)}**"
+        if position_in_full_list is not None and total_in_full_list > 0:
+            st.markdown(f"{in_filtered}<br>In full list: **{position_in_full_list}** of **{total_in_full_list}**", unsafe_allow_html=True)
+        else:
+            st.markdown(in_filtered)
 
         # Jump to specific sample (no value param - uses session state key)
         st.number_input(
