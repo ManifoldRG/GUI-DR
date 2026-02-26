@@ -1,5 +1,6 @@
 import base64
 import io
+import os
 import streamlit as st
 import pandas as pd
 from pathlib import Path
@@ -15,6 +16,9 @@ CODE_LINK = "https://fig.inc/"
 DATA_LINK = "https://fig.inc/"
 FIG_LINK = "https://fig.inc/"
 MANIFOLDRG_LINK = "https://www.manifoldrg.com/"
+
+# HF dataset for screenshot images (figai/GUI-Perturbed). Images load from here when local files are missing.
+HF_IMAGES_DATASET = os.environ.get("HF_IMAGES_DATASET") or "figai/GUI-Perturbed"
 
 MEDIA_DIR = Path(__file__).parent / "media"
 LOGO_SIZE_PX = 48  # same width and height for both sidebar logos
@@ -166,17 +170,37 @@ st.markdown("""
 
 @st.cache_data
 def load_data():
-    """Load and clean data"""
-    csv_path = Path(__file__).parent / "data" / "baseline_results_full_new.csv"
-    if not csv_path.exists():
+    """Load and clean data. Tries repo root (HF Space: /app/data/) then script dir."""
+    script_dir = Path(__file__).resolve().parent
+    repo_root = script_dir.parent
+    csv_path = None
+    for base in (repo_root, script_dir):
+        candidate = base / "data" / "baseline_results_full_new.csv"
+        if candidate.exists():
+            csv_path = candidate
+            break
+    if csv_path is None:
         return pd.DataFrame()
 
     df = pd.read_csv(csv_path)
-    df = df[df['interesting_cases'] != 'Invalid']
-    df['success'] = df['hit_box_accuracy'].apply(
-        lambda x: True if (isinstance(x, bool) and x) or (isinstance(x, str) and x.lower() == 'true') else False
+    if "interesting_cases" in df.columns:
+        df = df[df["interesting_cases"] != "Invalid"]
+    df["success"] = df["hit_box_accuracy"].apply(
+        lambda x: True if (isinstance(x, bool) and x) or (isinstance(x, str) and x.lower() == "true") else False
     )
     return df
+
+
+def _debug_csv_paths():
+    """Return list of (path_str, exists) for triage when no data found."""
+    script_dir = Path(__file__).resolve().parent
+    repo_root = script_dir.parent
+    out = []
+    for name, base in [("repo_root", repo_root), ("script_dir", script_dir)]:
+        p = base / "data" / "baseline_results_full_new.csv"
+        out.append((f"{name}: {p}", p.exists()))
+    out.append((f"__file__ = {__file__}", None))
+    return out
 
 def resolve_image_path(row):
     """Get image path for a row - improved to find variant-specific images"""
@@ -216,6 +240,87 @@ def resolve_image_path(row):
         return exact_path
 
     return None
+
+
+def _get_hf_dataset_name():
+    """Dataset name for HF images (constant or env). Empty string means disabled."""
+    name = os.environ.get("HF_IMAGES_DATASET") or HF_IMAGES_DATASET
+    return (name or "").strip()
+
+
+@st.cache_data(ttl=3600)
+def _load_hf_image_index(dataset_name):
+    """Load HF dataset (figai/GUI-Perturbed schema) and build (task_id, step_index, variant) -> row_index.
+    Dataset columns: visual_variant, instruction_type, task_id, step_index, instruction, gt_bbox, screenshot.
+    Returns (dataset_split, index_dict) or (None, None) on error."""
+    try:
+        from datasets import load_dataset
+    except ImportError:
+        return None, None
+    try:
+        ds = load_dataset(
+            dataset_name,
+            token=os.environ.get("HF_TOKEN"),
+        )
+        split = list(ds.keys())[0]
+        table = ds[split]
+        index = {}
+        for i in range(len(table)):
+            row = table[i]
+            task_id = row.get("task_id")
+            step_index = row.get("step_index")
+            # Dataset uses visual_variant (CSV uses variant)
+            variant = row.get("visual_variant")
+            if task_id is not None and step_index is not None and variant is not None:
+                step_int = int(step_index) if not isinstance(step_index, int) else step_index
+                key = (str(task_id), step_int, str(variant))
+                index[key] = i
+        return table, index
+    except Exception:
+        return None, None
+
+
+def get_image_for_row(row):
+    """Return a PIL Image for this CSV row, or None. Tries local path first, then HF dataset if configured."""
+    img_path = resolve_image_path(row)
+    if img_path is not None and img_path.exists():
+        try:
+            return Image.open(img_path)
+        except Exception:
+            pass
+    name = _get_hf_dataset_name()
+    if not name:
+        return None
+    table, index = _load_hf_image_index(name)
+    if table is None or index is None:
+        return None
+    task_id = row.get("task_id")
+    step_index = row.get("step_index")
+    variant = row.get("variant")
+    if pd.isna(task_id) or pd.isna(step_index) or pd.isna(variant):
+        return None
+    try:
+        step_index_int = int(step_index)
+    except (TypeError, ValueError):
+        return None
+    key = (str(task_id), step_index_int, str(variant))
+    idx = index.get(key)
+    if idx is None:
+        return None
+    try:
+        row_data = table[idx]
+        # Dataset uses screenshot (Image feature); fallback to image for other schemas
+        img = row_data.get("screenshot") or row_data.get("image")
+        if img is None:
+            return None
+        if isinstance(img, Image.Image):
+            return img
+        if isinstance(img, bytes):
+            return Image.open(io.BytesIO(img))
+        return None
+    except Exception:
+        return None
+
 
 def format_raw_prediction(raw_pred):
     """Format raw prediction for display - show entire raw prediction as-is"""
@@ -387,9 +492,8 @@ def display_comparison_multi_model(original_rows_by_model, variant_rows_by_model
     with col1:
         st.markdown("#### Original")
         if first_original is not None:
-            img_path = resolve_image_path(first_original)
-            if img_path and img_path.exists():
-                img = Image.open(img_path)
+            img = get_image_for_row(first_original)
+            if img is not None:
                 img_annotated = annotate_image_multi_model(img, original_rows_by_model, selected_models)
                 st.image(img_annotated, use_container_width=True)
             else:
@@ -400,9 +504,8 @@ def display_comparison_multi_model(original_rows_by_model, variant_rows_by_model
     with col2:
         st.markdown(f"#### Perturbed ({variant_name.replace('_', ' ').title()})")
         if first_variant is not None:
-            img_path = resolve_image_path(first_variant)
-            if img_path and img_path.exists():
-                img = Image.open(img_path)
+            img = get_image_for_row(first_variant)
+            if img is not None:
                 img_annotated = annotate_image_multi_model(img, variant_rows_by_model, selected_models)
                 st.image(img_annotated, use_container_width=True)
             else:
@@ -489,6 +592,12 @@ def main():
     df = load_data()
     if df.empty:
         st.error("No data found")
+        with st.expander("Triage: path resolution", expanded=True):
+            for path_str, exists in _debug_csv_paths():
+                if exists is None:
+                    st.text(path_str)
+                else:
+                    st.text(f"{'✓' if exists else '✗'} {path_str}")
         return
 
     # Create placeholders for sidebar sections in desired order (logos first = top of sidebar)
