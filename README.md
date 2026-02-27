@@ -2,7 +2,7 @@
   <img src="media/gui-dr.png" alt="GUI-DR Banner" width="640">
 </p>
 
-# 🩺 GUI-DR: GUI Domain-Randomization for generating diagnostic GUI grounding evaluation
+# 🩺 GUI-DR: GUI Domain-Randomization for generating diagnostic GUI grounding evaluation data
 
 Domain randomization for GUI grounding evaluation: generate perturbed web screenshots and step-level instructions from [Mind2Web](https://mind2web.github.io/) MHTML archives.
 
@@ -12,7 +12,7 @@ Domain randomization for GUI grounding evaluation: generate perturbed web screen
 
 ## 📢 Updates
 
-- **2025-02:** Initial release of [GUI-Perturbed](https://huggingface.co/datasets/figai/GUI-Perturbed), technical report, and data generation pipeline.
+- **2025-03:** Initial release of [GUI-Perturbed](https://huggingface.co/datasets/figai/GUI-Perturbed), technical report, and data generation pipeline.
 
 ---
 
@@ -54,7 +54,7 @@ git clone https://github.com/fig-ai/WebDomainRandomizer
 cd WebDomainRandomizer
 
 python3.11 -m venv .venv
-source .venv/bin/activate   # Windows: .venv\Scripts\activate
+source .venv/bin/activate
 
 pip install -e .
 
@@ -75,6 +75,12 @@ python src/main.py --split test_task
    - `mm_mind2web/data/<split>-*.parquet`
    - `mm_mind2web/task/<task_uid>/processed/dom_content.json`
    - `mm_mind2web/task/<task_uid>/processed/snapshots/*.mhtml`
+   Download the following two resources and organize them under `mm_mind2web/` at the root of your project:
+
+   - **Parquet files (mm_mind2web):** Download the `mm_mind2web` parquet files from the [Multimodal-Mind2Web dataset page](https://huggingface.co/datasets/osunlp/Multimodal-Mind2Web) on Hugging Face. Put them in `mm_mind2web/data/` (e.g. `train-*.parquet`, `test_task-*.parquet`, etc.).
+   - **MHTML (raw dump):** Download the Mind2Web raw dump (task folders with `processed/dom_content.json` and `processed/snapshots/*.mhtml`) following the [Mind2Web Repo README instructions](https://github.com/OSU-NLP-Group/Mind2Web?tab=readme-ov-file#raw-dump-with-full-traces-and-snapshots). Place or symlink the task trees so each task lives at `mm_mind2web/task/<task_uid>/` with `processed/dom_content.json` and `processed/snapshots/*.mhtml` inside it. This repo includes [scripts/globus_mind2web_downloader.sh](scripts/globus_mind2web_downloader.sh) to transfer the raw dump via Globus once you have a local endpoint and `.env` configured.
+
+   The parquet files reference tasks by `task_uid`; the pipeline loads the corresponding MHTML from `mm_mind2web/task/<task_uid>/`, so the two sources must match (same task set and layout).
 
 2. **(Optional)** For debug logging or scripts that use Globus/API keys, copy [.env.example](.env.example) to `.env` and set any variables you need.
 
@@ -141,7 +147,7 @@ python src/main.py --split test_task --enable_dense_info true --enable_style_var
 **Flow:** Load parquet → for each task, load MHTML snapshots in order → per step: optionally inject UI modifications (style / zoom / text shrink) → resolve target element from parquet → capture screenshot and bbox → write `trajectory.json` and screenshots.
 
 ```mermaid
-flowchart LR
+flowchart TB
   subgraph input [Input]
     Parquet[parquet files]
     MHTML[MHTML snapshots]
@@ -184,7 +190,7 @@ Instructions are generated per step from parquet `target_action_reprs` via [gene
 
 | Resource | Description |
 |----------|-------------|
-| **[Hugging Face: GUI-Perturbed](https://huggingface.co/datasets/figai/GUI-Perturbed)** | Released evaluation data (screenshots, instructions, ground-truth bboxes). Use for benchmarking or training. |
+| **[Hugging Face: GUI-Perturbed](https://huggingface.co/datasets/figai/GUI-Perturbed)** | Released evaluation data (screenshots, instructions, ground-truth bboxes). |
 | **Hugging Face Space: Data viewer** | Interactive viewer for original vs perturbed samples. *Planned; link will be added here and on the dataset card.* |
 
 **Dataset summary**
@@ -196,13 +202,13 @@ Instructions are generated per step from parquet `target_action_reprs` via [gene
 | **Schema** | `visual_variant`, `instruction_type`, `task_id`, `step_index`, `instruction`, `gt_bbox`, `screenshot`. See the [dataset card](https://huggingface.co/datasets/figai/GUI-Perturbed). |
 | **Instructions** | **Direct** (from `target_action_reprs`); **relational** (in released schema). |
 
-Use **this repo** to reproduce or extend the data; use the **Hugging Face dataset** for evaluation and training.
+Use **this repo** to reproduce or extend the data; use the **Hugging Face dataset** for evaluation.
 
 ---
 
 ## Evaluation
 
-To evaluate or train models on GUI-Perturbed, download the [Hugging Face dataset](https://huggingface.co/datasets/figai/GUI-Perturbed). For evaluation setup and results, see **Blog Part 2**; for training experiments, see **Part 3**. Blog Part 1 (dataset & methodology): [fig.ai/blog/gui-perturbed](https://fig.ai/blog/gui-perturbed).
+To evaluate models on GUI-Perturbed, download the [Hugging Face dataset](https://huggingface.co/datasets/figai/GUI-Perturbed). The evaluation setup and results will be included in the upcoming **Blog Part 2**; The training experiments will be included in **Part 3**. Blog Part 1 (dataset & methodology): [fig.ai/blog/gui-perturbed](https://fig.ai/blog/gui-perturbed).
 
 ---
 
@@ -222,7 +228,7 @@ See the [Mind2Web project](https://mind2web.github.io/) for data access. Place i
 
 ### Where is the released GUI-Perturbed dataset?
 
-On Hugging Face: [figai/GUI-Perturbed](https://huggingface.co/datasets/figai/GUI-Perturbed). Use it for diagnostic evaluation; use this repo to extend the data.
+On Hugging Face: [figai/GUI-Perturbed](https://huggingface.co/datasets/figai/GUI-Perturbed). Use it for diagnostic evaluation; use this repo to generate more variants or extend the perturbation methods.
 
 ---
 
