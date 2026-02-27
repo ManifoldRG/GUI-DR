@@ -1,7 +1,7 @@
 [project]
 name = "webdomainrandomizer"
 version = "0.1.0"
-description = "Add your description here"
+description = "GUI domain-randomization pipeline for generating diagnostic GUI grounding evaluation data from Mind2Web MHTML archives."
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
@@ -13,6 +13,12 @@ dependencies = [
     "playwright>=1.55.0",
 ]
 
+[project.urls]
+Repository = "https://github.com/fig-ai/WebDomainRandomizer"
+Documentation = "https://github.com/fig-ai/WebDomainRandomizer#readme"
+
+[dependency-groups]
+dev = []
+
 [tool.uv]
-dev-dependencies = []
 package = false
