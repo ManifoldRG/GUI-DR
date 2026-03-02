@@ -6,13 +6,13 @@
 
 Domain randomization for GUI grounding evaluation: generate perturbed web screenshots and step-level instructions from [Mind2Web](https://mind2web.github.io/) MHTML archives.
 
-[**Blog**](https://fig.ai/blog/gui-perturbed) · [**Data**](https://huggingface.co/datasets/figai/GUI-Perturbed) · **Result Viewer** *(coming soon)*
+[**Blog**](https://blog.fig.inc/gui-perturbed-a-domain-randomization-dataset-for-gui-grounding/) · [**Data**](https://huggingface.co/datasets/figai/GUI-Perturbed) · **Result Viewer** *(coming soon)*
 
 ---
 
 ## 📢 Updates
 
-- **2025-03:** Initial release of [GUI-Perturbed](https://huggingface.co/datasets/figai/GUI-Perturbed), technical report, and data generation pipeline.
+- **2025-03:** Initial release of [GUI-Perturbed](https://huggingface.co/datasets/figai/GUI-Perturbed), [technical report](https://blog.fig.inc/gui-perturbed-a-domain-randomization-dataset-for-gui-grounding/), and data generation pipeline [GUI-DR](https://github.com/ManifoldRG/GUI-DR).
 
 ---
 
@@ -214,9 +214,9 @@ To evaluate models on GUI-Perturbed, download the [Hugging Face dataset](https:/
 
 ## Limitations
 
-- **Perturbation realism** — We prioritize diagnostic coverage over photorealism; some variants may look synthetic but still reveal reliance on color, position, or layout.
-- **Instruction diversity** — The pipeline produces direct referring expressions; relational phrasings appear in the released dataset; broader natural-language diversity is future work.
-- **Web only** — Desktop, mobile, and cross-application flows are out of scope.
+- **Perturbation realism** - We prioritize diagnostic coverage over photorealism; some variants may look synthetic but still reveal reliance on color, position, or layout.
+- **Instruction diversity** - The pipeline produces direct referring expressions; relational phrasings appear in the released dataset; broader natural-language diversity is future work.
+- **Web only** - Desktop, mobile, and cross-application flows are out of scope.
 
 ---
 
