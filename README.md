@@ -1,12 +1,45 @@
-<p align="center">
+<!-- <p align="center">
   <img src="media/gui-dr.png" alt="GUI-DR Banner" width="640">
+</p> -->
+
+<p align="center">
+  <img src="media/gui-dr-logo.svg" alt="GUI-DR Banner" width="1080">
 </p>
 
+
 # 🩺 GUI-DR: GUI Domain-Randomization for generating diagnostic GUI grounding evaluation data
+<p align="center">
+  <span style="display: inline-flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 6px;">
+    <a href="https://blog.fig.inc/gui-perturbed-a-domain-randomization-dataset-for-gui-grounding" style="display: inline-flex; align-items: center; height: 20px; text-decoration: none; font-size: 11px; font-family: Verdana, 'DejaVu Sans', sans-serif; border-radius: 2px; overflow: hidden; box-sizing: border-box;"><span style="display: inline-flex; align-items: center; background: #555; color: #fff; padding: 0 5px 0 4px; height: 100%;"><img src="media/fig-logo.png" alt="" height="12" width="12" style="margin-right: 4px; vertical-align: middle;"><span style="line-height: 20px">Technical Report</span></span><span style="display: inline-flex; align-items: center; background: #007ec6; color: #fff; padding: 0 6px; height: 100%; line-height: 20px">Fig</span></a>
+    <a href="https://huggingface.co/datasets/figai/GUI-Perturbed"><img src="https://img.shields.io/badge/Data-HuggingFace-yellow?style=flat-square&logo=huggingface" alt="Hugging Face Data" style="display: block;"></a>
+    <a href="https://github.com/ManifoldRG/GUI-DR"><img src="https://img.shields.io/badge/GUI--DR-GitHub-blueviolet?style=flat-square&logo=github" alt="GUI-DR GitHub" style="display: block;"></a>
+    <a href="https://discord.gg/jxb5fXWf"><img src="https://img.shields.io/badge/Contribute-Discord-7289DA?style=flat-square&logo=discord" alt="Contribute on Discord" style="display: block;"></a>
+  </span>
+</p>
 
-Domain randomization for GUI grounding evaluation: generate perturbed web screenshots and step-level instructions from [Mind2Web](https://mind2web.github.io/) MHTML archives.
+### GUI-DR is a collaborative effort with contributions from leading research teams at institutions like:
 
-[**Blog**](https://blog.fig.inc/gui-perturbed-a-domain-randomization-dataset-for-gui-grounding/) · [**Data**](https://huggingface.co/datasets/figai/GUI-Perturbed) · **Result Viewer** *(coming soon)*
+<p align="center">
+  <a href="https://fig.inc/" target="_blank">
+    <kbd>
+    <img src="media/fig_logo_with_text.png" alt="Fig Logo" height="64">
+    </kbd>
+  </a>
+  <a href="https://www.manifoldrg.com/" target="_blank">
+    <kbd>
+    <img src="media/manifold_logo_square_with_text.png" alt="Manifold Research Logo" height="64">
+    </kbd>
+  </a>
+</p>
+
+<!-- ### _Need to Run Evaluations on Production Multimodal, Computer Use, or Robotics AI System? [We can help!](https://forms.gle/DuMyjoZrEYR641ro6)_
+[**Technical Report**](https://blog.fig.inc/gui-perturbed-a-domain-randomization-dataset-for-gui-grounding/) · [**Data**](https://huggingface.co/datasets/figai/GUI-Perturbed) · **Result Viewer** *(coming soon)* -->
+
+## Overview
+
+**GUI-DR** is a data augmentation pipeline built on domain randomization principles. Using [Mind2Web](https://mind2web.github.io/) MHTML archives, it varies _visual scenes_ and _instructions_ along controlled axes to expose CUA model fragile grounding.
+
+![gui-dr-diagram](/media/gui-dr-diagram.png)
 
 ---
 
@@ -190,17 +223,17 @@ Instructions are generated per step from parquet `target_action_reprs` via [gene
 
 | Resource | Description |
 |----------|-------------|
-| **[Hugging Face: GUI-Perturbed](https://huggingface.co/datasets/figai/GUI-Perturbed)** | Released evaluation data (screenshots, instructions, ground-truth bboxes). |
-| **Hugging Face Space: Data viewer** | Interactive viewer for original vs perturbed samples. *Planned; link will be added here and on the dataset card.* |
+| **[GUI-Perturbed](https://huggingface.co/datasets/figai/GUI-Perturbed)** | Released evaluation data (screenshots, instructions, ground-truth bboxes). |
+| **Data viewer** (coming soon) | Interactive viewer for original vs perturbed samples. *Planned; link will be added here and on the dataset card.* |
 
 **Dataset summary**
 
 | Aspect | Description |
 |--------|-------------|
 | **Source** | Mind2Web MHTML archives (real web pages, DOM preserved). |
-| **Visual variants** | **Original**, **Style**, **Precision** (zoom 0.7×/0.5×/0.3×), **Text Shrink**. ~390 screens per variant per run (split-dependent). |
+| **Visual variants** | **Original**, **Style**, **Precision** (zoom 0.7), **Text Shrink**. ~390 screens per variant. |
 | **Schema** | `visual_variant`, `instruction_type`, `task_id`, `step_index`, `instruction`, `gt_bbox`, `screenshot`. See the [dataset card](https://huggingface.co/datasets/figai/GUI-Perturbed). |
-| **Instructions** | **Direct** (from `target_action_reprs`); **relational** (in released schema). |
+| **Instructions** | **Direct** (constructed from `target_action_reprs`); **relational** (in released schema). |
 
 Use **this repo** to reproduce or extend the data; use the **Hugging Face dataset** for evaluation.
 
@@ -208,7 +241,7 @@ Use **this repo** to reproduce or extend the data; use the **Hugging Face datase
 
 ## Evaluation
 
-To evaluate models on GUI-Perturbed, download the [Hugging Face dataset](https://huggingface.co/datasets/figai/GUI-Perturbed). The evaluation setup and results will be included in the upcoming **Blog Part 2**; The training experiments will be included in **Part 3**. Blog Part 1 (dataset & methodology): [fig.ai/blog/gui-perturbed](https://fig.ai/blog/gui-perturbed).
+Download the [GUI-Perturbed](https://huggingface.co/datasets/figai/GUI-Perturbed) dataset to evaluate your models. An evaluation script will be released soon.
 
 ---
 
@@ -226,26 +259,22 @@ To evaluate models on GUI-Perturbed, download the [Hugging Face dataset](https:/
 
 See the [Mind2Web project](https://mind2web.github.io/) for data access. Place it under `mm_mind2web/` with the structure described in [Installation](#-installation).
 
-### Where is the released GUI-Perturbed dataset?
-
-On Hugging Face: [figai/GUI-Perturbed](https://huggingface.co/datasets/figai/GUI-Perturbed). Use it for diagnostic evaluation; use this repo to generate more variants or extend the perturbation methods.
-
 ---
 
 ## Contributing
 
-We welcome contributions: new perturbation types in `src/ui/`, bug reports, and improvements. Open an issue or pull request. If you use the dataset or this code in research, please cite the dataset and/or blog (see below).
+We welcome contributions: new perturbation types, bug reports, and improvements. Open an issue or pull request or reach out at our [discord server](https://discord.gg/jxb5fXWf).
 
 ---
 
 ## 📄 Citation
 
-If you find GUI-Perturbed or this pipeline useful, please consider citing the dataset and/or the blog series.
+If you find GUI-Perturbed or this pipeline useful, please consider citing the dataset and technical report series.
 
 ```bibtex
 @dataset{gui_perturbed_2026,
   title   = {GUI-Perturbed: A Domain-Randomized Dataset for GUI Grounding},
-  author  = {[AUTHORS]},
+  author  = {Wang, Yangyue and Mathur, Yash, Zhou, Tony and Nyachhyon, Jinu and Guruprasad, Pranav and Sikka, Harsh},
   year    = {2026},
   url     = {https://huggingface.co/datasets/figai/GUI-Perturbed},
   note    = {Built on Mind2Web (Deng et al., 2023)}
@@ -253,17 +282,16 @@ If you find GUI-Perturbed or this pipeline useful, please consider citing the da
 
 @software{gui_dr_code_2026,
   title   = {WebDomainRandomizer: GUI Domain-Randomization for GUI Grounding Evaluation},
-  author  = {[AUTHORS]},
+  author  = {Wang, Yangyue and Mathur, Yash, Zhou, Tony and Nyachhyon, Jinu and Guruprasad, Pranav and Sikka, Harsh},
   year    = {2026},
-  url     = {https://github.com/fig-ai/WebDomainRandomizer},
-  note    = {Data generation pipeline for GUI-Perturbed}
+  url     = {https://github.com/ManifoldRG/GUI-DR},
+  note    = {Data augmentation pipeline for GUI-Perturbed}
 }
 
-@online{gui_perturbed_blog_2026,
-  title   = {GUI-Perturbed: A Domain Randomization Dataset for GUI Grounding},
-  author  = {[AUTHORS]},
-  year    = {2026},
-  url     = {[LINK]},
-  note    = {Part 1: Dataset \& methodology}
-}
+@online{gui_perturbed_technical_report_2026,  
+  title   = {GUI-Perturbed: A Domain Randomization Dataset for GUI Grounding},  
+  author  = {Wang, Yangyue and Mathur, Yash, Zhou, Tony and Nyachhyon, Jinu and Guruprasad, Pranav and Sikka, Harsh},  
+  year    = {2026},  
+  url     = {https://blog.fig.inc/gui-perturbed-a-domain-randomization-dataset-for-gui-grounding},  
+  note    = {Part 1: Dataset \& methodology}
 ```
