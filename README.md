@@ -10,14 +10,14 @@
 # 🩺 GUI-DR: GUI Domain-Randomization for generating diagnostic GUI grounding evaluation data
 <p align="center">
   <span style="display: inline-flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 6px;">
-    <a href="https://blog.fig.inc/gui-perturbed-a-domain-randomization-dataset-for-gui-grounding" style="display: inline-flex; align-items: center; height: 20px; text-decoration: none; font-size: 11px; font-family: Verdana, 'DejaVu Sans', sans-serif; border-radius: 2px; overflow: hidden; box-sizing: border-box;"><span style="display: inline-flex; align-items: center; background: #555; color: #fff; padding: 0 5px 0 4px; height: 100%;"><img src="media/fig-logo.png" alt="" height="12" width="12" style="margin-right: 4px; vertical-align: middle;"><span style="line-height: 20px">Technical Report</span></span><span style="display: inline-flex; align-items: center; background: #007ec6; color: #fff; padding: 0 6px; height: 100%; line-height: 20px">Fig</span></a>
+    <a href="https://blog.fig.inc/gui-perturbed-a-domain-randomization-dataset-for-gui-grounding"><img src="media/technical-report-badge.svg" alt="Technical Report | Fig" height="20" style="display: block;"></a>
     <a href="https://huggingface.co/datasets/figai/GUI-Perturbed"><img src="https://img.shields.io/badge/Data-HuggingFace-yellow?style=flat-square&logo=huggingface" alt="Hugging Face Data" style="display: block;"></a>
     <a href="https://github.com/ManifoldRG/GUI-DR"><img src="https://img.shields.io/badge/GUI--DR-GitHub-blueviolet?style=flat-square&logo=github" alt="GUI-DR GitHub" style="display: block;"></a>
     <a href="https://discord.gg/jxb5fXWf"><img src="https://img.shields.io/badge/Contribute-Discord-7289DA?style=flat-square&logo=discord" alt="Contribute on Discord" style="display: block;"></a>
   </span>
 </p>
 
-### GUI-DR is a collaborative effort with contributions from leading research teams at institutions like:
+### _GUI-DR is a part of a collaborative effort on Software Control Agents between Manifold Research and Fig_
 
 <p align="center">
   <a href="https://fig.inc/" target="_blank">
@@ -32,12 +32,13 @@
   </a>
 </p>
 
-<!-- ### _Need to Run Evaluations on Production Multimodal, Computer Use, or Robotics AI System? [We can help!](https://forms.gle/DuMyjoZrEYR641ro6)_
-[**Technical Report**](https://blog.fig.inc/gui-perturbed-a-domain-randomization-dataset-for-gui-grounding/) · [**Data**](https://huggingface.co/datasets/figai/GUI-Perturbed) · **Result Viewer** *(coming soon)* -->
+<!-- ### _Need to Run Evaluations on Production Computer Use System?_ -->
 
 ## Overview
 
-**GUI-DR** is a data augmentation pipeline built on domain randomization principles. Using [Mind2Web](https://mind2web.github.io/) MHTML archives, it varies _visual scenes_ and _instructions_ along controlled axes to expose CUA model fragile grounding.
+**GUI-DR** is a data augmentation pipeline built on domain randomization principles.
+
+GUI grounding models often rely on visual primitives (shape, position, color) rather than functional semantics, and fixed-scene benchmarks do not reveal how they degrade under distribution shift. Using [Mind2Web](https://mind2web.github.io/) MHTML archives, it varies _visual scenes_ and _instructions_ along controlled axes to expose this fragile grounding.
 
 ![gui-dr-diagram](/media/gui-dr-diagram.png)
 
@@ -290,8 +291,9 @@ If you find GUI-Perturbed or this pipeline useful, please consider citing the da
 
 @online{gui_perturbed_technical_report_2026,  
   title   = {GUI-Perturbed: A Domain Randomization Dataset for GUI Grounding},  
-  author  = {Wang, Yangyue and Mathur, Yash, Zhou, Tony and Nyachhyon, Jinu and Guruprasad, Pranav and Sikka, Harsh},  
+  author  = {Wang, Yangyue and Mathur, Yash, Zhou, Tony and Nyachhyon, Jinu and Guruprasad, Pranav and Sikka, Harsh},
   year    = {2026},  
   url     = {https://blog.fig.inc/gui-perturbed-a-domain-randomization-dataset-for-gui-grounding},  
   note    = {Part 1: Dataset \& methodology}
+}
 ```
