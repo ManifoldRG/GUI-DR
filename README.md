@@ -275,25 +275,25 @@ If you find GUI-Perturbed or this pipeline useful, please consider citing the da
 ```bibtex
 @dataset{gui_perturbed_2026,
   title   = {GUI-Perturbed: A Domain-Randomized Dataset for GUI Grounding},
-  author  = {Wang, Yangyue and Mathur, Yash, Zhou, Tony and Nyachhyon, Jinu and Guruprasad, Pranav and Sikka, Harsh},
+  author  = {Wang, Yangyue and Mathur, Yash, and Zhou, Tony and Nyachhyon, Jinu and Guruprasad, Pranav and Sikka, Harsh},
   year    = {2026},
   url     = {https://huggingface.co/datasets/figai/GUI-Perturbed},
   note    = {Built on Mind2Web (Deng et al., 2023)}
 }
 
 @software{gui_dr_code_2026,
-  title   = {WebDomainRandomizer: GUI Domain-Randomization for GUI Grounding Evaluation},
-  author  = {Wang, Yangyue and Mathur, Yash, Zhou, Tony and Nyachhyon, Jinu and Guruprasad, Pranav and Sikka, Harsh},
+  title   = {GUI-DR: GUI Domain-Randomization for generating diagnostic GUI grounding evaluation data},
+  author  = {Wang, Yangyue and Mathur, Yash, and Zhou, Tony and Nyachhyon, Jinu and Guruprasad, Pranav and Sikka, Harsh},
   year    = {2026},
   url     = {https://github.com/ManifoldRG/GUI-DR},
   note    = {Data augmentation pipeline for GUI-Perturbed}
 }
 
-@online{gui_perturbed_technical_report_2026,  
-  title   = {GUI-Perturbed: A Domain Randomization Dataset for GUI Grounding},  
-  author  = {Wang, Yangyue and Mathur, Yash, Zhou, Tony and Nyachhyon, Jinu and Guruprasad, Pranav and Sikka, Harsh},
-  year    = {2026},  
-  url     = {https://blog.fig.inc/gui-perturbed-a-domain-randomization-dataset-for-gui-grounding},  
-  note    = {Part 1: Dataset \& methodology}
+@online{gui_perturbed_technical_report_2026,
+  title   = {GUI-Perturbed: A Domain Randomization Dataset for GUI Grounding},
+  author  = {Wang, Yangyue and Mathur, Yash, and Zhou, Tony and Nyachhyon, Jinu and Guruprasad, Pranav and Sikka, Harsh},
+  year    = {2026},
+  url     = {https://blog.fig.inc/gui-perturbed-a-domain-randomization-dataset-for-gui-grounding},
+  note    = {Part 1: Dataset \& methodology}
 }
 ```
