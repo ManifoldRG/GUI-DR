@@ -282,7 +282,7 @@ If you find GUI-Perturbed or this pipeline useful, please consider citing the da
 }
 
 @software{gui_dr_code_2026,
-  title   = {GUI-DR: GUI Domain-Randomization for generating diagnostic GUI grounding evaluation data},
+  title   = {GUI-DR: Domain-Randomization for generating diagnostic GUI grounding evaluation data},
   author  = {Wang, Yangyue and Mathur, Yash, and Zhou, Tony and Nyachhyon, Jinu and Guruprasad, Pranav and Sikka, Harsh},
   year    = {2026},
   url     = {https://github.com/ManifoldRG/GUI-DR},
