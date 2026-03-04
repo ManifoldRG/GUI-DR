@@ -38,7 +38,7 @@
 
 **GUI-DR** is a data augmentation pipeline built on domain randomization principles.
 
-GUI grounding models often rely on visual primitives (shape, position, color) rather than functional semantics, and fixed-scene benchmarks do not reveal how they degrade under distribution shift. Using [Mind2Web](https://mind2web.github.io/) MHTML archives, it varies _visual scenes_ and _instructions_ along controlled axes to expose this fragile grounding.
+GUI grounding models often rely on visual primitives (shape, position, color) rather than functional semantics, and fixed-scene benchmarks do not reveal how they degrade under distribution shift. Using [Mind2Web](https://mind2web.github.io/) MHTML archives, GUI-DR varies _visual scenes_ and _instructions_ along controlled axes to generate data to evaluate or finetune models for use cases such as GUI grounding.
 
 ![gui-dr-diagram](/media/gui-dr-diagram.png)
 
@@ -282,7 +282,7 @@ If you find GUI-Perturbed or this pipeline useful, please consider citing the da
 }
 
 @software{gui_dr_code_2026,
-  title   = {GUI-DR: Domain-Randomization for generating diagnostic GUI grounding evaluation data},
+  title   = {GUI-DR: GUI Domain-Randomization for generating diagnostic GUI grounding evaluation data},
   author  = {Wang, Yangyue and Mathur, Yash, and Zhou, Tony and Nyachhyon, Jinu and Guruprasad, Pranav and Sikka, Harsh},
   year    = {2026},
   url     = {https://github.com/ManifoldRG/GUI-DR},
