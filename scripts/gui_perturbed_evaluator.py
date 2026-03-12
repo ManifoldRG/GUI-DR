@@ -487,7 +487,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--dataset_variant", default=None, type=str, choices=["style", "precision", "text_zoom", "original"], help="Dataset variant to evaluate")
     
     # Model configuration (optional overrides)
-    parser.add_argument("--model_name", type=str, default='ByteDance-Seed/UI-TARS-1.5-7B', help="HuggingFace model identifier for vLLM (e.g., 'ByteDance-Seed/UI-TARS-1.5-7B')")
+    parser.add_argument("--model_name", type=str, default=None, help="Override model name for vLLM (e.g., path to local checkpoint)")
     parser.add_argument("--temperature", type=float, default=0.0)
     parser.add_argument("--max_tokens", type=int, default=1000)
     parser.add_argument("--top_p", type=float, default=0.9)
@@ -556,7 +556,7 @@ def build_config(args: argparse.Namespace) -> EvaluationConfig:
     logger.info(f"  max_tokens: {max_tokens}")
     
     model_config = ModelConfig(
-        name=preset.model_name,
+        name=args.model_name if args.model_name is not None else preset.model_name,
         model_type=preset.model_type,
         use_reasoning=preset.use_reasoning,
         temperature=args.temperature,
