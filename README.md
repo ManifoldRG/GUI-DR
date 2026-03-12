@@ -61,8 +61,8 @@ We recommend using a **virtual environment** so dependencies stay isolated. You 
 [Install uv](https://docs.astral.sh/uv/getting-started/installation/), then from the repo root:
 
 ```bash
-git clone https://github.com/fig-ai/WebDomainRandomizer
-cd WebDomainRandomizer
+git clone https://github.com/ManifoldRG/GUI-DR.git
+cd GUI-DR
 
 # Create .venv and install dependencies from pyproject.toml + uv.lock
 uv sync
@@ -84,8 +84,8 @@ To activate the venv yourself: `source .venv/bin/activate` (Unix) or `.venv\Scri
 From the repo root:
 
 ```bash
-git clone https://github.com/fig-ai/WebDomainRandomizer
-cd WebDomainRandomizer
+git clone https://github.com/ManifoldRG/GUI-DR.git
+cd GUI-DR
 
 python3.11 -m venv .venv
 source .venv/bin/activate
