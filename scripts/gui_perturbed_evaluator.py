@@ -1,7 +1,7 @@
 """
-Standalone CSV-based evaluation script.
+Standalone evaluation script.
 
-Loads evaluation data from CSV, runs model inference, and saves raw predictions.
+Loads evaluation data from HuggingFace (figai/GUI-Perturbed), runs model inference, and saves raw predictions.
 """
 
 import argparse
@@ -10,11 +10,11 @@ import os
 import sys
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional
 from datetime import datetime
 from enum import Enum
 
-import pandas as pd
+from datasets import load_dataset
 from openai import OpenAI
 from PIL import Image
 from loguru import logger
@@ -93,8 +93,6 @@ class DatasetConfig:
 @dataclass
 class EvaluationConfig:
     """Overall evaluation configuration."""
-    csv_path: Path
-    screenshots_base_dir: Path
     output_dir: Path
     model_config: ModelConfig
     dataset_config: DatasetConfig
@@ -157,37 +155,35 @@ def setup_logging(output_dir: Path) -> Path:
 # ============================================================================
 
 class DataLoader:
-    """Loads and filters evaluation data from CSV."""
-    
-    def __init__(self, csv_path: Path, dataset_config: DatasetConfig, screenshots_base_dir: Path):
-        self.csv_path = csv_path
+    """Loads and filters evaluation data from HuggingFace (figai/GUI-Perturbed)."""
+
+    def __init__(self, dataset_config: DatasetConfig):
         self.dataset_config = dataset_config
-        self.screenshots_base_dir = screenshots_base_dir
-        self.df = self._load_and_filter()
-    
-    def _load_and_filter(self) -> pd.DataFrame:
-        """Load CSV and filter by dataset variant configuration."""
-        df = pd.read_csv(self.csv_path)
-        
+        self.rows = self._load_and_filter()
+
+    def _load_and_filter(self) -> List[Dict]:
+        """Load dataset from HuggingFace and filter by dataset variant configuration."""
+        logger.info("Loading dataset from figai/GUI-Perturbed...")
+        ds = load_dataset("figai/GUI-Perturbed", split="eval")
+
         # Filter by dataset variant type
         if self.dataset_config.dataset_variant is not None:
             variant_value = self.dataset_config.dataset_variant.value
-            df = df[df["variant"] == variant_value]
+            ds = ds.filter(lambda row: row["visual_variant"] == variant_value)
 
-        return df.sort_values(["task_id", "step_index"]).reset_index(drop=True)
-    
+        # Filter by instruction type
+        instruction_type_value = self.dataset_config.instruction_type.value
+        ds = ds.filter(lambda row: row["instruction_type"] == instruction_type_value)
+
+        # Sort by task_id and step_index
+        ds = ds.sort(["task_id", "step_index"])
+
+        logger.info(f"Loaded {len(ds)} rows after filtering")
+        return [ds[i] for i in range(len(ds))]
+
     def get_rows(self) -> List[Dict]:
-        """Get all filtered rows with resolved screenshot paths."""
-        rows = self.df.to_dict("records")
-        
-        for row in rows:
-            # Get instruction based on instruction type
-            if self.dataset_config.instruction_type == InstructionType.DIRECT_QUERY:
-                row["instruction"] = row.get("step_instruction", "")
-            else:
-                row["instruction"] = row.get("multi_element_instruction", "")
-        
-        return rows
+        """Get all filtered rows."""
+        return self.rows
 
 
 # ============================================================================
@@ -201,21 +197,21 @@ class ModelClient:
         self.config = config
         self.client = OpenAI(base_url=api_url, api_key=api_key)
     
-    def predict(self, instruction: str, image_path: Path, 
+    def predict(self, instruction: str, image: Image.Image,
                metadata: Optional[Dict[str, Any]] = None) -> str:
         """
         Run model inference on instruction and image.
-        
+
         Args:
             instruction: Text instruction
-            image_path: Path to image file
+            image: PIL Image for inference
             metadata: Optional dict with task_id, step_index, variant for logging
-        
+
         Returns raw prediction text from model.
         """
-        # Load and process image
+        # Validate image
         metadata = metadata or {}
-        image = self._load_image(image_path, **metadata)
+        image = self._validate_image(image, **metadata)
         
         # Build messages
         messages = self.build_messages(instruction, image, self.config.model_type, self.config.use_reasoning)
@@ -245,52 +241,32 @@ class ModelClient:
         else:
             raise ValueError(f"Invalid model type: {model_type}")
     
-    def _load_image(self, image_path: Path, 
-                    task_id: Optional[str] = None, 
-                    step_index: Optional[int] = None, 
-                    variant: Optional[str] = None) -> Image.Image:
+    def _validate_image(self, image: Image.Image,
+                        task_id: Optional[str] = None,
+                        step_index: Optional[int] = None,
+                        variant: Optional[str] = None) -> Image.Image:
         """
-        Load, validate, and resize image using smart_resize.
-        
+        Validate and prepare image for inference.
+
         Args:
-            image_path: Path to image file
+            image: PIL Image from dataset
             task_id: Optional task ID for logging
             step_index: Optional step index for logging
             variant: Optional variant for logging
-        
+
         Returns:
-            Resized image ready for inference
+            Image ready for inference
         """
-        # the image_path can be inaccurate with the final file name which has the format of step_<index>_<action>.png
-        # and the action can be wrong, so we need to get the correct image path from the task_id and step_index
-        image_folder = image_path.parent
-        # use step index and the image folder only because image filename in the csv file sometimes has the wrong action name in the filename.
-        search_pattern = f"step_{step_index}_*.png"
-        image_files = list(image_folder.glob(search_pattern))
-        
-        if len(image_files) == 0:
-            raise FileNotFoundError(
-                f"Image files not found: pattern '{search_pattern}' in folder {image_folder} "
-                f"for task {task_id} and step {step_index}"
-            )
-        
-        image_file = image_files[0]
-        if len(image_files) > 1:
-            logger.warning(f"Multiple images found for task {task_id} step {step_index}, using: {image_file}")
-        
-        image = Image.open(image_file)
         if image.mode != "RGB":
             image = image.convert("RGB")
-        
-        # Store original dimensions
+
         original_width, original_height = image.size
-        
-        # Check if image is 1920x1080 (expected resolution)
+
         if original_width != EXPECTED_IMAGE_WIDTH or original_height != EXPECTED_IMAGE_HEIGHT:
             metadata_str = format_metadata_string(task_id, step_index, variant)
             logger.warning(
                 f"[Image Dimension Check] Image is not {EXPECTED_IMAGE_WIDTH}x{EXPECTED_IMAGE_HEIGHT}: "
-                f"actual={original_width}x{original_height}{metadata_str} path={image_file}"
+                f"actual={original_width}x{original_height}{metadata_str}"
             )
 
         return image
@@ -307,9 +283,7 @@ class Evaluator:
     def __init__(self, config: EvaluationConfig):
         self.config = config
         self.data_loader = DataLoader(
-            config.csv_path,
             config.dataset_config,
-            config.screenshots_base_dir
         )
         self.model_client = ModelClient(
             config.model_config,
@@ -359,47 +333,44 @@ class Evaluator:
         logger.info(f"Evaluation completed. Processed {total_rows} rows")
     
     def _process_row(self, row: Dict, step_num: int, total_rows: int) -> Dict:
-        """Process a single CSV row and return prediction."""
+        """Process a single dataset row and return prediction."""
         logger.info("=" * 80)
         logger.info(f"Step {step_num}/{total_rows} ({step_num/total_rows*100:.1f}%)")
         logger.info("=" * 80)
-        
+
         instruction = row["instruction"]
-        image_path = self.data_loader.screenshots_base_dir / row["image_path"]
-        
+        image = row["screenshot"]
+
         # Prepare metadata for logging
         metadata = {
             "task_id": row.get("task_id"),
             "step_index": row.get("step_index"),
-            "variant": row.get("variant"),
+            "variant": row.get("visual_variant"),
         }
-        
-        raw_prediction = self.model_client.predict(instruction, image_path, metadata=metadata)
+
+        raw_prediction = self.model_client.predict(instruction, image, metadata=metadata)
         logger.info(f"Instruction: {instruction}")
-        logger.info(f"Image path: {image_path}")
-        
+
         # Truncate very long predictions in logs (likely model hallucination)
         if len(raw_prediction) > 500:
             logger.warning(f"Raw prediction is unusually long ({len(raw_prediction)} chars), truncating log output")
             logger.info(f"Raw prediction (first 500 chars): \n{raw_prediction[:500]}...")
         else:
             logger.info(f"Raw prediction: \n{raw_prediction}")
-        
-        logger.info(f"Ground truth bbox: {row['target_bounding_box']}")
+
+        logger.info(f"Ground truth bbox: {row['gt_bbox']}")
         logger.info("=" * 80)
-        
+
         return {
             "model": self.config.model_config.model_type,
             "use_reasoning": self.config.model_config.use_reasoning,
             "query_type": self.config.dataset_config.instruction_type.value,
-            "test_split": row['split'],
             "variant": metadata["variant"],
             "task_id": row["task_id"],
             "step_index": row["step_index"],
             "instruction": instruction,
             "raw_prediction": raw_prediction,
-            "ground_truth_bbox": row["target_bounding_box"],
-            "image_path": str(image_path),
+            "ground_truth_bbox": row["gt_bbox"],
         }
 
 
@@ -507,9 +478,7 @@ def parse_args() -> argparse.Namespace:
     """Parse command line arguments."""
     parser = argparse.ArgumentParser(description="evaluation script")
     
-    # CSV and output
-    parser.add_argument("--csv_path", type=Path, required=True, help="Path to CSV file")
-    parser.add_argument("--screenshots_base_dir", type=Path, required=True, help="Base directory containing screenshot folders")
+    # Output
     parser.add_argument("--output_dir", type=Path, required=True, help="Output directory")
     
     # Configuration selection
@@ -613,8 +582,6 @@ def build_config(args: argparse.Namespace) -> EvaluationConfig:
     api_key = args.api_key or os.environ.get("VLLM_API_KEY", "EMPTY")
     
     return EvaluationConfig(
-        csv_path=args.csv_path,
-        screenshots_base_dir=args.screenshots_base_dir,
         output_dir=args.output_dir,
         model_config=model_config,
         dataset_config=dataset_config,
@@ -641,9 +608,7 @@ def main():
 
 
 """
-uv run eval/gui_perturbed_evaluator.py \
-    --csv_path /Users/lockewang/FIG/WebDomainRandomizer/data/variant_data_cleaned.csv \
-    --screenshots_base_dir /Users/lockewang/FIG/WebDomainRandomizer/test_splits/ \
+uv run scripts/gui_perturbed_evaluator.py \
     --output_dir data/gui_perturbed_eval/predictions \
     --seed 42 \
     --config_id gta1_no_reasoning_direct_query
