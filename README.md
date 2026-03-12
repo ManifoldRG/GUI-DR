@@ -22,7 +22,11 @@
 <p align="center">
   <a href="https://fig.inc/" target="_blank">
     <kbd>
-    <img src="media/fig_logo_with_text.png" alt="Fig Logo" height="64">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="media/fig_logo_with_text_dark.svg">
+      <source media="(prefers-color-scheme: light)" srcset="media/fig_logo_with_text_light.svg">
+      <img src="media/fig_logo_with_text_light.svg" alt="Fig Logo" height="64">
+    </picture>
     </kbd>
   </a>
   <a href="https://www.manifoldrg.com/" target="_blank">
