@@ -246,7 +246,58 @@ Use **this repo** to reproduce or extend the data; use the **Hugging Face datase
 
 ## Evaluation
 
-Download the [GUI-Perturbed](https://huggingface.co/datasets/figai/GUI-Perturbed) dataset to evaluate your models. An evaluation script will be released soon.
+The evaluation script loads data directly from [GUI-Perturbed](https://huggingface.co/datasets/figai/GUI-Perturbed) on HuggingFace and runs inference against a model served via an OpenAI-compatible API (e.g., [vLLM](https://docs.vllm.ai/)).
+
+### Prerequisites
+
+1. **Serve your model** with vLLM (or any OpenAI-compatible endpoint):
+
+```bash
+# Example: serve UI-TARS-1.5-7B with vLLM
+vllm serve ByteDance-Seed/UI-TARS-1.5-7B --port 8000
+```
+
+2. **HuggingFace access** — `figai/GUI-Perturbed` is a gated dataset. Log in via `huggingface-cli login` if you haven't already.
+
+### Running evaluation
+
+```bash
+uv run scripts/gui_perturbed_evaluator.py \
+    --output_dir data/predictions \
+    --config_id uitars15_no_reasoning_direct_query \
+    --dataset_variant original
+```
+
+### Arguments
+
+| Argument | Default | Description |
+|----------|---------|-------------|
+| `--output_dir` | _(required)_ | Directory for prediction output files. |
+| `--config_id` | _(required)_ | Preset configuration ID. Use `--list_presets` to see all options. |
+| `--dataset_variant` | `None` (all) | Filter by variant: `original`, `style`, `precision`, `text_zoom`. |
+| `--model_name` | _(from preset)_ | Override the HuggingFace model identifier sent to the API. |
+| `--api_url` | `http://localhost:8000/v1` | API endpoint (or set `VLLM_API_URL` env var). |
+| `--api_key` | `EMPTY` | API key (or set `VLLM_API_KEY` env var). |
+| `--temperature` | `0.0` | Sampling temperature. |
+| `--max_tokens` | _(model-specific)_ | Max tokens for generation. |
+| `--seed` | `None` | Random seed for reproducibility. |
+| `--save_interval` | `10` | Save predictions to disk every N steps. |
+
+### Available presets
+
+Presets are generated for all combinations of **model** × **reasoning** × **instruction type**:
+
+- **Models:** `gta1` (GTA1-7B), `qwen25vl` (Qwen2.5-VL-7B), `uitars15` (UI-TARS-1.5-7B)
+- **Reasoning:** `no_reasoning`, `reasoning`
+- **Instruction type:** `direct_query`, `relational_query`
+
+Example preset IDs: `gta1_no_reasoning_direct_query`, `qwen25vl_reasoning_relational_query`, `uitars15_no_reasoning_direct_query`.
+
+List all presets:
+
+```bash
+uv run scripts/gui_perturbed_evaluator.py --list_presets
+```
 
 ---
 
@@ -299,5 +350,21 @@ If you find GUI-Perturbed or this pipeline useful, please consider citing the da
   year    = {2026},
   url     = {https://blog.fig.inc/gui-perturbed-a-domain-randomization-dataset-for-gui-grounding},
   note    = {Part 1: Dataset \& methodology}
+}
+
+@online{measuring_gui_models_robustness_technical_report_2026,
+  title   = {Measuring Brittleness in GUI Grounding Models using GUI-Perturbed},
+  author  = {Wang, Yangyue and Mathur, Yash, and Zhou, Tony and Nyachhyon, Jinu and Guruprasad, Pranav and Sikka, Harsh},
+  year    = {2026},
+  url     = {https://blog.fig.inc/measuring-brittleness-in-gui-grounding-models-using-gui-perturbed},
+  note    = {Part 2: Baseline evaluation}
+}
+
+@online{training_on_gui_perturbed_technical_report_2026,
+  title   = {Training on GUI-Perturbed: Why More Data Isn’t Enough},
+  author  = {Wang, Yangyue and Mathur, Yash, and Zhou, Tony and Nyachhyon, Jinu and Guruprasad, Pranav and Sikka, Harsh},
+  year    = {2026},
+  url     = {https://blog.fig.inc/training-on-gui-perturbed-why-more-data-isnt-enough},
+  note    = {Part 3: Finetuning Experiments}
 }
 ```
