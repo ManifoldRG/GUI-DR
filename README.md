@@ -239,8 +239,11 @@ The evaluation script loads data directly from [GUI-Perturbed](https://huggingfa
 **Serve your model** with vLLM (or any OpenAI-compatible endpoint):
 
 ```bash
-# Example: serve UI-TARS-1.5-7B with vLLM
-vllm serve ByteDance-Seed/UI-TARS-1.5-7B --port 8000
+# Example: serve your local_model with vLLM
+vllm serve "/mnt/disks/eval-data/exp_2_checkpoint_1_epoch/" \
+    --tensor-parallel-size 2 \
+    --max-model-len 16384 \
+    --gpu-memory-utilization 0.9
 ```
 
 ### Running evaluation
@@ -249,7 +252,8 @@ vllm serve ByteDance-Seed/UI-TARS-1.5-7B --port 8000
 uv run scripts/gui_perturbed_evaluator.py \
     --output_dir data/predictions \
     --config_id uitars15_no_reasoning_direct_query \
-    --dataset_variant original
+    --dataset_variant original \
+    --model_name /mnt/disks/eval-data/exp_2_checkpoint_1_epoch/
 ```
 
 ### Arguments
