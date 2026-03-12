@@ -250,14 +250,12 @@ The evaluation script loads data directly from [GUI-Perturbed](https://huggingfa
 
 ### Prerequisites
 
-1. **Serve your model** with vLLM (or any OpenAI-compatible endpoint):
+**Serve your model** with vLLM (or any OpenAI-compatible endpoint):
 
 ```bash
 # Example: serve UI-TARS-1.5-7B with vLLM
 vllm serve ByteDance-Seed/UI-TARS-1.5-7B --port 8000
 ```
-
-2. **HuggingFace access** — `figai/GUI-Perturbed` is a gated dataset. Log in via `huggingface-cli login` if you haven't already.
 
 ### Running evaluation
 
