@@ -10,7 +10,7 @@
 # 🩺 GUI-DR: GUI Domain-Randomization for generating diagnostic GUI grounding evaluation data
 <details align="center">
 <summary>
-  <img src="media/technical-report-badge.svg" alt="Technical Reports | Fig" height="20">
+  <img src="https://img.shields.io/badge/Technical_Reports-Fig-007ec6?style=flat-square" alt="Technical Reports | Fig" height="20">
   <a href="https://huggingface.co/datasets/figai/GUI-Perturbed"><img src="https://img.shields.io/badge/Data-HuggingFace-yellow?style=flat-square&logo=huggingface" alt="Hugging Face Data"></a>
   <a href="https://github.com/ManifoldRG/GUI-DR"><img src="https://img.shields.io/badge/GUI--DR-GitHub-blueviolet?style=flat-square&logo=github" alt="GUI-DR GitHub"></a>
   <a href="https://discord.gg/jxb5fXWf"><img src="https://img.shields.io/badge/Contribute-Discord-7289DA?style=flat-square&logo=discord" alt="Contribute on Discord"></a>
@@ -19,6 +19,16 @@
   <a href="https://blog.fig.inc/gui-perturbed-a-domain-randomization-dataset-for-gui-grounding"><img src="https://img.shields.io/badge/Dataset_&_Methodology-555?style=flat-square" alt="Dataset & Methodology"></a>
   <a href="https://blog.fig.inc/measuring-brittleness-in-gui-grounding-models-using-gui-perturbed"><img src="https://img.shields.io/badge/Model_Robustness_Evaluation-555?style=flat-square" alt="Model Robustness Evaluation"></a>
   <a href="https://blog.fig.inc/training-on-gui-perturbed-why-more-data-isnt-enough"><img src="https://img.shields.io/badge/Finetuning_Experiments-555?style=flat-square" alt="Finetuning Experiments"></a>
+</p>
+</details>
+
+<details align="center">
+<summary>
+  <img src="https://img.shields.io/badge/Result_Viewers-HuggingFace-yellow?style=flat-square&logo=huggingface" alt="Result Viewers" height="20">
+</summary>
+<p>
+  <a href="https://huggingface.co/spaces/figai/GUI-Perturbed-Baseline-Result-Viewer"><img src="https://img.shields.io/badge/Baseline_Result_Viewer-555?style=flat-square" alt="Baseline Result Viewer"></a>
+  <a href="https://huggingface.co/spaces/figai/GUI-Perturbed-Finetuned-Result-Viewer"><img src="https://img.shields.io/badge/Finetuned_Result_Viewer-555?style=flat-square" alt="Finetuned Result Viewer"></a>
 </p>
 </details>
 
