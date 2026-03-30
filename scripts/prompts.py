@@ -150,6 +150,12 @@ Then output the coordinate pair exactly:
 """
 
 
+# Claude Computer Use: Anthropic auto-generates the base computer-use system prompt
+# when the tool is present. Computer Use is designed for an agent loop where Claude
+# first requests a screenshot, then acts on it. The evaluator handles this by
+# returning the screenshot as a tool_result when Claude requests it.
+
+
 QWEN25_SYSTEM_PROMPT_NOTHOUGHT = (
     "You are a helpful assistant.\n\n\n"
     "# Tools\n\n"
@@ -234,6 +240,87 @@ def build_uitars15_messages(instruction: str, image: Image.Image, use_reasoning:
         }
     ]
     return messages
+
+
+# Claude vision constraints (from Anthropic docs)
+CLAUDE_MAX_LONG_EDGE = 1568
+CLAUDE_MAX_PIXELS = 1_150_000  # ~1.15 megapixels
+
+
+def _claude_scale_factor(width: int, height: int) -> float:
+    """Compute the downscale factor to fit within Claude's vision constraints.
+
+    Returns a factor <= 1.0 by which both dimensions should be multiplied.
+    """
+    factor = 1.0
+    # Constraint 1: longest edge <= 1568
+    longest = max(width, height)
+    if longest > CLAUDE_MAX_LONG_EDGE:
+        factor = min(factor, CLAUDE_MAX_LONG_EDGE / longest)
+    # Constraint 2: total pixels <= ~1.15M
+    pixels = width * height
+    if pixels * (factor ** 2) > CLAUDE_MAX_PIXELS:
+        factor = min(factor, (CLAUDE_MAX_PIXELS / pixels) ** 0.5)
+    return factor
+
+
+def build_claude_messages(instruction: str, image: Image.Image, use_reasoning: bool) -> Dict[str, Any]:
+    """Build Anthropic-format messages for Claude computer use.
+
+    Unlike the OpenAI-format builders, this returns a dict with separate
+    messages and tools fields for the Anthropic API.
+
+    Claude Computer Use follows an agent loop: it first requests a screenshot
+    via the tool, then acts on it. The evaluator handles this loop by returning
+    the provided screenshot as a tool_result.
+
+    The image is resized to fit Claude's vision constraints (max 1568px longest
+    edge, ~1.15 megapixels). The display dimensions in the tool definition are
+    set to the *resized* size so Claude returns coordinates in that space.
+    A scale_factor is returned so the evaluator can map coordinates back to the
+    original 1920x1080 space for bbox comparison.
+    """
+    if image.mode != "RGB":
+        image = image.convert("RGB")
+
+    orig_w, orig_h = image.size
+    scale = _claude_scale_factor(orig_w, orig_h)
+
+    if scale < 1.0:
+        new_w = int(orig_w * scale)
+        new_h = int(orig_h * scale)
+        image = image.resize((new_w, new_h), Image.Resampling.LANCZOS)
+    else:
+        new_w, new_h = orig_w, orig_h
+
+    encoded_image = convert_pil_image_to_base64(image)
+
+    # Initial user message with just the instruction.
+    # The screenshot is NOT included here — it will be returned as a
+    # tool_result when Claude requests a screenshot in the agent loop.
+    messages = [
+        {
+            "role": "user",
+            "content": instruction,
+        }
+    ]
+
+    tools = [
+        {
+            "type": "computer_20250124",
+            "name": "computer",
+            "display_width_px": new_w,
+            "display_height_px": new_h,
+            "display_number": 1,
+        }
+    ]
+
+    return {
+        "messages": messages,
+        "tools": tools,
+        "encoded_image": encoded_image,
+        "scale_factor": scale,
+    }
 
 
 def build_qwen25vl_messages(instruction: str, image: Image.Image, use_reasoning: bool) -> List[Dict[str, Any]]:
