@@ -1,12 +1,13 @@
 """
-Standalone CSV-based evaluation script.
+Standalone evaluation script.
 
-Loads evaluation data from CSV, runs model inference, and saves raw predictions.
+Loads evaluation data from HuggingFace (figai/GUI-Perturbed), runs model inference, and saves raw predictions.
 """
 
 import argparse
 import json
 import os
+import re
 import sys
 from dataclasses import dataclass
 from pathlib import Path
@@ -14,7 +15,11 @@ from typing import Any, Dict, List, Optional, Tuple
 from datetime import datetime
 from enum import Enum
 
-import pandas as pd
+from anthropic import Anthropic
+from datasets import load_dataset
+from dotenv import load_dotenv
+
+load_dotenv()
 from openai import OpenAI
 from PIL import Image
 from loguru import logger
@@ -24,9 +29,11 @@ eval_dir = Path(__file__).parent
 sys.path.insert(0, str(eval_dir))
 
 from prompts import (
+    build_claude_messages,
     build_gta1_messages,
     build_uitars15_messages,
     build_qwen25vl_messages,
+    resize_image,
 )
 
 
@@ -42,7 +49,7 @@ MIN_PIXELS = 100 * 28 * 28
 MAX_PIXELS = 16384 * 28 * 28
 MAX_RATIO = 200
 
-VALID_MODEL_TYPES = {"gta1", "qwen25vl", "uitars15"}
+VALID_MODEL_TYPES = {"gta1", "qwen25vl", "uitars15", "claude"}
 
 # Model-specific default max_tokens
 # GTA1 only needs ~32 tokens for coordinate output (x,y), but we use 64 to be safe
@@ -53,7 +60,128 @@ DEFAULT_MAX_TOKENS = {
     ("qwen25vl", True): 1000,
     ("uitars15", False): 1000,
     ("uitars15", True): 1000,
+    ("claude", False): 1024,
+    ("claude", True): 4096,
 }
+
+# ============================================================================
+# Coordinate Extraction and Hit Detection
+# ============================================================================
+
+def extract_coordinates(raw_prediction: str, model_type: str) -> Optional[Tuple[float, float]]:
+    """Extract (x, y) coordinates from a model's raw prediction.
+
+    Each model type has a different output format:
+    - gta1: "(x,y)" or "Thought: ... Action: (x,y)" or "Thought: ... (x,y)"
+    - uitars15: "Action: click(start_box='(x,y)')" or with Thought prefix
+    - qwen25vl: '<tool_call>{"name":"computer_use","arguments":{"coordinate":[x,y]}}</tool_call>'
+    - claude: JSON array with tool_use blocks containing {"input":{"coordinate":[x,y]}}
+
+    Returns (x, y) in the model's native coordinate space, or None if parsing fails.
+    """
+    if not raw_prediction or not raw_prediction.strip():
+        return None
+
+    try:
+        if model_type == "claude":
+            return _extract_claude_coordinates(raw_prediction)
+        elif model_type == "gta1":
+            return _extract_gta1_coordinates(raw_prediction)
+        elif model_type == "uitars15":
+            return _extract_uitars15_coordinates(raw_prediction)
+        elif model_type == "qwen25vl":
+            return _extract_qwen25vl_coordinates(raw_prediction)
+    except Exception:
+        return None
+    return None
+
+
+def _extract_claude_coordinates(raw_prediction: str) -> Optional[Tuple[float, float]]:
+    """Claude: JSON array of content blocks. Coordinates are already scaled to 1920x1080."""
+    blocks = json.loads(raw_prediction)
+    for block in blocks:
+        if block.get("type") == "tool_use" and "input" in block:
+            coord = block["input"].get("coordinate")
+            if coord and len(coord) == 2:
+                return (float(coord[0]), float(coord[1]))
+    return None
+
+
+def _extract_gta1_coordinates(raw_prediction: str) -> Optional[Tuple[float, float]]:
+    """GTA1: '(x,y)' or 'Thought: ... Action: (x,y)' or 'Thought: ... (x,y)'."""
+    # Find last (x,y) pattern — in reasoning mode the coordinate comes after the thought
+    matches = re.findall(r'\((\d+(?:\.\d+)?)\s*,\s*(\d+(?:\.\d+)?)\)', raw_prediction)
+    if matches:
+        x, y = matches[-1]
+        return (float(x), float(y))
+    return None
+
+
+def _extract_uitars15_coordinates(raw_prediction: str) -> Optional[Tuple[float, float]]:
+    """UITARS: "click(start_box='(x,y)')" or similar action format."""
+    # Match click(start_box='(x,y)') or similar patterns with box coordinates
+    match = re.search(r"start_box='(?:<\|box_start\|>)?\((\d+(?:\.\d+)?)\s*,\s*(\d+(?:\.\d+)?)\)", raw_prediction)
+    if match:
+        return (float(match.group(1)), float(match.group(2)))
+    # Fallback: any (x,y) pattern
+    matches = re.findall(r'\((\d+(?:\.\d+)?)\s*,\s*(\d+(?:\.\d+)?)\)', raw_prediction)
+    if matches:
+        return (float(matches[-1][0]), float(matches[-1][1]))
+    return None
+
+
+def _extract_qwen25vl_coordinates(raw_prediction: str) -> Optional[Tuple[float, float]]:
+    """Qwen2.5VL: '<tool_call>{"name":"computer_use","arguments":{"coordinate":[x,y]}}</tool_call>'."""
+    match = re.search(r'<tool_call>\s*(\{.*?\})\s*</tool_call>', raw_prediction, re.DOTALL)
+    if match:
+        tool_call = json.loads(match.group(1))
+        coord = tool_call.get("arguments", {}).get("coordinate")
+        if coord and len(coord) == 2:
+            return (float(coord[0]), float(coord[1]))
+    # Fallback: find "coordinate": [x, y] anywhere
+    match = re.search(r'"coordinate"\s*:\s*\[(\d+(?:\.\d+)?)\s*,\s*(\d+(?:\.\d+)?)\]', raw_prediction)
+    if match:
+        return (float(match.group(1)), float(match.group(2)))
+    return None
+
+
+def renormalize_to_original(
+    coord: Tuple[float, float],
+    model_type: str,
+    original_width: int = EXPECTED_IMAGE_WIDTH,
+    original_height: int = EXPECTED_IMAGE_HEIGHT,
+) -> Tuple[float, float]:
+    """Map predicted coordinates back to the original image dimensions.
+
+    - gta1, uitars15, qwen25vl: coordinates are in the smart_resize'd space.
+      Renormalize by multiplying by (original / resized) per axis.
+    - claude: coordinates are already in 1920x1080 space (scaled back in
+      _parse_claude_response), so no further transformation is needed.
+    """
+    if model_type == "claude":
+        # Already scaled back to original dimensions during response parsing
+        return coord
+
+    # Compute the resized dimensions that the VLM models used
+    resized_image = resize_image(Image.new("RGB", (original_width, original_height)))
+    resized_w, resized_h = resized_image.size
+
+    x = coord[0] * (original_width / resized_w)
+    y = coord[1] * (original_height / resized_h)
+    return (x, y)
+
+
+def is_hit(coord: Tuple[float, float], gt_bbox) -> bool:
+    """Check whether the predicted coordinate falls inside the ground truth bbox.
+
+    gt_bbox format: [x, y, width, height] where (x, y) is the top-left corner.
+    Accepts either a list of floats or a JSON string representation.
+    """
+    if isinstance(gt_bbox, str):
+        gt_bbox = json.loads(gt_bbox)
+    bx, by, bw, bh = [float(v) for v in gt_bbox]
+    return bx <= coord[0] <= bx + bw and by <= coord[1] <= by + bh
+
 
 # ============================================================================
 # Configuration
@@ -93,13 +221,12 @@ class DatasetConfig:
 @dataclass
 class EvaluationConfig:
     """Overall evaluation configuration."""
-    csv_path: Path
-    screenshots_base_dir: Path
     output_dir: Path
     model_config: ModelConfig
     dataset_config: DatasetConfig
     api_url: str
     api_key: str
+    config_id: str = ""
     save_interval: int = 10  # Save predictions every N steps
 
 
@@ -157,37 +284,35 @@ def setup_logging(output_dir: Path) -> Path:
 # ============================================================================
 
 class DataLoader:
-    """Loads and filters evaluation data from CSV."""
-    
-    def __init__(self, csv_path: Path, dataset_config: DatasetConfig, screenshots_base_dir: Path):
-        self.csv_path = csv_path
+    """Loads and filters evaluation data from HuggingFace (figai/GUI-Perturbed)."""
+
+    def __init__(self, dataset_config: DatasetConfig):
         self.dataset_config = dataset_config
-        self.screenshots_base_dir = screenshots_base_dir
-        self.df = self._load_and_filter()
-    
-    def _load_and_filter(self) -> pd.DataFrame:
-        """Load CSV and filter by dataset variant configuration."""
-        df = pd.read_csv(self.csv_path)
-        
+        self.rows = self._load_and_filter()
+
+    def _load_and_filter(self) -> List[Dict]:
+        """Load dataset from HuggingFace and filter by dataset variant configuration."""
+        logger.info("Loading dataset from figai/GUI-Perturbed...")
+        ds = load_dataset("figai/GUI-Perturbed", split="eval")
+
         # Filter by dataset variant type
         if self.dataset_config.dataset_variant is not None:
             variant_value = self.dataset_config.dataset_variant.value
-            df = df[df["variant"] == variant_value]
+            ds = ds.filter(lambda row: row["visual_variant"] == variant_value)
 
-        return df.sort_values(["task_id", "step_index"]).reset_index(drop=True)
-    
+        # Filter by instruction type
+        instruction_type_value = self.dataset_config.instruction_type.value
+        ds = ds.filter(lambda row: row["instruction_type"] == instruction_type_value)
+
+        # Sort by task_id and step_index
+        ds = ds.sort(["task_id", "step_index"])
+
+        logger.info(f"Loaded {len(ds)} rows after filtering")
+        return [ds[i] for i in range(len(ds))]
+
     def get_rows(self) -> List[Dict]:
-        """Get all filtered rows with resolved screenshot paths."""
-        rows = self.df.to_dict("records")
-        
-        for row in rows:
-            # Get instruction based on instruction type
-            if self.dataset_config.instruction_type == InstructionType.DIRECT_QUERY:
-                row["instruction"] = row.get("step_instruction", "")
-            else:
-                row["instruction"] = row.get("multi_element_instruction", "")
-        
-        return rows
+        """Get all filtered rows."""
+        return self.rows
 
 
 # ============================================================================
@@ -199,27 +324,36 @@ class ModelClient:
     
     def __init__(self, config: ModelConfig, api_url: str, api_key: str):
         self.config = config
-        self.client = OpenAI(base_url=api_url, api_key=api_key)
+        if config.model_type == "claude":
+            self.anthropic_client = Anthropic(api_key=api_key, max_retries=5)
+            self.client = None
+        else:
+            self.client = OpenAI(base_url=api_url, api_key=api_key)
+            self.anthropic_client = None
     
-    def predict(self, instruction: str, image_path: Path, 
+    def predict(self, instruction: str, image: Image.Image,
                metadata: Optional[Dict[str, Any]] = None) -> str:
         """
         Run model inference on instruction and image.
-        
+
         Args:
             instruction: Text instruction
-            image_path: Path to image file
+            image: PIL Image for inference
             metadata: Optional dict with task_id, step_index, variant for logging
-        
+
         Returns raw prediction text from model.
         """
-        # Load and process image
+        # Validate image
         metadata = metadata or {}
-        image = self._load_image(image_path, **metadata)
-        
+        image = self._validate_image(image, **metadata)
+
+        # Claude uses a separate API path
+        if self.config.model_type == "claude":
+            return self._predict_claude(instruction, image)
+
         # Build messages
         messages = self.build_messages(instruction, image, self.config.model_type, self.config.use_reasoning)
-        
+
         # Make API request
         request_kwargs = {
             "model": self.config.name,
@@ -230,9 +364,105 @@ class ModelClient:
         }
         if self.config.seed is not None:
             request_kwargs["seed"] = self.config.seed
-        
+
         response = self.client.chat.completions.create(**request_kwargs)
         return response.choices[0].message.content.strip()
+
+    def _predict_claude(self, instruction: str, image: Image.Image) -> str:
+        """Run Claude computer use inference via the beta API.
+
+        Implements a mini agent loop matching the official Computer Use pattern:
+        1. Send instruction → Claude requests a screenshot via the tool
+        2. Return the screenshot as a tool_result → Claude responds with a click
+        The loop runs for at most MAX_TURNS to avoid runaway costs.
+        """
+        MAX_TURNS = 3
+        msg_data = build_claude_messages(instruction, image, self.config.use_reasoning)
+        encoded_image = msg_data["encoded_image"]
+        scale_factor = msg_data["scale_factor"]
+
+        base_kwargs = {
+            "model": self.config.name,
+            "max_tokens": self.config.max_tokens,
+            "tools": msg_data["tools"],
+        }
+        if self.config.use_reasoning:
+            base_kwargs["thinking"] = {
+                "type": "enabled",
+                "budget_tokens": 2048,
+            }
+        else:
+            base_kwargs["temperature"] = self.config.temperature
+
+        messages = list(msg_data["messages"])
+
+        for turn in range(MAX_TURNS):
+            response = self.anthropic_client.beta.messages.create(
+                betas=["computer-use-2025-01-24"],
+                messages=messages,
+                **base_kwargs,
+            )
+
+            # Check if any tool_use block has an action with coordinates (i.e. a click)
+            for block in response.content:
+                if block.type == "tool_use" and hasattr(block, "input"):
+                    action = block.input.get("action", "")
+                    if action != "screenshot":
+                        # Got a click or other action with coordinates — done
+                        return self._parse_claude_response(response, scale_factor)
+
+            # Claude requested a screenshot — return the image as tool_result
+            # Build the assistant message and tool_result for the next turn
+            messages.append({"role": "assistant", "content": response.content})
+            tool_results = []
+            for block in response.content:
+                if block.type == "tool_use":
+                    tool_results.append({
+                        "type": "tool_result",
+                        "tool_use_id": block.id,
+                        "content": [
+                            {
+                                "type": "image",
+                                "source": {
+                                    "type": "base64",
+                                    "media_type": "image/png",
+                                    "data": encoded_image,
+                                },
+                            }
+                        ],
+                    })
+            messages.append({"role": "user", "content": tool_results})
+
+        # Fallback: return whatever the last response was
+        return self._parse_claude_response(response, scale_factor)
+
+    def _parse_claude_response(self, response, scale_factor: float) -> str:
+        """Parse Claude response into a JSON string of content blocks.
+
+        Coordinates are scaled back to the original 1920x1080 space using
+        scale_factor, since the image was downscaled before sending to Claude.
+        """
+        blocks = []
+        for block in response.content:
+            if block.type == "thinking":
+                blocks.append({"type": "thinking", "thinking": block.thinking})
+            elif block.type == "text":
+                blocks.append({"type": "text", "text": block.text})
+            elif block.type == "tool_use":
+                input_data = dict(block.input)
+                # Scale coordinates back to original image dimensions
+                if "coordinate" in input_data and scale_factor < 1.0:
+                    x, y = input_data["coordinate"]
+                    input_data["coordinate"] = [
+                        round(x / scale_factor),
+                        round(y / scale_factor),
+                    ]
+                blocks.append({
+                    "type": "tool_use",
+                    "name": block.name,
+                    "input": input_data,
+                })
+        return json.dumps(blocks)
 
     def build_messages(self, instruction: str, image: Image.Image, model_type: str, use_reasoning: bool) -> List[Dict[str, Any]]:
         """Build messages for model inference.""" 
@@ -242,55 +472,37 @@ class ModelClient:
             return build_uitars15_messages(instruction, image, use_reasoning)
         elif model_type == "qwen25vl":
             return build_qwen25vl_messages(instruction, image, use_reasoning)
+        elif model_type == "claude":
+            return build_claude_messages(instruction, image, use_reasoning)
         else:
             raise ValueError(f"Invalid model type: {model_type}")
     
-    def _load_image(self, image_path: Path, 
-                    task_id: Optional[str] = None, 
-                    step_index: Optional[int] = None, 
-                    variant: Optional[str] = None) -> Image.Image:
+    def _validate_image(self, image: Image.Image,
+                        task_id: Optional[str] = None,
+                        step_index: Optional[int] = None,
+                        variant: Optional[str] = None) -> Image.Image:
         """
-        Load, validate, and resize image using smart_resize.
-        
+        Validate and prepare image for inference.
+
         Args:
-            image_path: Path to image file
+            image: PIL Image from dataset
             task_id: Optional task ID for logging
             step_index: Optional step index for logging
             variant: Optional variant for logging
-        
+
         Returns:
-            Resized image ready for inference
+            Image ready for inference
         """
-        # the image_path can be inaccurate with the final file name which has the format of step_<index>_<action>.png
-        # and the action can be wrong, so we need to get the correct image path from the task_id and step_index
-        image_folder = image_path.parent
-        # use step index and the image folder only because image filename in the csv file sometimes has the wrong action name in the filename.
-        search_pattern = f"step_{step_index}_*.png"
-        image_files = list(image_folder.glob(search_pattern))
-        
-        if len(image_files) == 0:
-            raise FileNotFoundError(
-                f"Image files not found: pattern '{search_pattern}' in folder {image_folder} "
-                f"for task {task_id} and step {step_index}"
-            )
-        
-        image_file = image_files[0]
-        if len(image_files) > 1:
-            logger.warning(f"Multiple images found for task {task_id} step {step_index}, using: {image_file}")
-        
-        image = Image.open(image_file)
         if image.mode != "RGB":
             image = image.convert("RGB")
-        
-        # Store original dimensions
+
         original_width, original_height = image.size
-        
-        # Check if image is 1920x1080 (expected resolution)
+
         if original_width != EXPECTED_IMAGE_WIDTH or original_height != EXPECTED_IMAGE_HEIGHT:
             metadata_str = format_metadata_string(task_id, step_index, variant)
             logger.warning(
                 f"[Image Dimension Check] Image is not {EXPECTED_IMAGE_WIDTH}x{EXPECTED_IMAGE_HEIGHT}: "
-                f"actual={original_width}x{original_height}{metadata_str} path={image_file}"
+                f"actual={original_width}x{original_height}{metadata_str}"
             )
 
         return image
@@ -307,9 +519,7 @@ class Evaluator:
     def __init__(self, config: EvaluationConfig):
         self.config = config
         self.data_loader = DataLoader(
-            config.csv_path,
             config.dataset_config,
-            config.screenshots_base_dir
         )
         self.model_client = ModelClient(
             config.model_config,
@@ -323,83 +533,111 @@ class Evaluator:
         """Generate output file path based on configuration."""
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         filename = (
-            f"predictions_"
-            f"{self.config.model_config.model_type}_"
-            f"{'reasoning' if self.config.model_config.use_reasoning else 'no_reasoning'}_"
-            f"{self.config.dataset_config.instruction_type.value}_"
-            f"{timestamp}.jsonl"
+            f"predictions_{self.config.config_id}_{timestamp}.jsonl"
         )
         return self.config.output_dir / filename
     
     def run(self):
-        """Run evaluation on all CSV rows."""
+        """Run evaluation on all dataset rows."""
         rows = self.data_loader.get_rows()
         total_rows = len(rows)
-        
+        hits = 0
+        parsed = 0
+
         logger.info(f"Starting evaluation on {total_rows} rows")
-        
+
         self.output_path.parent.mkdir(parents=True, exist_ok=True)
-        
+
         try:
             with open(self.output_path, "w", encoding="utf-8") as f:
                 for idx, row in enumerate(rows, 1):
                     prediction = self._process_row(row, step_num=idx, total_rows=total_rows)
                     json.dump(prediction, f, ensure_ascii=False)
                     f.write("\n")
-                    
+
+                    if prediction["predicted_coordinate"] is not None:
+                        parsed += 1
+                    if prediction["is_hit"]:
+                        hits += 1
+
                     if idx % self.save_interval == 0:
                         f.flush()
-                    
+
                     if idx % 100 == 0:
-                        logger.info(f"Processed {idx}/{total_rows} rows ({idx/total_rows*100:.1f}%)")
+                        acc = hits / idx * 100
+                        logger.info(
+                            f"Processed {idx}/{total_rows} ({idx/total_rows*100:.1f}%) | "
+                            f"Running accuracy: {acc:.1f}% ({hits}/{idx}) | "
+                            f"Parse rate: {parsed}/{idx}"
+                        )
         except Exception as e:
             logger.error(f"Error processing row {idx}: {e}")
             raise e
 
+        # Final accuracy summary
+        acc = hits / total_rows * 100 if total_rows > 0 else 0
+        logger.info("=" * 80)
         logger.info(f"Evaluation completed. Processed {total_rows} rows")
+        logger.info(f"Hit accuracy: {acc:.2f}% ({hits}/{total_rows})")
+        logger.info(f"Parse rate: {parsed}/{total_rows} ({parsed/total_rows*100:.1f}%)")
+        logger.info(f"Results saved to: {self.output_path}")
+        logger.info("=" * 80)
     
     def _process_row(self, row: Dict, step_num: int, total_rows: int) -> Dict:
-        """Process a single CSV row and return prediction."""
+        """Process a single dataset row and return prediction with hit detection."""
         logger.info("=" * 80)
         logger.info(f"Step {step_num}/{total_rows} ({step_num/total_rows*100:.1f}%)")
         logger.info("=" * 80)
-        
+
+        model_type = self.config.model_config.model_type
         instruction = row["instruction"]
-        image_path = self.data_loader.screenshots_base_dir / row["image_path"]
-        
+        image = row["screenshot"]
+
         # Prepare metadata for logging
         metadata = {
             "task_id": row.get("task_id"),
             "step_index": row.get("step_index"),
-            "variant": row.get("variant"),
+            "variant": row.get("visual_variant"),
         }
-        
-        raw_prediction = self.model_client.predict(instruction, image_path, metadata=metadata)
+
+        raw_prediction = self.model_client.predict(instruction, image, metadata=metadata)
         logger.info(f"Instruction: {instruction}")
-        logger.info(f"Image path: {image_path}")
-        
+
         # Truncate very long predictions in logs (likely model hallucination)
         if len(raw_prediction) > 500:
             logger.warning(f"Raw prediction is unusually long ({len(raw_prediction)} chars), truncating log output")
             logger.info(f"Raw prediction (first 500 chars): \n{raw_prediction[:500]}...")
         else:
             logger.info(f"Raw prediction: \n{raw_prediction}")
-        
-        logger.info(f"Ground truth bbox: {row['target_bounding_box']}")
+
+        # Extract and renormalize coordinates, then check hit
+        gt_bbox = row["gt_bbox"]
+        raw_coord = extract_coordinates(raw_prediction, model_type)
+        predicted_coord = None
+        hit = False
+
+        if raw_coord is not None:
+            predicted_coord = renormalize_to_original(raw_coord, model_type)
+            hit = is_hit(predicted_coord, gt_bbox)
+
+        logger.info(f"Ground truth bbox: {gt_bbox}")
+        logger.info(f"Predicted coordinate: {predicted_coord}")
+        logger.info(f"Is hit: {hit}")
         logger.info("=" * 80)
-        
+
         return {
-            "model": self.config.model_config.model_type,
+            "config_id": self.config.config_id,
+            "model": model_type,
             "use_reasoning": self.config.model_config.use_reasoning,
             "query_type": self.config.dataset_config.instruction_type.value,
-            "test_split": row['split'],
             "variant": metadata["variant"],
             "task_id": row["task_id"],
             "step_index": row["step_index"],
             "instruction": instruction,
             "raw_prediction": raw_prediction,
-            "ground_truth_bbox": row["target_bounding_box"],
-            "image_path": str(image_path),
+            "ground_truth_bbox": gt_bbox,
+            "predicted_coordinate": list(predicted_coord) if predicted_coord else None,
+            "is_hit": hit,
         }
 
 
@@ -440,7 +678,7 @@ def _generate_all_presets() -> Dict[str, EvaluationPreset]:
     """Generate all possible evaluation configuration presets.
     
     Generates 12 total combinations:
-    - 3 models (gta1, qwen25vl, uitars15)
+    - 4 models (gta1, qwen25vl, uitars15, claude)
     - 2 reasoning modes (with/without)
     - 2 instruction types (direct_query, relational_query)
     
@@ -450,14 +688,15 @@ def _generate_all_presets() -> Dict[str, EvaluationPreset]:
     presets = {}
     
     # Define all model types explicitly
-    MODEL_TYPES = ["gta1", "qwen25vl", "uitars15"]
-    
+    MODEL_TYPES = ["gta1", "qwen25vl", "uitars15", "claude"]
+
     # Define all other dimensions explicitly
     REASONING_MODES = [False, True]
     MODEL_NAMES = {
         "gta1": "HelloKKMe/GTA1-7B",
         "qwen25vl": "Qwen/Qwen2.5-VL-7B-Instruct",
         "uitars15": "ByteDance-Seed/UI-TARS-1.5-7B",
+        "claude": "claude-sonnet-4-20250514",
     }
     INSTRUCTION_TYPES = [
         InstructionType.DIRECT_QUERY,
@@ -507,9 +746,7 @@ def parse_args() -> argparse.Namespace:
     """Parse command line arguments."""
     parser = argparse.ArgumentParser(description="evaluation script")
     
-    # CSV and output
-    parser.add_argument("--csv_path", type=Path, required=True, help="Path to CSV file")
-    parser.add_argument("--screenshots_base_dir", type=Path, required=True, help="Base directory containing screenshot folders")
+    # Output
     parser.add_argument("--output_dir", type=Path, required=True, help="Output directory")
     
     # Configuration selection
@@ -518,7 +755,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--dataset_variant", default=None, type=str, choices=["style", "precision", "text_zoom", "original"], help="Dataset variant to evaluate")
     
     # Model configuration (optional overrides)
-    parser.add_argument("--model_name", type=str, default='ByteDance-Seed/UI-TARS-1.5-7B', help="HuggingFace model identifier for vLLM (e.g., 'ByteDance-Seed/UI-TARS-1.5-7B')")
+    parser.add_argument("--model_name", type=str, default=None, help="Override model name for vLLM (e.g., path to local checkpoint)")
     parser.add_argument("--temperature", type=float, default=0.0)
     parser.add_argument("--max_tokens", type=int, default=1000)
     parser.add_argument("--top_p", type=float, default=0.9)
@@ -587,7 +824,7 @@ def build_config(args: argparse.Namespace) -> EvaluationConfig:
     logger.info(f"  max_tokens: {max_tokens}")
     
     model_config = ModelConfig(
-        name=preset.model_name,
+        name=args.model_name if args.model_name is not None else preset.model_name,
         model_type=preset.model_type,
         use_reasoning=preset.use_reasoning,
         temperature=args.temperature,
@@ -610,16 +847,18 @@ def build_config(args: argparse.Namespace) -> EvaluationConfig:
     )
     
     api_url = args.api_url or os.environ.get("VLLM_API_URL", "http://localhost:8000/v1")
-    api_key = args.api_key or os.environ.get("VLLM_API_KEY", "EMPTY")
+    if preset.model_type == "claude":
+        api_key = args.api_key or os.environ.get("ANTHROPIC_API_KEY", "")
+    else:
+        api_key = args.api_key or os.environ.get("VLLM_API_KEY", "EMPTY")
     
     return EvaluationConfig(
-        csv_path=args.csv_path,
-        screenshots_base_dir=args.screenshots_base_dir,
         output_dir=args.output_dir,
         model_config=model_config,
         dataset_config=dataset_config,
         api_url=api_url,
         api_key=api_key,
+        config_id=args.config_id,
         save_interval=args.save_interval,
     )
 
@@ -641,9 +880,7 @@ def main():
 
 
 """
-uv run eval/gui_perturbed_evaluator.py \
-    --csv_path /Users/lockewang/FIG/WebDomainRandomizer/data/variant_data_cleaned.csv \
-    --screenshots_base_dir /Users/lockewang/FIG/WebDomainRandomizer/test_splits/ \
+uv run scripts/gui_perturbed_evaluator.py \
     --output_dir data/gui_perturbed_eval/predictions \
     --seed 42 \
     --config_id gta1_no_reasoning_direct_query
