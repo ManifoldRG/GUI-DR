@@ -1,0 +1,73 @@
+% ============================================================
+% 5.1 Visual Perturbations Break Models That Benchmarks Call Robust
+% ============================================================
+
+% [TODO filled in] Report with CIs and McNemar p-values:
+
+Precision perturbation produced statistically significant accuracy drops
+in 9 of 12 paired comparisons (McNemar's $p < 0.05$). The effect was
+most pronounced on relational queries:
+
+\begin{itemize}[nosep]
+  \item \textbf{GTA-1}: direct 92.8\% (95\% CI [90.3, 95.3])
+    $\to$ 89.2\% (CI [86.0, 92.2]), drop 3.6\,pp
+    (CI [0.4, 6.8], $p = 0.006$);
+    relational 65.8\% (CI [61.0, 70.4])
+    $\to$ 57.8\% (CI [52.9, 62.7]), drop 7.9\,pp
+    (CI [3.5, 12.4], $p < 0.001$).
+  \item \textbf{UI-TARS-1.5}: direct 91.0\% (CI [88.1, 93.8])
+    $\to$ 84.9\% (CI [81.3, 88.3]), drop 6.2\,pp
+    (CI [2.7, 9.6], $p < 0.001$);
+    relational 35.0\% (CI [30.4, 39.7])
+    $\to$ 29.6\% (CI [25.0, 34.2]), drop 5.4\,pp
+    (CI [1.3, 9.6], $p = 0.008$).
+    UI-TARS-1.5 was the only model where precision perturbation was
+    significant in all 4 configurations (4/4).
+  \item \textbf{Qwen2.5-VL}: direct 86.9\% (CI [83.6, 90.0])
+    $\to$ 83.6\% (CI [79.9, 87.2]), drop 3.3\,pp
+    (CI [$-$0.3, 6.9], $p = 0.071$, n.s.);
+    relational 45.0\% (CI [40.1, 49.9])
+    $\to$ 40.1\% (CI [35.3, 45.0]), drop 4.9\,pp
+    (CI [0.9, 8.8], $p = 0.023$).
+\end{itemize}
+
+% "Some perturbations inadvertently help" paragraph:
+
+Some perturbations inadvertently improved accuracy on individual
+configurations---for example, style perturbation on relational queries
+with chain-of-thought for GTA-1 (63.1\% $\to$ 65.1\%, $+$2.1\,pp)---though
+none of these improvements reached significance (all $p > 0.4$).
+Similar non-significant improvements appeared for text-shrink on
+UI-TARS-1.5 direct queries (92.8\% $\to$ 93.8\%, $p = 0.45$).
+
+
+% ============================================================
+% 5.2 Spatial Reasoning Is the Weakest Link
+% ============================================================
+
+% [TODO filled in] Report with CIs and significance tests:
+
+Relational instructions caused 27--56\,pp accuracy drops compared to
+direct instructions. All comparisons were significant at $p < 0.001$
+(two-proportion $z$-test):
+
+\begin{itemize}[nosep]
+  \item \textbf{GTA-1}: 92.8\% (95\% CI [90.3, 95.3])
+    $\to$ 65.8\% (CI [61.0, 70.4]),
+    drop 27.1\,pp ($z = 8.61$--$10.02$, $p < 0.001$).
+  \item \textbf{Qwen2.5-VL}: 86.9\% (CI [83.6, 90.0])
+    $\to$ 45.0\% (CI [40.1, 49.9]),
+    drop 41.9\,pp ($z = 11.83$--$12.88$, $p < 0.001$).
+  \item \textbf{UI-TARS-1.5}: 91.0\% (CI [88.1, 93.8])
+    $\to$ 35.0\% (CI [30.4, 39.7]),
+    drop 56.0\,pp ($z = 14.25$--$18.15$, $p < 0.001$).
+\end{itemize}
+
+The effect was consistent across reasoning modes, though UI-TARS-1.5
+showed the largest reasoning-mode gap: 63.3\,pp drop without reasoning
+versus 48.7\,pp with reasoning, suggesting chain-of-thought partially
+mitigates the spatial reasoning deficit but does not resolve it.
+
+The 95\% bootstrap CIs for direct and relational hit rates do not
+overlap for any model, confirming these are not marginal differences
+but fundamental capability gaps.

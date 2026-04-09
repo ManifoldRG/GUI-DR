@@ -1,0 +1,127 @@
+% === Methods paragraph (for Methods / Evaluation Metrics section) ===
+\paragraph{Evaluation Metrics.}
+We evaluate perturbation robustness along three complementary dimensions,
+each computed over $n$ matched sample pairs (same task and step evaluated on
+both the original and perturbed screenshot):
+
+\begin{itemize}[nosep]
+  \item \textbf{Hit rate} --- the proportion of predictions that fall inside
+    the ground-truth bounding box. We report 95\% bootstrap confidence
+    intervals (10{,}000 resamples) for all hit rates; exact binomial
+    (Clopper--Pearson) intervals agreed within 0.2\,pp throughout and are
+    omitted for brevity.
+  \item \textbf{Flip rate} --- the fraction of matched pairs whose binary
+    outcome (hit/miss) changed between the original and the perturbed
+    condition. This measures \emph{prediction consistency}: a high flip rate
+    indicates the model's output is sensitive to the perturbation, regardless
+    of whether accuracy improves or degrades on average.
+  \item \textbf{Net~$\Delta$} --- the difference in hit rate between the
+    original and perturbed conditions (original $-$ perturbed), with 95\%
+    bootstrap CI. A positive $\Delta$ indicates degradation. We test
+    significance with McNemar's test on the $2\times2$ table of concordant
+    and discordant pairs, reporting $p$-values with continuity correction
+    (exact binomial $p$ for cells $<25$).
+\end{itemize}
+
+Flip rate and net~$\Delta$ decompose the perturbation effect: a perturbation
+can cause many individual predictions to change (high flip rate) without
+shifting overall accuracy (low $\Delta$), if roughly equal numbers of
+samples degrade and improve. Conversely, a perturbation with a high
+$\Delta$ necessarily has a high flip rate with an asymmetric split between
+degraded and improved samples.
+
+% === Baseline robustness table ===
+\begin{table*}[ht]
+\centering
+\caption{Perturbation robustness of baseline models ($n = 390$ matched sample pairs per test).}
+\label{tab:robustness-baseline}
+\small
+\begin{tabular}{llc cc cc cc}
+\toprule
+ & & & \multicolumn{2}{c}{\textbf{Flip Rate}} & \multicolumn{2}{c}{\textbf{Net $\Delta$ (\%)}} & & \\
+\cmidrule(lr){4-5} \cmidrule(lr){6-7}
+\textbf{Model} & \textbf{Pert.} & \textbf{Baseline Acc.} & \textbf{Direct} & \textbf{Rel.} & \textbf{Direct} & \textbf{Rel.} & $\boldsymbol{b}$\,/\,$\boldsymbol{c}$ & \textbf{Sig.} \\
+\midrule
+GTA-1 & Precision & 79.3 & 10.3\% & 21.5\% & +3.6** & +7.9*** & 169/79 & 3/4 \\
+ & Style &  & 9.7\% & 21.5\% & +1.3 & -0.3 & 126/118 & 0/4 \\
+ & Text Shrink &  & 4.2\% & 16.7\% & +0.4 & +1.8 & 90/73 & 0/4 \\
+\midrule
+Qwen2.5-VL & Precision & 66.0 & 13.1\% & 16.4\% & +3.3 & +4.9* & 147/83 & 2/4 \\
+ & Style &  & 8.7\% & 19.1\% & +2.8** & +0.1 & 120/97 & 1/4 \\
+ & Text Shrink &  & 7.8\% & 14.4\% & +0.1 & +2.8 & 98/75 & 0/4 \\
+\midrule
+UI-TARS-1.5 & Precision & 63.0 & 13.1\% & 18.7\% & +6.2*** & +5.4** & 169/79 & 4/4 \\
+ & Style &  & 11.2\% & 19.2\% & +2.4 & +1.0 & 132/105 & 0/4 \\
+ & Text Shrink &  & 6.9\% & 14.1\% & -0.8 & +0.0 & 79/85 & 0/4 \\
+\bottomrule
+\end{tabular}
+\vspace{6pt}
+\begin{minipage}{\textwidth}
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{@{} >{\bfseries}l @{\hspace{8pt}} p{0.80\textwidth} @{}}
+Baseline Acc. & Hit rate (\%) on unperturbed (original) screenshots, averaged across reasoning modes and query types. This is the model\textquotesingle s accuracy \emph{before} any perturbation is applied. \\[2pt]
+Flip Rate & Fraction of matched sample pairs whose binary outcome (hit/miss) \emph{changed} between original and perturbed conditions. Reported separately for \textbf{Direct} (direct-instruction) and \textbf{Rel.}\ (relational-instruction) queries. \\[2pt]
+Net\,$\Delta$ & Hit-rate drop in percentage points (original $-$ perturbed). Positive values mean the perturbation \emph{degraded} accuracy. \\[2pt]
+$b$\,/\,$c$ & Count of samples that degraded ($b$: correct$\,\to\,$wrong) vs.\ improved ($c$: wrong$\,\to\,$correct), aggregated across all configurations. When $b \gg c$, the perturbation causes systematic, directional degradation. \\[2pt]
+Sig. & Number of significant McNemar tests ($p < 0.05$) out of 4 total (2 reasoning modes $\times$ 2 query types). \\[2pt]
+{*\,/\,**\,/\,***} & McNemar\textquotesingle s $p < 0.05$\,/\,$p < 0.01$\,/\,$p < 0.001$. \\
+\end{tabular}
+\end{minipage}
+\end{table*}
+
+% === Finetuned robustness table ===
+\begin{table*}[ht]
+\centering
+\caption{Perturbation robustness of finetuned models ($n = 429$ matched sample pairs per test). Same metrics and notation as Table~\ref{tab:robustness-baseline}.}
+\label{tab:robustness-finetuned}
+\scriptsize
+\begin{tabular}{llc cc cc cc}
+\toprule
+ & & & \multicolumn{2}{c}{\textbf{Flip Rate}} & \multicolumn{2}{c}{\textbf{Net $\Delta$ (\%)}} & & \\
+\cmidrule(lr){4-5} \cmidrule(lr){6-7}
+\textbf{Model} & \textbf{Pert.} & \textbf{Baseline Acc.} & \textbf{Direct} & \textbf{Rel.} & \textbf{Direct} & \textbf{Rel.} & $\boldsymbol{b}$\,/\,$\boldsymbol{c}$ & \textbf{Sig.} \\
+\midrule
+UI-TARS-1.5 (base) & Precision & 61.7 & 12.5\% & 18.3\% & +5.0*** & +5.5** & 177/87 & 4/4 \\
+ & Style &  & 12.0\% & 19.1\% & +3.1 & +0.9 & 151/116 & 0/4 \\
+ & Text Shrink &  & 6.5\% & 13.9\% & -0.7 & +0.1 & 85/90 & 0/4 \\
+\midrule
+FT-All (6.5k) & Precision & 61.2 & 13.5\% & 19.0\% & +4.7** & +5.2** & 182/97 & 3/4 \\
+ & Style &  & 15.5\% & 18.6\% & +2.7 & +1.2 & 163/130 & 0/4 \\
+ & Text Shrink &  & 7.9\% & 13.1\% & +0.7 & +2.1 & 102/78 & 0/4 \\
+\midrule
+FT-Style (6.5k) & Precision & 61.1 & 13.8\% & 18.4\% & +4.9** & +5.1** & 181/95 & 3/4 \\
+ & Style &  & 15.4\% & 17.8\% & +2.8 & +1.3 & 160/125 & 0/4 \\
+ & Text Shrink &  & 7.9\% & 12.8\% & +0.7 & +1.9 & 100/78 & 0/4 \\
+\midrule
+FT-TextShrink (6.5k) & Precision & 61.2 & 13.8\% & 18.9\% & +4.9** & +5.6** & 185/95 & 3/4 \\
+ & Style &  & 15.3\% & 18.6\% & +2.7 & +1.6 & 164/127 & 0/4 \\
+ & Text Shrink &  & 7.8\% & 12.7\% & +0.6 & +2.0 & 99/77 & 0/4 \\
+\midrule
+FT-All (25k, 3ep) & Precision & 59.6 & 14.5\% & 21.6\% & +5.6*** & +5.5** & 202/107 & 3/4 \\
+ & Style &  & 16.4\% & 21.1\% & +4.3** & +0.3 & 181/141 & 1/4 \\
+ & Text Shrink &  & 9.4\% & 14.7\% & +1.0 & +0.9 & 112/95 & 0/4 \\
+\midrule
+FT-Salesforce (25k) & Precision & 61.2 & 13.2\% & 18.8\% & +5.0** & +5.2** & 181/93 & 3/4 \\
+ & Style &  & 14.9\% & 18.9\% & +2.6 & +1.2 & 161/129 & 0/4 \\
+ & Text Shrink &  & 7.6\% & 12.2\% & +0.6 & +2.2 & 97/73 & 0/4 \\
+\midrule
+FT-Perturbed (25k) & Precision & 61.1 & 13.9\% & 18.9\% & +4.8** & +5.1** & 183/98 & 3/4 \\
+ & Style &  & 15.2\% & 18.6\% & +2.8 & +0.9 & 161/129 & 0/4 \\
+ & Text Shrink &  & 7.6\% & 12.7\% & +0.6 & +1.7 & 97/77 & 0/4 \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+% === Results prose (for Results section) ===
+\paragraph{Baseline Models (Table~\ref{tab:robustness-baseline}).}
+Precision perturbation was the dominant source of degradation across all three baseline models, reaching significance in {\bfseries 9}/12 McNemar tests ($p < 0.05$), compared to 1/12 for style and 0/12 for text-shrink. The effect was consistently unidirectional: 485 samples degraded versus 241 improved ($b$/$c$ ratio $\approx$ 2.0:1), whereas style perturbation produced a near-symmetric split (378 degraded vs.\ 320 improved, 1.2:1).
+
+GTA-1 showed the largest single drop on relational queries, where precision perturbation reduced hit rate from 68.5\% (95\% CI [63.8, 73.1]) to 58.5\%, a drop of 10.0\,pp ($p < 0.001$). 
+UI-TARS-1.5 was most affected on direct queries with a 6.4\,pp drop ($p < 0.001$), and was the only model where precision perturbation was significant in all 4 configurations (4/4). 
+Qwen2.5-VL showed moderate sensitivity, with precision perturbation significant primarily on relational queries (2/4 significant).
+
+Importantly, the lack of significance for style and text-shrink perturbations does not mean these perturbations had no effect on individual predictions. Style perturbation flipped 698 of 4680 sample pairs (14.9\% flip rate), comparable to precision's 726 flips (15.5\%). However, because style flips were roughly bidirectional (378 degraded vs.\ 320 improved), the net accuracy change was not statistically distinguishable from zero. This reveals a distinction between \emph{robustness} (net $\Delta$) and \emph{consistency} (flip rate): all three perturbation types cause substantial prediction instability, but only precision perturbation does so in a systematically harmful direction.
+
+\paragraph{Finetuned Models (Table~\ref{tab:robustness-finetuned}).}
+After finetuning, precision perturbation remained the primary source of significant degradation (22/28 tests significant), while style (1/28) and text-shrink (0/28) perturbations remained non-significant. None of the finetuning strategies---whether trained on all perturbation types (FT-All), a single perturbation type (FT-Style, FT-TextShrink), or scaled to 25k samples---substantially reduced the precision vulnerability. The $b$/$c$ ratios for precision remained close to 2:1 across all finetuned variants, indicating that the directional nature of the degradation persisted. Flip rates for style perturbation were comparable to or slightly higher than the baseline, suggesting finetuning did not improve prediction consistency either.
