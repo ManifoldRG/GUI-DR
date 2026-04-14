@@ -245,7 +245,7 @@ def make_unified_table_finetuned():
     lines = []
     lines.append(r'\begin{table*}[ht]')
     lines.append(r'\centering')
-    lines.append(r'\caption{Perturbation robustness of finetuned models ($n = 429$ matched sample pairs per test). Same metrics and notation as Table~\ref{tab:robustness-baseline}.}')
+    lines.append(r'\caption{Perturbation robustness of finetuned models ($n = 390$ matched sample pairs per test). Same metrics and notation as Table~\ref{tab:robustness-baseline}.}')
     lines.append(r'\label{tab:robustness-finetuned}')
     lines.append(r'\scriptsize')
     lines.append(r'\begin{tabular}{llc cc cc cc}')

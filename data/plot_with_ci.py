@@ -389,6 +389,21 @@ def load_finetuned():
     df_all = pd.concat(model_dfs, ignore_index=True)
     print(f"  finetuned total: {len(df_all)} rows, models: {sorted(df_all['model'].unique())}")
 
+    # --- Filter Invalid samples (same task-level labels as baseline) ---
+    csv_path = os.path.join(SCRIPT_DIR, 'baseline_results_full_new_cleaned.csv')
+    csv_df = pd.read_csv(csv_path)
+    invalid_keys = csv_df[csv_df['interesting_cases'] == 'Invalid'][
+        ['task_id', 'step_index', 'variant']].drop_duplicates()
+    invalid_set = set(zip(invalid_keys['task_id'], invalid_keys['step_index'], invalid_keys['variant']))
+
+    n_bl = len(df_baseline_uitars)
+    n_ft = len(df_all)
+    df_baseline_uitars = df_baseline_uitars[~df_baseline_uitars.apply(
+        lambda r: (r['task_id'], r['step_index'], r['variant']) in invalid_set, axis=1)].copy()
+    df_all = df_all[~df_all.apply(
+        lambda r: (r['task_id'], r['step_index'], r['variant']) in invalid_set, axis=1)].copy()
+    print(f"  Filtered Invalid: baseline {n_bl} -> {len(df_baseline_uitars)}, finetuned {n_ft} -> {len(df_all)}")
+
     # --- Parse actions + compute hit_box_accuracy (cells 16-19) ---
     print("[Finetuned] Parsing actions for all finetuned models...")
     df_all['structured_actions'] = df_all['raw_prediction'].apply(parse_action_to_structure_output)

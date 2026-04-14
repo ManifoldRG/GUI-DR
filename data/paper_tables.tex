@@ -73,7 +73,7 @@ Sig. & Number of significant McNemar tests ($p < 0.05$) out of 4 total (2 reason
 % === Finetuned robustness table ===
 \begin{table*}[ht]
 \centering
-\caption{Perturbation robustness of finetuned models ($n = 429$ matched sample pairs per test). Same metrics and notation as Table~\ref{tab:robustness-baseline}.}
+\caption{Perturbation robustness of finetuned models ($n = 390$ matched sample pairs per test). Same metrics and notation as Table~\ref{tab:robustness-baseline}.}
 \label{tab:robustness-finetuned}
 \scriptsize
 \begin{tabular}{llc cc cc cc}
@@ -82,33 +82,33 @@ Sig. & Number of significant McNemar tests ($p < 0.05$) out of 4 total (2 reason
 \cmidrule(lr){4-5} \cmidrule(lr){6-7}
 \textbf{Model} & \textbf{Pert.} & \textbf{Baseline Acc.} & \textbf{Direct} & \textbf{Rel.} & \textbf{Direct} & \textbf{Rel.} & $\boldsymbol{b}$\,/\,$\boldsymbol{c}$ & \textbf{Sig.} \\
 \midrule
-UI-TARS-1.5 (base) & Precision & 61.7 & 12.5\% & 18.3\% & +5.0*** & +5.5** & 177/87 & 4/4 \\
- & Style &  & 12.0\% & 19.1\% & +3.1 & +0.9 & 151/116 & 0/4 \\
- & Text Shrink &  & 6.5\% & 13.9\% & -0.7 & +0.1 & 85/90 & 0/4 \\
+UI-TARS-1.5 (base) & Precision & 63.3 & 11.8\% & 18.7\% & +5.6*** & +5.4** & 162/76 & 4/4 \\
+ & Style &  & 11.2\% & 19.1\% & +2.7 & +1.2 & 133/103 & 0/4 \\
+ & Text Shrink &  & 6.5\% & 14.2\% & -0.9 & -0.1 & 77/85 & 0/4 \\
 \midrule
-FT-All (6.5k) & Precision & 61.2 & 13.5\% & 19.0\% & +4.7** & +5.2** & 182/97 & 3/4 \\
- & Style &  & 15.5\% & 18.6\% & +2.7 & +1.2 & 163/130 & 0/4 \\
- & Text Shrink &  & 7.9\% & 13.1\% & +0.7 & +2.1 & 102/78 & 0/4 \\
+FT-All (6.5k) & Precision & 63.1 & 12.7\% & 19.7\% & +5.5** & +5.6** & 170/83 & 4/4 \\
+ & Style &  & 14.1\% & 18.7\% & +2.8 & +1.3 & 144/112 & 0/4 \\
+ & Text Shrink &  & 6.9\% & 13.5\% & +1.0 & +2.4 & 93/66 & 0/4 \\
 \midrule
-FT-Style (6.5k) & Precision & 61.1 & 13.8\% & 18.4\% & +4.9** & +5.1** & 181/95 & 3/4 \\
- & Style &  & 15.4\% & 17.8\% & +2.8 & +1.3 & 160/125 & 0/4 \\
- & Text Shrink &  & 7.9\% & 12.8\% & +0.7 & +1.9 & 100/78 & 0/4 \\
+FT-Style (6.5k) & Precision & 63.1 & 12.9\% & 19.0\% & +5.8** & +5.6** & 169/80 & 4/4 \\
+ & Style &  & 14.0\% & 18.1\% & +2.9 & +1.4 & 142/108 & 0/4 \\
+ & Text Shrink &  & 6.9\% & 12.9\% & +1.0 & +2.2 & 90/65 & 0/4 \\
 \midrule
-FT-TextShrink (6.5k) & Precision & 61.2 & 13.8\% & 18.9\% & +4.9** & +5.6** & 185/95 & 3/4 \\
- & Style &  & 15.3\% & 18.6\% & +2.7 & +1.6 & 164/127 & 0/4 \\
- & Text Shrink &  & 7.8\% & 12.7\% & +0.6 & +2.0 & 99/77 & 0/4 \\
+FT-TextShrink (6.5k) & Precision & 63.1 & 12.9\% & 19.6\% & +5.8** & +6.0** & 173/81 & 4/4 \\
+ & Style &  & 13.8\% & 18.8\% & +2.8 & +1.7 & 145/110 & 0/4 \\
+ & Text Shrink &  & 6.8\% & 12.9\% & +0.9 & +2.2 & 89/65 & 0/4 \\
 \midrule
-FT-All (25k, 3ep) & Precision & 59.6 & 14.5\% & 21.6\% & +5.6*** & +5.5** & 202/107 & 3/4 \\
- & Style &  & 16.4\% & 21.1\% & +4.3** & +0.3 & 181/141 & 1/4 \\
- & Text Shrink &  & 9.4\% & 14.7\% & +1.0 & +0.9 & 112/95 & 0/4 \\
+FT-All (25k, 3ep) & Precision & 61.4 & 13.1\% & 21.7\% & +5.9*** & +5.8** & 181/90 & 3/4 \\
+ & Style &  & 15.6\% & 21.4\% & +4.4** & +0.6 & 164/125 & 1/4 \\
+ & Text Shrink &  & 8.7\% & 14.9\% & +1.5 & +1.3 & 103/81 & 0/4 \\
 \midrule
-FT-Salesforce (25k) & Precision & 61.2 & 13.2\% & 18.8\% & +5.0** & +5.2** & 181/93 & 3/4 \\
- & Style &  & 14.9\% & 18.9\% & +2.6 & +1.2 & 161/129 & 0/4 \\
- & Text Shrink &  & 7.6\% & 12.2\% & +0.6 & +2.2 & 97/73 & 0/4 \\
+FT-Salesforce (25k) & Precision & 62.9 & 12.7\% & 19.5\% & +5.8** & +5.4* & 169/82 & 4/4 \\
+ & Style &  & 13.8\% & 18.8\% & +2.6 & +1.2 & 142/113 & 0/4 \\
+ & Text Shrink &  & 6.8\% & 12.3\% & +0.6 & +2.3 & 86/63 & 0/4 \\
 \midrule
-FT-Perturbed (25k) & Precision & 61.1 & 13.9\% & 18.9\% & +4.8** & +5.1** & 183/98 & 3/4 \\
- & Style &  & 15.2\% & 18.6\% & +2.8 & +0.9 & 161/129 & 0/4 \\
- & Text Shrink &  & 7.6\% & 12.7\% & +0.6 & +1.7 & 97/77 & 0/4 \\
+FT-Perturbed (25k) & Precision & 62.9 & 13.2\% & 19.5\% & +5.5** & +5.4* & 170/85 & 4/4 \\
+ & Style &  & 13.8\% & 18.6\% & +2.8 & +1.2 & 142/111 & 0/4 \\
+ & Text Shrink &  & 6.7\% & 12.9\% & +0.8 & +1.9 & 87/66 & 0/4 \\
 \bottomrule
 \end{tabular}
 \end{table*}
@@ -124,4 +124,4 @@ Qwen2.5-VL showed moderate sensitivity, with precision perturbation significant 
 Importantly, the lack of significance for style and text-shrink perturbations does not mean these perturbations had no effect on individual predictions. Style perturbation flipped 698 of 4680 sample pairs (14.9\% flip rate), comparable to precision's 726 flips (15.5\%). However, because style flips were roughly bidirectional (378 degraded vs.\ 320 improved), the net accuracy change was not statistically distinguishable from zero. This reveals a distinction between \emph{robustness} (net $\Delta$) and \emph{consistency} (flip rate): all three perturbation types cause substantial prediction instability, but only precision perturbation does so in a systematically harmful direction.
 
 \paragraph{Finetuned Models (Table~\ref{tab:robustness-finetuned}).}
-After finetuning, precision perturbation remained the primary source of significant degradation (22/28 tests significant), while style (1/28) and text-shrink (0/28) perturbations remained non-significant. None of the finetuning strategies---whether trained on all perturbation types (FT-All), a single perturbation type (FT-Style, FT-TextShrink), or scaled to 25k samples---substantially reduced the precision vulnerability. The $b$/$c$ ratios for precision remained close to 2:1 across all finetuned variants, indicating that the directional nature of the degradation persisted. Flip rates for style perturbation were comparable to or slightly higher than the baseline, suggesting finetuning did not improve prediction consistency either.
+After finetuning, precision perturbation remained the primary source of significant degradation (27/28 tests significant), while style (1/28) and text-shrink (0/28) perturbations remained non-significant. None of the finetuning strategies---whether trained on all perturbation types (FT-All), a single perturbation type (FT-Style, FT-TextShrink), or scaled to 25k samples---substantially reduced the precision vulnerability. The $b$/$c$ ratios for precision remained close to 2:1 across all finetuned variants, indicating that the directional nature of the degradation persisted. Flip rates for style perturbation were comparable to or slightly higher than the baseline, suggesting finetuning did not improve prediction consistency either.

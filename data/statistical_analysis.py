@@ -10,6 +10,71 @@ Implements:
 Data loading replicates the exact logic from:
   - baseline_data_visualization_v3.ipynb  (baseline: 3 models)
   - finetuned_data_visualization_v3.ipynb (finetuned: UI-TARS variants)
+
+
+The full logic walkthrough:
+                                                                                             
+  How the numbers flow                                                                       
+   
+  Step 1: Matching (statistical_analysis.py, line 807-835)                                   
+                                                                                           
+  For each group (e.g., GTA-1 / no reasoning / direct query), samples are matched across     
+  variants by (task_id, step_index) via inner join. This produces a table like:            
+                                                                                             
+  ┌─────────┬────────────┬──────────────┬───────────────┬───────────┬─────────────────┐      
+  │ task_id │ step_index │ hit_original │ hit_precision │ hit_style │ hit_text_shrink │
+  ├─────────┼────────────┼──────────────┼───────────────┼───────────┼─────────────────┤      
+  │ task_42 │ 3          │ 1            │ 1             │ 1         │ 1               │
+  ├─────────┼────────────┼──────────────┼───────────────┼───────────┼─────────────────┤
+  │ task_42 │ 5          │ 1            │ 0             │ 1         │ 1               │      
+  ├─────────┼────────────┼──────────────┼───────────────┼───────────┼─────────────────┤      
+  │ task_99 │ 1          │ 0            │ 0             │ 1         │ 0               │      
+  └─────────┴────────────┴──────────────┴───────────────┴───────────┴─────────────────┘      
+                  
+  Step 2: McNemar 2×2 table (statistical_analysis.py, line 724-779)                          
+  
+  For each matched group, comparing original vs. one perturbation:                           
+                  
+                Perturbed=1   Perturbed=0                                                    
+  Original=1      a              b  (degraded: was right, now wrong)                         
+  Original=0      c              d                                                           
+                  (improved)                                                                 
+                                                                                             
+  - b = sum(orig==1 & pert==0) — samples that broke                                          
+  - c = sum(orig==0 & pert==1) — samples that got fixed
+  - diff = mean(orig) - mean(pert) = (b-c)/n — verified: these are algebraically identical   
+  (confirmed above: 0.0231 == 0.0231)                                                        
+  
+  Step 3: Table aggregation (generate_paper_tables.py, line 119-131)                         
+                  
+  For the table, we aggregate across the 2 reasoning modes within each (model × perturbation 
+  × query_type):  
+                                                                                             
+  - flip_rate = (b_total + c_total) / n_total where totals are summed across reasoning modes.
+   So (54+26)/780 = 10.3%. This is correct — it's the total fraction of matched pairs that
+  flipped.                                                                                   
+  - net_diff = mean of per-reasoning diffs = (0.0231 + 0.0487)/2 = 0.0359 = 3.6%. This is the
+   average drop across reasoning modes.                                                      
+  - Verify consistency: (b_total - c_total) / n_total = (54-26)/780 = 0.0359 = 3.6% — matches
+   the averaged diff. This works because both reasoning modes have the same n (390), so      
+  averaging diffs equals pooling b/c.
+                                                                                             
+  Potential concern: averaging CIs                                                           
+  
+  Line 127-128 averages diff_ci_lo and diff_ci_hi across reasoning modes. This is an         
+  approximation — the correct way would be to bootstrap the pooled data. But since both
+  groups have the same n=390, this averaging is reasonable and conservative (the true pooled 
+  CI would be tighter).
+
+  Verdict
+
+  The math checks out:
+  - diff = (b-c)/n — verified algebraically identical to mean(orig) - mean(pert)
+  - flip_rate = (b+c)/n — correct definition                                                 
+  - Aggregation across reasoning modes is consistent (pooling b/c gives same result as
+  averaging diffs)                                                                           
+  - The one approximation is the CI averaging, which is acceptable for reporting
+
 """
 
 import json
@@ -635,6 +700,24 @@ def load_finetuned_from_jsonl():
 
     print(f"  Loaded finetuned df_all: {len(df_all)} rows, models: {sorted(df_all['model'].unique())}")
     print(f"  Loaded baseline (uitars15): {len(df_baseline)} rows")
+
+    # --- Filter Invalid samples (same task-level labels as baseline) ---
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    csv_path = os.path.join(script_dir, 'baseline_results_full_new_cleaned.csv')
+    csv_df = pd.read_csv(csv_path)
+    invalid_keys = csv_df[csv_df['interesting_cases'] == 'Invalid'][
+        ['task_id', 'step_index', 'variant']].drop_duplicates()
+    invalid_set = set(zip(invalid_keys['task_id'], invalid_keys['step_index'], invalid_keys['variant']))
+
+    n_before_bl = len(df_baseline)
+    n_before_ft = len(df_all)
+    df_baseline = df_baseline[~df_baseline.apply(
+        lambda r: (r['task_id'], r['step_index'], r['variant']) in invalid_set, axis=1)].copy()
+    df_all = df_all[~df_all.apply(
+        lambda r: (r['task_id'], r['step_index'], r['variant']) in invalid_set, axis=1)].copy()
+    print(f"  Filtered Invalid: baseline {n_before_bl} -> {len(df_baseline)}, "
+          f"finetuned {n_before_ft} -> {len(df_all)}")
+
     return df_baseline, df_all
 
 
