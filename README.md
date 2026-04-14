@@ -358,7 +358,7 @@ If you find GUI-Perturbed or this pipeline useful, please cite the dataset and t
 
 @online{measuring_gui_models_robustness_technical_report_2026,
   title   = {Measuring Brittleness in GUI Grounding Models using GUI-Perturbed},
-  author  = {Wang, Yangyue and Mathur, Yash, and Zhou, Tony and Nyachhyon, Jinu and Guruprasad, Pranav and Sikka, Harsh},
+  author  = {Wang, Yangyue and Sikka, Harsh and Mathur, Yash, and Zhou, Tony and Nyachhyon, Jinu and Guruprasad, Pranav},
   year    = {2026},
   url     = {https://blog.fig.inc/measuring-brittleness-in-gui-grounding-models-using-gui-perturbed},
   note    = {Part 2: Baseline evaluation}
@@ -366,7 +366,7 @@ If you find GUI-Perturbed or this pipeline useful, please cite the dataset and t
 
 @online{training_on_gui_perturbed_technical_report_2026,
   title   = {Training on GUI-Perturbed: Why More Data Isn’t Enough},
-  author  = {Wang, Yangyue and Mathur, Yash, and Zhou, Tony and Nyachhyon, Jinu and Guruprasad, Pranav and Sikka, Harsh},
+  author  = {Wang, Yangyue and Sikka, Harsh and Mathur, Yash, and Zhou, Tony and Nyachhyon, Jinu and Guruprasad, Pranav},
   year    = {2026},
   url     = {https://blog.fig.inc/training-on-gui-perturbed-why-more-data-isnt-enough},
   note    = {Part 3: Finetuning Experiments}
