@@ -12,6 +12,7 @@
 <summary>
   <img src="https://img.shields.io/badge/Technical_Reports-Fig-007ec6?style=flat-square" alt="Technical Reports | Fig" height="20">
   <a href="https://huggingface.co/datasets/figai/GUI-Perturbed"><img src="https://img.shields.io/badge/Data-HuggingFace-yellow?style=flat-square&logo=huggingface" alt="Hugging Face Data"></a>
+  <a href="https://arxiv.org/abs/2604.14262"><img src="https://img.shields.io/badge/arXiv-2604.14262-b31b1b?style=flat-square&logo=arxiv" alt="arXiv"></a>
   <a href="https://github.com/ManifoldRG/GUI-DR"><img src="https://img.shields.io/badge/GUI--DR-GitHub-blueviolet?style=flat-square&logo=github" alt="GUI-DR GitHub"></a>
   <a href="https://discord.gg/J9Auc4f4AT"><img src="https://img.shields.io/badge/Contribute-Discord-7289DA?style=flat-square&logo=discord" alt="Contribute on Discord"></a>
 </summary>
@@ -65,7 +66,8 @@ GUI grounding models often rely on visual primitives (shape, position, color) ra
 
 ## 📢 Updates
 
-- **2026-04** Initial release of [GUI-Perturbed](https://huggingface.co/datasets/figai/GUI-Perturbed), [technical report](https://blog.fig.inc/gui-perturbed-a-domain-randomization-dataset-for-gui-grounding/), and data generation pipeline [GUI-DR](https://github.com/ManifoldRG/GUI-DR).
+- **2026-04:** Preprint live on arXiv: [GUI-Perturbed: Domain Randomization Reveals Systematic Brittleness in GUI Grounding Models](https://arxiv.org/abs/2604.14262).
+- **2026-04:** Initial release of [GUI-Perturbed](https://huggingface.co/datasets/figai/GUI-Perturbed), [technical report](https://blog.fig.inc/gui-perturbed-a-domain-randomization-dataset-for-gui-grounding/), and data generation pipeline [GUI-DR](https://github.com/ManifoldRG/GUI-DR).
 
 ---
 
@@ -329,9 +331,19 @@ Our finetuning experiments were built on [Qwen-VL-Series-Finetune](https://githu
 
 ## 📄 Citation
 
-If you find GUI-Perturbed or this pipeline useful, please cite the dataset and technical report series.
+If you find GUI-Perturbed or this pipeline useful, please consider citing the arXiv preprint, dataset, and technical report series.
 
 ```bibtex
+@misc{wang2026guiperturbed,
+  title         = {GUI-Perturbed: Domain Randomization Reveals Systematic Brittleness in GUI Grounding Models},
+  author        = {Wang, Yangyue and Sikka, Harsh and Mathur, Yash and Zhou, Tony and Nyachhyon, Jinu and Guruprasad, Pranav},
+  year          = {2026},
+  eprint        = {2604.14262},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.AI},
+  url           = {https://arxiv.org/abs/2604.14262}
+}
+
 @dataset{gui_perturbed_2026,
   title   = {GUI-Perturbed: A Domain-Randomized Dataset for GUI Grounding},
   author  = {Wang, Yangyue and Sikka, Harsh and Mathur, Yash, and Zhou, Tony and Nyachhyon, Jinu and Guruprasad, Pranav},
