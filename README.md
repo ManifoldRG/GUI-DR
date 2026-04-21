@@ -215,7 +215,7 @@ Instructions are generated per step from parquet `target_action_reprs` via [gene
 |----------|-------------|
 | **[GUI-Perturbed](https://huggingface.co/datasets/figai/GUI-Perturbed)** | Released evaluation data (screenshots, instructions, ground-truth bboxes). |
 | **[Baseline result viewer](https://huggingface.co/spaces/figai/GUI-Perturbed-Baseline-Result-Viewer)** | Streamlit Space: baseline 7B GUI grounding predictions on original vs perturbed screenshots. |
-| **[Finetuned result viewer](https://huggingface.co/spaces/figai/GUI-Perturbed-Finetuned-Result-Viewer)** | Streamlit Space: finetuned-checkpoint predictions, same layout as the baseline viewer. |
+<!-- | **[Finetuned result viewer](https://huggingface.co/spaces/figai/GUI-Perturbed-Finetuned-Result-Viewer)** | Streamlit Space: finetuned-checkpoint predictions, same layout as the baseline viewer. | -->
 
 **Dataset summary**
 
