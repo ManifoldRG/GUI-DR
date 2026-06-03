@@ -8,30 +8,19 @@
 
 
 # 🩺 GUI-DR: GUI Domain-Randomization for generating diagnostic GUI grounding evaluation data
-<details align="center">
-<summary>
-  <img src="https://img.shields.io/badge/Technical_Reports-Fig-007ec6?style=flat-square" alt="Technical Reports | Fig" height="20">
+<p align="center">
+  <a href="https://blog.fig.inc/domain-randomization-for-computer-control/?utm_source=huggingface&utm_medium=topbutton&utm_campaign=guip-p1"><img src="https://img.shields.io/badge/Technical_Report-Fig-007ec6?style=flat-square" alt="Technical Report | Fig" height="20"></a>
   <a href="https://huggingface.co/datasets/figai/GUI-Perturbed"><img src="https://img.shields.io/badge/Data-HuggingFace-yellow?style=flat-square&logo=huggingface" alt="Hugging Face Data"></a>
   <a href="https://github.com/ManifoldRG/GUI-DR"><img src="https://img.shields.io/badge/GUI--DR-GitHub-blueviolet?style=flat-square&logo=github" alt="GUI-DR GitHub"></a>
   <a href="https://discord.gg/J9Auc4f4AT"><img src="https://img.shields.io/badge/Contribute-Discord-7289DA?style=flat-square&logo=discord" alt="Contribute on Discord"></a>
-</summary>
-<p>
-  <a href="https://blog.fig.inc/gui-perturbed-a-domain-randomization-dataset-for-gui-grounding"><img src="https://img.shields.io/badge/Dataset_&_Methodology-555?style=flat-square" alt="Dataset & Methodology"></a>
-  <a href="https://blog.fig.inc/measuring-brittleness-in-gui-grounding-models-using-gui-perturbed"><img src="https://img.shields.io/badge/Model_Robustness_Evaluation-555?style=flat-square" alt="Model Robustness Evaluation"></a>
-  <!-- <a href="https://blog.fig.inc/training-on-gui-perturbed-why-more-data-isnt-enough"><img src="https://img.shields.io/badge/Finetuning_Experiments-555?style=flat-square" alt="Finetuning Experiments"></a> -->
 </p>
-</details>
 
 ### _GUI-DR is a part of a collaborative effort on Software Control Agents between Manifold Research and Fig_
 
 <p align="center">
   <a href="https://fig.inc/" target="_blank">
     <kbd>
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="media/fig_logo_with_text_dark.svg">
-      <source media="(prefers-color-scheme: light)" srcset="media/fig_logo_with_text_light.svg">
-      <img src="media/fig_logo_with_text_light.svg" alt="Fig Logo" height="64">
-    </picture>
+      <img src="media/Fig-Logo-with-White-Text-Color.svg" alt="Fig Logo" height="64">
     </kbd>
   </a>
   <a href="https://www.manifoldrg.com/" target="_blank">
@@ -49,13 +38,13 @@
 
 GUI grounding models often rely on visual primitives (shape, position, color) rather than functional semantics, and fixed-scene benchmarks do not reveal how they degrade under distribution shift. Using [Mind2Web](https://mind2web.github.io/) MHTML archives, GUI-DR varies _visual scenes_ and _instructions_ along controlled axes to generate data to evaluate or finetune models for use cases such as GUI grounding.
 
-![gui-dr-diagram](/media/gui-dr-diagram.png)
+![gui-dr-diagram](media/two-axis-perturbation-diagram.png)
 
 ---
 
 ## 📢 Updates
 
-- **2026-04** Initial release of [GUI-Perturbed](https://huggingface.co/datasets/figai/GUI-Perturbed), [technical report](https://blog.fig.inc/gui-perturbed-a-domain-randomization-dataset-for-gui-grounding/), and data generation pipeline [GUI-DR](https://github.com/ManifoldRG/GUI-DR).
+- **2026-04** Initial release of [GUI-Perturbed](https://huggingface.co/datasets/figai/GUI-Perturbed), [technical report](https://blog.fig.inc/domain-randomization-for-computer-control/?utm_source=huggingface&utm_medium=topbutton&utm_campaign=guip-p1), and data generation pipeline [GUI-DR](https://github.com/ManifoldRG/GUI-DR).
 
 ---
 
@@ -283,7 +272,7 @@ If you find GUI-Perturbed or this pipeline useful, please cite the dataset and t
   title   = {GUI-Perturbed: A Domain Randomization Dataset for GUI Grounding},
   author  = {Wang, Yangyue and Sikka, Harsh and Mathur, Yash, and Zhou, Tony and Nyachhyon, Jinu and Guruprasad, Pranav},
   year    = {2026},
-  url     = {https://blog.fig.inc/gui-perturbed-a-domain-randomization-dataset-for-gui-grounding},
+  url     = {https://blog.fig.inc/domain-randomization-for-computer-control},
   note    = {Part 1: Dataset \& methodology}
 }
 ```
