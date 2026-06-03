@@ -10,7 +10,7 @@
 # 🩺 GUI-DR: GUI Domain-Randomization for generating diagnostic GUI grounding evaluation data
 <p align="center">
   <a href="https://blog.fig.inc/domain-randomization-for-computer-control/?utm_source=huggingface&utm_medium=topbutton&utm_campaign=guip-p1"><img src="https://img.shields.io/badge/Technical_Report-Fig-007ec6?style=flat-square" alt="Technical Report | Fig" height="20"></a>
-  <a href="https://huggingface.co/datasets/figai/GUI-Perturbed"><img src="https://img.shields.io/badge/Data-HuggingFace-yellow?style=flat-square&logo=huggingface" alt="Hugging Face Data"></a>
+  <!-- <a href="https://huggingface.co/datasets/figai/GUI-Perturbed"><img src="https://img.shields.io/badge/Data-HuggingFace-yellow?style=flat-square&logo=huggingface" alt="Hugging Face Data"></a> -->
   <a href="https://github.com/ManifoldRG/GUI-DR"><img src="https://img.shields.io/badge/GUI--DR-GitHub-blueviolet?style=flat-square&logo=github" alt="GUI-DR GitHub"></a>
   <a href="https://discord.gg/J9Auc4f4AT"><img src="https://img.shields.io/badge/Contribute-Discord-7289DA?style=flat-square&logo=discord" alt="Contribute on Discord"></a>
 </p>
@@ -44,7 +44,7 @@ GUI grounding models often rely on visual primitives (shape, position, color) ra
 
 ## 📢 Updates
 
-- **2026-04** Initial release of [GUI-Perturbed](https://huggingface.co/datasets/figai/GUI-Perturbed), [technical report](https://blog.fig.inc/domain-randomization-for-computer-control/?utm_source=huggingface&utm_medium=topbutton&utm_campaign=guip-p1), and data generation pipeline [GUI-DR](https://github.com/ManifoldRG/GUI-DR).
+- **2026-06** Initial release of [GUI-Perturbed](https://huggingface.co/datasets/figai/GUI-Perturbed), [technical report](https://blog.fig.inc/domain-randomization-for-computer-control/?utm_source=huggingface&utm_medium=topbutton&utm_campaign=guip-p1), and data generation pipeline [GUI-DR](https://github.com/ManifoldRG/GUI-DR).
 
 ---
 
@@ -199,11 +199,11 @@ Instructions are generated per step from parquet `target_action_reprs` via [gene
 ---
 
 ## Data & resources
-
+<!-- 
 | Resource | Description |
 |----------|-------------|
-| **[GUI-Perturbed](https://huggingface.co/datasets/figai/GUI-Perturbed)** | Released evaluation data (screenshots, instructions, ground-truth bboxes). |
-| **[Baseline result viewer](https://huggingface.co/spaces/figai/GUI-Perturbed-Baseline-Result-Viewer)** | Streamlit Space: baseline 7B GUI grounding predictions on original vs perturbed screenshots. |
+| **[GUI-Perturbed](https://huggingface.co/datasets/figai/GUI-Perturbed)** | Released evaluation data (screenshots, instructions, ground-truth bboxes). | -->
+<!-- | **[Baseline result viewer](https://huggingface.co/spaces/figai/GUI-Perturbed-Baseline-Result-Viewer)** | Streamlit Space: baseline 7B GUI grounding predictions on original vs perturbed screenshots. | -->
 <!-- | **[Finetuned result viewer](https://huggingface.co/spaces/figai/GUI-Perturbed-Finetuned-Result-Viewer)** | Streamlit Space: finetuned-checkpoint predictions, same layout as the baseline viewer. | -->
 
 **Dataset summary**
@@ -212,18 +212,18 @@ Instructions are generated per step from parquet `target_action_reprs` via [gene
 |--------|-------------|
 | **Source** | Mind2Web MHTML archives (real web pages, DOM preserved). |
 | **Visual variants** | **Original**, **Style**, **Precision** (zoom 0.7), **Text Shrink**. ~390 screens per variant. |
-| **Schema** | `visual_variant`, `instruction_type`, `task_id`, `step_index`, `instruction`, `gt_bbox`, `screenshot`. See the [dataset card](https://huggingface.co/datasets/figai/GUI-Perturbed). |
+| **Schema** | `visual_variant`, `instruction_type`, `task_id`, `step_index`, `instruction`, `gt_bbox`, `screenshot`. |
 | **Instructions** | **Direct** (constructed from `target_action_reprs`); **relational** (in released schema). |
 
-Use **this repo** to reproduce or extend the data; use the **Hugging Face dataset** for evaluation.
+<!-- Use **this repo** to reproduce or extend the data; use the **Hugging Face dataset** for evaluation. --> 
 
----
+<!-- 
 
 ## Evaluation
 
-Download the [GUI-Perturbed](https://huggingface.co/datasets/figai/GUI-Perturbed) dataset to evaluate your models. An evaluation script will be released soon.
+Download the [GUI-Perturbed](https://huggingface.co/datasets/figai/GUI-Perturbed) dataset to evaluate your models. An evaluation script will be released soon. -->
 
----
+<!-- --- -->
 
 ## Limitations
 
@@ -252,14 +252,6 @@ We welcome contributions: new perturbation types, bug reports, and improvements.
 If you find GUI-Perturbed or this pipeline useful, please cite the dataset and technical report series.
 
 ```bibtex
-@dataset{gui_perturbed_2026,
-  title   = {GUI-Perturbed: A Domain-Randomized Dataset for GUI Grounding},
-  author  = {Wang, Yangyue and Sikka, Harsh and Mathur, Yash, and Zhou, Tony and Nyachhyon, Jinu and Guruprasad, Pranav},
-  year    = {2026},
-  url     = {https://huggingface.co/datasets/figai/GUI-Perturbed},
-  note    = {Built on Mind2Web (Deng et al., 2023)}
-}
-
 @software{gui_dr_code_2026,
   title   = {GUI-DR: GUI Domain-Randomization for generating diagnostic GUI grounding evaluation data},
   author  = {Wang, Yangyue and Sikka, Harsh and Mathur, Yash, and Zhou, Tony and Nyachhyon, Jinu and Guruprasad, Pranav},
