@@ -44,7 +44,7 @@ GUI grounding models often rely on visual primitives (shape, position, color) ra
 
 ## 📢 Updates
 
-- **2026-04** Initial release of [GUI-Perturbed](https://huggingface.co/datasets/figai/GUI-Perturbed), [technical report](https://blog.fig.inc/domain-randomization-for-computer-control/?utm_source=huggingface&utm_medium=topbutton&utm_campaign=guip-p1), and data generation pipeline [GUI-DR](https://github.com/ManifoldRG/GUI-DR).
+- **2026-06** Initial release of [GUI-Perturbed](https://huggingface.co/datasets/figai/GUI-Perturbed), [technical report](https://blog.fig.inc/domain-randomization-for-computer-control/?utm_source=huggingface&utm_medium=topbutton&utm_campaign=guip-p1), and data generation pipeline [GUI-DR](https://github.com/ManifoldRG/GUI-DR).
 
 ---
 
