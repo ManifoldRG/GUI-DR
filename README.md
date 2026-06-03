@@ -249,12 +249,12 @@ We welcome contributions: new perturbation types, bug reports, and improvements.
 
 ## 📄 Citation
 
-If you find GUI-Perturbed or this pipeline useful, please cite the dataset and technical report series.
+If you find this pipeline useful, please cite the technical report series.
 
 ```bibtex
 @software{gui_dr_code_2026,
   title   = {GUI-DR: GUI Domain-Randomization for generating diagnostic GUI grounding evaluation data},
-  author  = {Wang, Yangyue and Sikka, Harsh and Mathur, Yash, and Zhou, Tony and Nyachhyon, Jinu and Guruprasad, Pranav},
+  author  = {Wang, Yangyue and Sikka, Harshvardhan and Mathur, Yash, and Zhou, Tony and Nyachhyon, Jinu and Guruprasad, Pranav},
   year    = {2026},
   url     = {https://github.com/ManifoldRG/GUI-DR},
   note    = {Data augmentation pipeline for GUI-Perturbed}
@@ -262,7 +262,7 @@ If you find GUI-Perturbed or this pipeline useful, please cite the dataset and t
 
 @online{gui_perturbed_technical_report_2026,
   title   = {GUI-Perturbed: A Domain Randomization Dataset for GUI Grounding},
-  author  = {Wang, Yangyue and Sikka, Harsh and Mathur, Yash, and Zhou, Tony and Nyachhyon, Jinu and Guruprasad, Pranav},
+  author  = {Wang, Yangyue and Sikka, Harshvardhan and Mathur, Yash, and Zhou, Tony and Nyachhyon, Jinu and Guruprasad, Pranav},
   year    = {2026},
   url     = {https://blog.fig.inc/domain-randomization-for-computer-control},
   note    = {Part 1: Dataset \& methodology}
