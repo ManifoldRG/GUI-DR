@@ -264,7 +264,6 @@ If you find this pipeline useful, please cite the technical report series.
   title   = {GUI-Perturbed: A Domain Randomization Dataset for GUI Grounding},
   author  = {Wang, Yangyue and Sikka, Harshvardhan and Mathur, Yash, and Zhou, Tony and Nyachhyon, Jinu and Guruprasad, Pranav},
   year    = {2026},
-  url     = {https://blog.fig.inc/domain-randomization-for-computer-control},
-  note    = {Part 1: Dataset \& methodology}
+  url     = {https://blog.fig.inc/domain-randomization-for-computer-control}
 }
 ```
