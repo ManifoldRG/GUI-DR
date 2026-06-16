@@ -38,7 +38,7 @@
 
 GUI grounding models often rely on visual primitives (shape, position, color) rather than functional semantics, and fixed-scene benchmarks do not reveal how they degrade under distribution shift. Using [Mind2Web](https://mind2web.github.io/) MHTML archives, GUI-DR varies _visual scenes_ and _instructions_ along controlled axes to generate data to evaluate or finetune models for use cases such as GUI grounding.
 
-![gui-dr-diagram](media/two-axis-perturbation-diagram.png)
+![gui-dr-diagram](media/perturbation-chart.gif)
 
 ---
 
