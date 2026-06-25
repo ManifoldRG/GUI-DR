@@ -9,11 +9,15 @@
 
 # 🩺 GUI-DR: GUI Domain-Randomization for generating diagnostic GUI grounding evaluation data
 <p align="center">
-  <a href="https://blog.fig.inc/domain-randomization-for-computer-control/?utm_source=huggingface&utm_medium=topbutton&utm_campaign=guip-p1"><img src="https://img.shields.io/badge/Technical_Report-Fig-007ec6?style=flat-square" alt="Technical Report | Fig" height="20"></a>
-  <!-- <a href="https://huggingface.co/datasets/figai/GUI-Perturbed"><img src="https://img.shields.io/badge/Data-HuggingFace-yellow?style=flat-square&logo=huggingface" alt="Hugging Face Data"></a> -->
+  <a href="https://www.fig.inc/blog/domain-randomization-for-computer-control/?utm_source=huggingface&utm_medium=topbutton&utm_campaign=guip-p3"><img src="https://img.shields.io/badge/Technical_Report-Fig-007ec6?style=flat-square" alt="Technical Report | Fig" height="20"></a>
+  <a href="https://huggingface.co/datasets/figai/GUI-Perturbed"><img src="https://img.shields.io/badge/Data-HF-yellow?style=flat-square&logo=huggingface" alt="HF Data"></a>
+  <a href="https://huggingface.co/spaces/figai/GUI-Perturbed-Baseline-Result-Viewer"><img src="https://img.shields.io/badge/Baseline_Results-HF-yellow?style=flat-square&logo=huggingface" alt="Baseline Results"></a>
+  <a href="https://huggingface.co/spaces/figai/GUI-Perturbed-Finetuned-Result-Viewer"><img src="https://img.shields.io/badge/Finetuned_Results-HF-yellow?style=flat-square&logo=huggingface" alt="Finetuned Results"></a>
   <a href="https://github.com/ManifoldRG/GUI-DR"><img src="https://img.shields.io/badge/GUI--DR-GitHub-blueviolet?style=flat-square&logo=github" alt="GUI-DR GitHub"></a>
   <a href="https://discord.gg/J9Auc4f4AT"><img src="https://img.shields.io/badge/Contribute-Discord-7289DA?style=flat-square&logo=discord" alt="Contribute on Discord"></a>
+  <a href="https://arxiv.org/abs/2604.14262"><img src="https://img.shields.io/badge/Paper-arXiv-B31B1B?style=flat-square&logoColor=white&logoSize=auto&label=Paper"></a>
 </p>
+
 
 ### _GUI-DR is a part of a collaborative effort on Software Control Agents between Manifold Research and Fig_
 
@@ -38,13 +42,14 @@
 
 GUI grounding models often rely on visual primitives (shape, position, color) rather than functional semantics, and fixed-scene benchmarks do not reveal how they degrade under distribution shift. Using [Mind2Web](https://mind2web.github.io/) MHTML archives, GUI-DR varies _visual scenes_ and _instructions_ along controlled axes to generate data to evaluate or finetune models for use cases such as GUI grounding.
 
-![gui-dr-diagram](media/perturbation-chart.gif)
+![gui-dr-diagram](/media/perturbation-chart.gif)
 
 ---
 
 ## 📢 Updates
 
-- **2026-06** Initial release of the [technical report](https://blog.fig.inc/domain-randomization-for-computer-control/?utm_source=huggingface&utm_medium=topbutton&utm_campaign=guip-p1) and the data generation pipeline [GUI-DR](https://github.com/ManifoldRG/GUI-DR).
+- **2026-06:** Preprint live on arXiv: [GUI-Perturbed: Domain Randomization Reveals Systematic Brittleness in GUI Grounding Models](https://arxiv.org/abs/2604.14262).
+- **2026-06:** Initial release of [GUI-Perturbed](https://huggingface.co/datasets/figai/GUI-Perturbed), [technical report](https://www.fig.inc/blog/domain-randomization-for-computer-control/?utm_source=huggingface&utm_medium=updatessection&utm_campaign=guip-p3), and data generation pipeline [GUI-DR](https://github.com/ManifoldRG/GUI-DR).
 
 ---
 
@@ -221,7 +226,60 @@ Instructions are generated per step from parquet `target_action_reprs` via [gene
 
 ## Evaluation
 
-Download the [GUI-Perturbed](https://huggingface.co/datasets/figai/GUI-Perturbed) dataset to evaluate your models. An evaluation script will be released soon. -->
+The evaluation script loads data directly from [GUI-Perturbed](https://huggingface.co/datasets/figai/GUI-Perturbed) on HuggingFace and runs inference against a model served via an OpenAI-compatible API (e.g., [vLLM](https://docs.vllm.ai/)).
+
+### Prerequisites
+
+**Serve your model** with vLLM (or any OpenAI-compatible endpoint):
+
+```bash
+# Example: serve your local_model with vLLM
+vllm serve "/mnt/disks/eval-data/exp_2_checkpoint_1_epoch/" \
+    --tensor-parallel-size 2 \
+    --max-model-len 16384 \
+    --gpu-memory-utilization 0.9
+```
+
+### Running evaluation
+
+```bash
+uv run scripts/gui_perturbed_evaluator.py \
+    --output_dir data/predictions \
+    --config_id uitars15_no_reasoning_direct_query \
+    --dataset_variant original \
+    --model_name /mnt/disks/eval-data/exp_2_checkpoint_1_epoch/
+```
+
+### Arguments
+
+| Argument | Default | Description |
+|----------|---------|-------------|
+| `--output_dir` | _(required)_ | Directory for prediction output files. |
+| `--config_id` | _(required)_ | Preset configuration ID. Use `--list_presets` to see all options. |
+| `--dataset_variant` | `None` (all) | Filter by variant: `original`, `style`, `precision`, `text_zoom`. |
+| `--model_name` | _(from preset)_ | Override the HuggingFace model identifier sent to the API. |
+| `--api_url` | `http://localhost:8000/v1` | API endpoint (or set `VLLM_API_URL` env var). |
+| `--api_key` | `EMPTY` | API key (or set `VLLM_API_KEY` env var). |
+| `--temperature` | `0.0` | Sampling temperature. |
+| `--max_tokens` | _(model-specific)_ | Max tokens for generation. |
+| `--seed` | `None` | Random seed for reproducibility. |
+| `--save_interval` | `10` | Save predictions to disk every N steps. |
+
+### Available presets
+
+Presets are generated for all combinations of **model** × **reasoning** × **instruction type**:
+
+- **Models:** `gta1` (GTA1-7B), `qwen25vl` (Qwen2.5-VL-7B), `uitars15` (UI-TARS-1.5-7B)
+- **Reasoning:** `no_reasoning`, `reasoning`
+- **Instruction type:** `direct_query`, `relational_query`
+
+Example preset IDs: `gta1_no_reasoning_direct_query`, `qwen25vl_reasoning_relational_query`, `uitars15_no_reasoning_direct_query`.
+
+List all presets:
+
+```bash
+uv run scripts/gui_perturbed_evaluator.py --list_presets
+```
 
 <!-- --- -->
 
@@ -247,11 +305,35 @@ We welcome contributions: new perturbation types, bug reports, and improvements.
 
 ---
 
+## Acknowledgments
+
+Our finetuning experiments were built on [Qwen-VL-Series-Finetune](https://github.com/2U1/Qwen-VL-Series-Finetune). We thank the authors for their open-source contributions.
+
+---
+
 ## 📄 Citation
 
-If you find this pipeline useful, please cite the technical report series.
+If you find GUI-Perturbed or this pipeline useful, please consider citing the arXiv preprint, dataset, and technical report series.
 
 ```bibtex
+@misc{wang2026guiperturbed,
+  title         = {GUI-Perturbed: Domain Randomization Reveals Systematic Brittleness in GUI Grounding Models},
+  author        = {Wang, Yangyue and Sikka, Harshvardhan and Mathur, Yash and Zhou, Tony and Nyachhyon, Jinu and Guruprasad, Pranav},
+  year          = {2026},
+  eprint        = {2604.14262},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.AI},
+  url           = {https://arxiv.org/abs/2604.14262}
+}
+
+@dataset{gui_perturbed_2026,
+  title   = {GUI-Perturbed: A Domain-Randomized Dataset for GUI Grounding},
+  author  = {Wang, Yangyue and Sikka, Harshvardhan and Mathur, Yash, and Zhou, Tony and Nyachhyon, Jinu and Guruprasad, Pranav},
+  year    = {2026},
+  url     = {https://huggingface.co/datasets/figai/GUI-Perturbed},
+  note    = {Built on Mind2Web (Deng et al., 2023)}
+}
+
 @software{gui_dr_code_2026,
   title   = {GUI-DR: GUI Domain-Randomization for generating diagnostic GUI grounding evaluation data},
   author  = {Wang, Yangyue and Sikka, Harshvardhan and Mathur, Yash, and Zhou, Tony and Nyachhyon, Jinu and Guruprasad, Pranav},
@@ -264,6 +346,20 @@ If you find this pipeline useful, please cite the technical report series.
   title   = {GUI-Perturbed: A Domain Randomization Dataset for GUI Grounding},
   author  = {Wang, Yangyue and Sikka, Harshvardhan and Mathur, Yash, and Zhou, Tony and Nyachhyon, Jinu and Guruprasad, Pranav},
   year    = {2026},
-  url     = {https://blog.fig.inc/domain-randomization-for-computer-control}
+  url     = {https://blog.fig.inc/gui-perturbed-a-domain-randomization-dataset-for-gui-grounding}
+}
+
+@online{measuring_gui_models_robustness_technical_report_2026,
+  title   = {Measuring Brittleness in GUI Grounding Models using GUI-Perturbed},
+  author  = {Wang, Yangyue and Sikka, Harshvardhan and Mathur, Yash, and Zhou, Tony and Nyachhyon, Jinu and Guruprasad, Pranav},
+  year    = {2026},
+  url     = {https://blog.fig.inc/measuring-brittleness-in-gui-grounding-models-using-gui-perturbed}
+}
+
+@online{training_on_gui_perturbed_technical_report_2026,
+  title   = {Training on GUI-Perturbed: Why More Data Isn’t Enough},
+  author  = {Wang, Yangyue and Sikka, Harshvardhan and Mathur, Yash, and Zhou, Tony and Nyachhyon, Jinu and Guruprasad, Pranav},
+  year    = {2026},
+  url     = {https://blog.fig.inc/training-on-gui-perturbed-why-more-data-isnt-enough}
 }
 ```
