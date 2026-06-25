@@ -9,12 +9,13 @@
 
 # 🩺 GUI-DR: GUI Domain-Randomization for generating diagnostic GUI grounding evaluation data
 <p align="center">
-  <a href="https://blog.fig.inc/domain-randomization-for-computer-control/?utm_source=huggingface&utm_medium=topbutton&utm_campaign=guip-p3"><img src="https://img.shields.io/badge/Technical_Report-Fig-007ec6?style=flat-square" alt="Technical Report | Fig" height="20"></a>
+  <a href="https://www.fig.inc/blog/domain-randomization-for-computer-control/?utm_source=huggingface&utm_medium=topbutton&utm_campaign=guip-p3"><img src="https://img.shields.io/badge/Technical_Report-Fig-007ec6?style=flat-square" alt="Technical Report | Fig" height="20"></a>
   <a href="https://huggingface.co/datasets/figai/GUI-Perturbed"><img src="https://img.shields.io/badge/Data-HF-yellow?style=flat-square&logo=huggingface" alt="HF Data"></a>
   <a href="https://huggingface.co/spaces/figai/GUI-Perturbed-Baseline-Result-Viewer"><img src="https://img.shields.io/badge/Baseline_Results-HF-yellow?style=flat-square&logo=huggingface" alt="Baseline Results"></a>
   <a href="https://huggingface.co/spaces/figai/GUI-Perturbed-Finetuned-Result-Viewer"><img src="https://img.shields.io/badge/Finetuned_Results-HF-yellow?style=flat-square&logo=huggingface" alt="Finetuned Results"></a>
   <a href="https://github.com/ManifoldRG/GUI-DR"><img src="https://img.shields.io/badge/GUI--DR-GitHub-blueviolet?style=flat-square&logo=github" alt="GUI-DR GitHub"></a>
   <a href="https://discord.gg/J9Auc4f4AT"><img src="https://img.shields.io/badge/Contribute-Discord-7289DA?style=flat-square&logo=discord" alt="Contribute on Discord"></a>
+  <a href="https://arxiv.org/abs/2604.14262"><img src="https://img.shields.io/badge/Paper-arXiv-B31B1B?style=flat-square&logoColor=white&logoSize=auto&label=Paper"></a>
 </p>
 
 
@@ -48,7 +49,7 @@ GUI grounding models often rely on visual primitives (shape, position, color) ra
 ## 📢 Updates
 
 - **2026-06:** Preprint live on arXiv: [GUI-Perturbed: Domain Randomization Reveals Systematic Brittleness in GUI Grounding Models](https://arxiv.org/abs/2604.14262).
-- **2026-06:** Initial release of [GUI-Perturbed](https://huggingface.co/datasets/figai/GUI-Perturbed), [technical report](https://blog.fig.inc/domain-randomization-for-computer-control/?utm_source=huggingface&utm_medium=topbutton&utm_campaign=guip-p3), and data generation pipeline [GUI-DR](https://github.com/ManifoldRG/GUI-DR).
+- **2026-06:** Initial release of [GUI-Perturbed](https://huggingface.co/datasets/figai/GUI-Perturbed), [technical report](https://www.fig.inc/blog/domain-randomization-for-computer-control/?utm_source=huggingface&utm_medium=updatessection&utm_campaign=guip-p3), and data generation pipeline [GUI-DR](https://github.com/ManifoldRG/GUI-DR).
 
 ---
 
