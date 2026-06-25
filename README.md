@@ -204,12 +204,12 @@ Instructions are generated per step from parquet `target_action_reprs` via [gene
 ---
 
 ## Data & resources
-
+<!-- 
 | Resource | Description |
 |----------|-------------|
-| **[GUI-Perturbed](https://huggingface.co/datasets/figai/GUI-Perturbed)** | Released evaluation data (screenshots, instructions, ground-truth bboxes). |
-| **[Baseline result viewer](https://huggingface.co/spaces/figai/GUI-Perturbed-Baseline-Result-Viewer)** | Streamlit Space: baseline 7B GUI grounding predictions on original vs perturbed screenshots. |
-| **[Finetuned result viewer](https://huggingface.co/spaces/figai/GUI-Perturbed-Finetuned-Result-Viewer)** | Streamlit Space: finetuned-checkpoint predictions, same layout as the baseline viewer. |
+| **[GUI-Perturbed](https://huggingface.co/datasets/figai/GUI-Perturbed)** | Released evaluation data (screenshots, instructions, ground-truth bboxes). | -->
+<!-- | **[Baseline result viewer](https://huggingface.co/spaces/figai/GUI-Perturbed-Baseline-Result-Viewer)** | Streamlit Space: baseline 7B GUI grounding predictions on original vs perturbed screenshots. | -->
+<!-- | **[Finetuned result viewer](https://huggingface.co/spaces/figai/GUI-Perturbed-Finetuned-Result-Viewer)** | Streamlit Space: finetuned-checkpoint predictions, same layout as the baseline viewer. | -->
 
 **Dataset summary**
 
@@ -217,12 +217,12 @@ Instructions are generated per step from parquet `target_action_reprs` via [gene
 |--------|-------------|
 | **Source** | Mind2Web MHTML archives (real web pages, DOM preserved). |
 | **Visual variants** | **Original**, **Style**, **Precision** (zoom 0.7), **Text Shrink**. ~390 screens per variant. |
-| **Schema** | `visual_variant`, `instruction_type`, `task_id`, `step_index`, `instruction`, `gt_bbox`, `screenshot`. See the [dataset card](https://huggingface.co/datasets/figai/GUI-Perturbed). |
+| **Schema** | `visual_variant`, `instruction_type`, `task_id`, `step_index`, `instruction`, `gt_bbox`, `screenshot`. |
 | **Instructions** | **Direct** (constructed from `target_action_reprs`); **relational** (in released schema). |
 
-Use **this repo** to reproduce or extend the data; use the **Hugging Face dataset** for evaluation.
+<!-- Use **this repo** to reproduce or extend the data; use the **Hugging Face dataset** for evaluation. --> 
 
----
+<!-- 
 
 ## Evaluation
 
@@ -281,7 +281,7 @@ List all presets:
 uv run scripts/gui_perturbed_evaluator.py --list_presets
 ```
 
----
+<!-- --- -->
 
 ## Limitations
 
